@@ -9,6 +9,30 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 .brand{display:flex;align-items:center;gap:13px}.brand-symbol{width:44px;height:44px;border:1px solid rgba(215,184,93,.7);border-radius:50%;display:grid;place-items:center;color:#e6d18c;font-family:"Playfair Display",serif;font-size:24px}.brand b{font-size:23px;letter-spacing:.8px;display:block}.brand small{display:block;font-size:11px;color:#dcefe1;letter-spacing:.2px}
 .nav-right{display:flex;align-items:center;gap:10px}.lang,.settings,.profile-btn{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;padding:10px 15px;font-size:14px}
 .hero{position:relative;width:100%;background:#dff0df;overflow:hidden}.hero-img{display:block;width:100%;height:auto}.hero-actions{position:absolute;inset:0}.hero-hotspot{position:absolute;background:transparent;border:0;height:9%;bottom:4.5%}.hero-hotspot.start{left:4.3%;width:17.5%}.hero-hotspot.join{left:21.5%;width:14.5%}
+.hero{position:relative;width:100%;background:#dff0df;overflow:hidden}
+.hero-img{display:block;width:100%;height:auto}
+
+/* By default mobile image ko chhupa do */
+.mobile-img { display: none; }
+.desktop-img { display: block; }
+
+.hero-actions{position:absolute;inset:0}
+.hero-hotspot{position:absolute;background:transparent;border:0;height:9%;bottom:4.5%}
+
+/* Laptop ke liye hotspots */
+.hero-hotspot.start{left:4.3%;width:17.5%}
+.hero-hotspot.join{left:21.5%;width:14.5%}
+
+/* --- Mobile View Settings (Screen width < 700px) --- */
+@media(max-width:700px){
+  /* Desktop image chhupao, mobile image dikhao */
+  .desktop-img { display: none; }
+  .mobile-img { display: block; width: 100%; min-height: 420px; object-fit: cover; object-position: center; }
+
+  /* Agar mobile image ke buttons ki position thodi alag karni ho, toh yahan adjust kar lena */
+  .hero-hotspot.start{left:4%; width:35%; bottom:5%}
+  .hero-hotspot.join{left:39%; width:30%; bottom:5%}
+}
 .section{padding:115px 9%;max-width:1450px;margin:auto}.intro{text-align:center;max-width:1000px}.eyebrow{display:block;color:var(--gold);font-weight:800;font-size:12px;letter-spacing:2.4px;margin-bottom:16px;text-transform:uppercase}.intro h1,.section-head h2,.how h2,.cta h2{font-family:"Playfair Display","Noto Sans Devanagari",serif;line-height:1.1;font-weight:600}.intro h1{font-size:clamp(42px,5.2vw,64px);color:var(--g)}.intro p{max-width:720px;margin:28px auto 0;color:var(--muted);font-size:17px;line-height:1.9}
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:42px}.section-head h2{font-size:clamp(38px,4.2vw,56px);color:var(--g)}.section-head p{color:var(--muted);font-size:15px;margin-top:10px}.center{text-align:center;display:block}
 
