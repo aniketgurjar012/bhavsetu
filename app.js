@@ -900,7 +900,7 @@ if(tabBtn) {
 }
 
 // ==================== NEW EMAIL & PHONE OTP FLOW ====================
-const backendUrl = "http://localhost:5000";
+const backendUrl = "https://bhavsetu-0758.onrender.com";
 let pendingEmail = "";
 
 // 1. Send OTP
@@ -1104,7 +1104,7 @@ if (finishBtn) {
 
     // Cloud Database par data save karne ke liye API call
     try {
-        await fetch('http://localhost:5000/api/update-profile', {
+        await fetch('https://bhavsetu-0758.onrender.com/api/update-profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user)
@@ -1122,7 +1122,7 @@ if (finishBtn) {
 
 async function fetchUserFromCloud(email) {
     try {
-        let response = await fetch(`http://localhost:5000/api/get-profile/${email}`);
+        let response = await fetch(`https://bhavsetu-0758.onrender.com/api/get-profile/${email}`);
         let data = await response.json();
         if (data.success && data.user) {
             user = data.user;
