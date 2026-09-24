@@ -111,7 +111,42 @@ m5:"16%+ - Wet",
 m6:"Don't know",
 whCapacity:"Capacity",whAvailable:"Available",whAccepted:"Accepted Crops",
 negateBtn:"Negotiate",acceptBtn:"Accept",rejectBtn:"Reject",sendBtn:"Send Offer",
-cartNeededMsg:"Please add this crop to your cart before starting negotiation!"
+cartNeededMsg:"Please add this crop to your cart before starting negotiation!",
+tabEyebrow: "QUICK START",
+tabTitle: "Begin your journey with BhavSetu",
+tabSub: "Choose your preferred language and connect directly to your dashboard.",
+tabBtnText: "Get Started / Login →",
+emailLabel: "Email ID",
+emailSub: "Enter your email ID to login or create your profile.",
+otpTitle: "OTP Verification",
+otpSub: "Enter the 6-digit OTP sent to your email.",
+phoneTitle: "Enter Mobile Number",
+phoneSub: "Add a mobile number to secure your account.",
+invalidEmail: "Please enter a valid email!",
+sendingOtp: "Sending OTP...",
+otpSent: "OTP sent to your email!",
+enterFullOtp: "Enter full 6-digit OTP!",
+verificationSuccess: "Verification successful! Enter mobile number.",
+invalidOtp: "Invalid OTP!",
+invalidPhone: "Please enter a valid 10-digit phone number!",
+loginSuccess: "Login Successful!",
+nameTitle: "Enter your full name",
+nameSub: "Please enter your name to complete your profile.",
+nameLabel: "Full Name",
+namePlaceholder: "e.g. Ramesh Patidar",
+invalidName: "Please enter your name!",
+villageLabel: "Village / Town",
+villagePlaceholder: "Enter your village or town name",
+serverErr: "Could not connect to server!",
+profileEyebrow: "MY PROFILE",
+profileTitle: "View Profile",
+profileSub: "Your verified account information on BhavSetu.",
+fullName: "Full Name",
+emailLabel: "Email ID",
+village: "Village / Town",
+profileState: "State / UT",
+profileDistrict: "District",
+profilePhone: "Mobile Number"
 },
 hi:{
 tagline:"जानकारी से जुड़ाव, किसानों को समृद्धि से जोड़ना",home:"होम",market:"मंडी भाव",buy:"फसल खरीदें",sell:"फसल बेचें",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"मेरी प्रोफाइल",profileTitle:"अपनी प्रोफाइल बनाएं",profileSub:"अपनी जानकारी जोड़ें ताकि भावसेतु आपके अनुभव को बेहतर बना सके।",fullName:"पूरा नाम",role:"मैं हूँ",village:"गाँव / शहर",profileState:"राज्य / केंद्र शासित प्रदेश",profileDistrict:"जिला",profilePhone:"मोबाइल नंबर",saveProfile:"प्रोफाइल सेव करें →",profileSaved:"प्रोफाइल सफलतापूर्वक सेव हो गई।",profileNeedLogin:"कृपया पहले मोबाइल नंबर से लॉगिन करें।",
@@ -147,7 +182,41 @@ m5:"16%+ - गीला / Wet / ओले",
 m6:"नहीं पता / Don't know / माहीत नाही",
 whCapacity:"कुल क्षमता",whAvailable:"रिक्त स्थान",whAccepted:"संग्रहणीय फसलें",
 negateBtn:"भावताव (चर्चा)",acceptBtn:"स्वीकार करें (Accept)",rejectBtn:"अस्वीकार करें (Reject)",sendBtn:"ऑफर भेजें (Send)",
-cartNeededMsg:"कृपया नेगोशिएशन शुरू करने से पहले इस फसल को अपने कार्ट में जोड़ें!"
+cartNeededMsg:"कृपया नेगोशिएशन शुरू करने से पहले इस फसल को अपने कार्ट में जोड़ें!",tabEyebrow: "त्वरित शुरुआत",
+tabTitle: "भावसेतु के साथ अपनी यात्रा शुरू करें",
+tabSub: "अपनी भाषा चुनें और सीधे अपने किसान या खरीदार डैशबोर्ड से जुड़ें।",
+tabBtnText: "शुरू करें / लॉगिन करें →",
+emailLabel: "ईमेल आईडी",
+emailSub: "लॉगिन करने या प्रोफाइल बनाने के लिए अपनी ईमेल आईडी दर्ज करें।",
+otpTitle: "OTP सत्यापन",
+otpSub: "आपके ईमेल पर भेजा गया 6 अंकों का OTP दर्ज करें।",
+phoneTitle: "मोबाइल नंबर दर्ज करें",
+phoneSub: "अपने खाते को सुरक्षित रखने के लिए मोबाइल नंबर जोड़ें।",
+invalidEmail: "कृपया सही ईमेल डालें!",
+sendingOtp: "OTP भेजा जा रहा है...",
+otpSent: "OTP आपके ईमेल पर भेज दिया गया है!",
+enterFullOtp: "पूरा 6 अंकों का OTP डालें!",
+verificationSuccess: "सत्यापन सफल! अब मोबाइल नंबर दर्ज करें।",
+invalidOtp: "गलत OTP है!",
+invalidPhone: "कृपया 10 अंकों का सही मोबाइल नंबर डालें!",
+loginSuccess: "लॉगिन सफल!",
+nameTitle: "अपना नाम दर्ज करें",
+nameSub: "कृपया अपना पूरा नाम लिखें ताकि प्रोफाइल पूरी हो सके।",
+nameLabel: "पूरा नाम",
+namePlaceholder: "जैसे: रमेश पाटीदार",
+invalidName: "कृपया अपना नाम दर्ज करें!",
+villageLabel: "गाँव / शहर (Village / Town)",
+villagePlaceholder: "अपने गाँव या शहर का नाम लिखें",
+serverErr: "सर्वर से कनेक्ट नहीं हो सका!",
+profileEyebrow: "मेरी प्रोफाइल",
+profileTitle: "अपनी प्रोफाइल देखें",
+profileSub: "भावसेतु पर आपकी सत्यापित खाता जानकारी।",
+fullName: "पूरा नाम",
+emailLabel: "ईमेल आईडी",
+village: "गाँव / शहर",
+profileState: "राज्य / केंद्र शासित प्रदेश",
+profileDistrict: "जिला",
+profilePhone: "मोबाइल नंबर"
 },
 mr:{
 tagline:"माहितीचा दुवा, शेतकऱ्यांना समृद्धीकडे नेणारा",home:"होम",market:"मंडी भाव",buy:"पीक खरेदी करा",sell:"पीक विक्री करा",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"माझी प्रोफाइल",profileTitle:"तुमची प्रोफाइल तयार करा",profileSub:"भावसेतु तुमचा शेतकरी अनुभव अधिक चांगला करण्यासाठी तपशील जोडा.",fullName:"पूर्ण नाव",role:"मी आहे",village:"गाव / शहर",profileState:"राज्य / केंद्रशासित प्रदेश",profileDistrict:"जिल्हा",profilePhone:"मोबाईल नंबर",saveProfile:"प्रोफाइल सेव्ह करा →",profileSaved:"प्रोफाइल यशस्वीरित्या सेव्ह झाली.",profileNeedLogin:"कृपया प्रथम मोबाईल नंबरने लॉगिन करा.",
@@ -183,7 +252,42 @@ m5:"16%+ - ओले / Wet / गीला",
 m6:"माहिती नाही / Don't know / नहीं पता",
 whCapacity:"एकूण क्षमता",whAvailable:"रिकामी जागा",whAccepted:"स्वीकारार्ह पिके",
 negateBtn:"भाव चर्चा (Negotiate)",acceptBtn:"स्वीकारा (Accept)",rejectBtn:"नाकारा (Reject)",sendBtn:"ऑफर पाठवा (Send)",
-cartNeededMsg:"भावताव सुरू करण्यापूर्वी कृपया हे पीक तुमच्या कार्टमध्ये जोडा!"
+cartNeededMsg:"भावताव सुरू करण्यापूर्वी कृपया हे पीक तुमच्या कार्टमध्ये जोडा!",
+tabEyebrow: "जलद सुरुवात",
+tabTitle: "भावसेतुसह तुमचा प्रवास सुरू करा",
+tabSub: "तुमची भाषा निवडा आणि थेट तुमच्या डॅशबोर्डशी कनेक्ट व्हा.",
+tabBtnText: "सुरू करा / लॉगिन करा →",
+emailLabel: "ईमेल आयडी",
+emailSub: "लॉगिन करण्यासाठी किंवा प्रोफाइल तयार करण्यासाठी तुमचा ईमेल पत्ता प्रविष्ट करा.",
+otpTitle: "OTP पडताळणी",
+otpSub: "तुमच्या ईमेलवर पाठवलेला 6 अंकी OTP प्रविष्ट करा.",
+phoneTitle: "मोबाईल नंबर प्रविष्ट करा",
+phoneSub: "तुमचे खाते सुरक्षित ठेवण्यासाठी मोबाईल नंबर जोडा.",
+invalidEmail: "कृपया वैध ईमेल प्रविष्ट करा!",
+sendingOtp: "OTP पाठवत आहे...",
+otpSent: "तुमच्या ईमेलवर OTP पाठवला गेला आहे!",
+enterFullOtp: "पूर्ण 6 अंकी OTP प्रविष्ट करा!",
+verificationSuccess: "तपासणी यशस्वी! आता मोबाईल नंबर प्रविष्ट करा.",
+invalidOtp: "चुकीचा OTP आहे!",
+invalidPhone: "कृपया १० अंकी वैध मोबाईल नंबर टाका!",
+loginSuccess: "լogin यशस्वी झाले!",
+nameTitle: "तुमचे नाव प्रविष्ट करा",
+nameSub: "प्रतिक्रिया पूर्ण करण्यासाठी कृपया तुमचे नाव लिहा.",
+nameLabel: "पूर्ण नाव",
+namePlaceholder: "उदा. रमेश पाटीदार",
+invalidName: "कृपया तुमचे नाव प्रविष्ट करा!",
+serverErr: "सर्व्हरशी कनेक्ट होऊ शकले नाही!",
+villageLabel: "गाव / शहर (Village / Town)",
+villagePlaceholder: "तुमच्या गावाचे किंवा शहराचे नाव प्रविष्ट करा",
+profileEyebrow: "माझी प्रोफाइल",
+profileTitle: "तुमची प्रोफाइल पहा",
+profileSub: "भावसेतु मधील तुमची सत्यापित खाते माहिती.",
+fullName: "पूर्ण नाव",
+emailLabel: "ईमेल आयडी",
+village: "गाव / शहर",
+profileState: "राज्य / केंद्रशासित प्रदेश",
+profileDistrict: "जिल्हा",
+profilePhone: "मोबाईल नंबर"
 }
 };
 
@@ -193,9 +297,25 @@ function toast(msg){let tEl=$("toast");if(!tEl)return;tEl.textContent=msg;tEl.cl
 
 function applyLang(){
   document.documentElement.lang=lang;
-  document.querySelectorAll("[data-i18n]").forEach(el=>{let k=el.dataset.i18n;if(t[lang]&&t[lang][k])el.textContent=t[lang][k]});
-  document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{let k=el.dataset.i18nPlaceholder;if(t[lang]&&t[lang][k])el.placeholder=t[lang][k]});
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    let k=el.dataset.i18n;
+    if(t[lang]&&t[lang][k]) el.textContent=t[lang][k];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
+    let k=el.dataset.i18nPlaceholder;
+    if(t[lang]&&t[lang][k]) el.placeholder=t[lang][k];
+  });
   
+  // Profile modal ke fixed titles aur subheadings ko language ke hisab se badalne ke liye
+  let pEyebrow = document.querySelector("#profileModal .eyebrow");
+  if(pEyebrow) pEyebrow.textContent = t[lang].profileEyebrow || "मेरी प्रोफाइल";
+  
+  let pTitle = document.querySelector("#profileModal h2");
+  if(pTitle) pTitle.textContent = t[lang].profileTitle || "अपनी प्रोफाइल देखें";
+  
+  let pSub = document.querySelector("#profileModal p");
+  if(pSub && !pSub.id) pSub.textContent = t[lang].profileSub || "भावसेतु पर आपकी सत्यापित खाता जानकारी।";
+
   let mSelect = $("moistureSelect");
   if(mSelect){
     mSelect.options[0].text = t[lang].selMoisture || "Select moisture";
@@ -207,7 +327,7 @@ function applyLang(){
     mSelect.options[6].text = t[lang].m6;
   }
 
-  let langBtn=$("languageBtn");if(langBtn)langBtn.textContent=lang==="en"?"अ / A":lang==="hi"?"हिन्दी":"मराठी";
+  let langBtn=$("languageBtn");if(langBtn)langBtn.textContent=lang==="en"?"Eng":lang==="hi"?"हिन्दी":"मराठी";
   let setLang=$("settingLanguage");
   if(setLang){
     if(lang==="en") setLang.textContent="हिन्दी / मराठी";
@@ -216,7 +336,6 @@ function applyLang(){
   }
   renderPrices();renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();updateProfileUI();
 }
-
 function renderPrices(){let pg=$("priceGrid");if(pg)pg.innerHTML=marketPrices.map(x=>`<article class="price-card"><div class="crop-icon">${x.emoji}</div><h3>${lang==="hi"?x.hi:lang==="mr"?x.mr:x.name}</h3><small>${lang==="hi"?"प्रति क्विंटल":lang==="mr"?"प्रति क्विंटल":"per quintal"}</small><div class="price-row"><strong>₹${x.price.toLocaleString("en-IN")}</strong><span class="${x.dir}">${x.move}</span></div></article>`).join("")}
 
 function renderMarketplace(){
@@ -472,30 +591,77 @@ function renderWeather(){
 
 function populateStates(){let s=$("state");if(s)s.innerHTML=`<option value="">${lang==="hi"?"राज्य चुनें":lang==="mr"?"राज्य निवडा":"Select State / UT"}</option>`+Object.keys(indiaDistricts).sort().map(x=>`<option>${x}</option>`).join("")}
 function populateDistricts(){let state=$("state").value,d=$("district");if(!d)return;d.disabled=!state;d.innerHTML=state?`<option value="">${lang==="hi"?"जिला चुनें":lang==="mr"?"जिल्हा निवडा":"Select District"}</option>`+indiaDistricts[state].map(x=>`<option>${x}</option>`).join(""):`<option>${lang==="hi"?"पहले राज्य चुनें":lang==="mr"?"पहिले राज्य निवडा":"Select State first"}</option>`;updateLocationPreview()}
-function updateLocationPreview(){let s=$("state").value,d=$("district").value;let lp=$("locationPreview");if(lp)lp.textContent=s&&d?"⌖ "+d+", "+s:"—";let fp=$("finishProfile");if(fp)fp.disabled=!(s&&d)}
+function updateLocationPreview(){
+  let s = $("state").value;
+  let d = $("district").value;
+  let v = $("modalVillageInput") ? $("modalVillageInput").value.trim() : "";
+  let lp = $("locationPreview");
+  
+  if(lp) {
+    let parts = [];
+    if(v) parts.push(v);
+    if(d) parts.push(d);
+    if(s) parts.push(s);
+    lp.textContent = parts.length ? "⌖ " + parts.join(", ") : "—";
+  }
+  
+  let fp = $("finishProfile");
+  if(fp) fp.disabled = !(s && d);
+}
+
+// Village input par live preview update hone ke liye event listener
+let mvInput = $("modalVillageInput");
+if(mvInput) {
+  mvInput.oninput = updateLocationPreview;
+}
 
 function openModal(id){let m=$(id);if(m)m.classList.remove("hidden")}
 function closeModal(id){let m=$(id);if(m)m.classList.add("hidden")}
-function startLogin(){openModal("loginModal")}
+function startLogin(){ 
+    openModal("loginModal");
+    
+    // Login modal khulte hi sirf Email step dikhega, baaki sab chup jayenge
+    let emailStep = $("emailStep"); if(emailStep) emailStep.classList.remove("hidden");
+    let otpStep = $("otpStep"); if(otpStep) otpStep.classList.add("hidden");
+    let phoneStep = $("phoneStep"); if(phoneStep) phoneStep.classList.add("hidden");
+    let phoneOtpStep = $("phoneOtpStep"); if(phoneOtpStep) phoneOtpStep.classList.add("hidden");
+    let nameStep = $("nameStep"); if(nameStep) nameStep.classList.add("hidden");
+    
+    let msg = $("loginStatusMsg"); if(msg) msg.innerText = "";
+    let emailInput = $("emailInput"); if(emailInput) emailInput.value = "";
+}
 
 let hs=$("heroStart"),hj=$("heroJoin"),cs=$("ctaStart");
 if(hs)hs.onclick=startLogin;
 if(hj)hj.onclick=startLogin;
 if(cs)cs.onclick=startLogin;
 
-let so=$("sendOtp");
-if(so)so.onclick=()=>{let ph=$("phone");let p=ph?ph.value.replace(/\D/g,""):"";if(p.length!==10)return toast(lang==="hi"?"10 अंकों का मोबाइल नंबर डालें।":lang==="mr"?"१० अंकी मोबाईल नंबर टाका.":"Enter a valid 10-digit mobile number.");let ob=$("otpBox");if(ob)ob.classList.remove("hidden");toast(lang==="hi"?"OTP भेजा गया। डेमो OTP 123456 है।":lang==="mr"?"OTP पाठवला. डेमो OTP 123456 आहे.":"OTP sent. Demo OTP is 123456.")};
-
-document.querySelectorAll(".otp input").forEach((el,i)=>el.addEventListener("input",e=>{if(e.target.value&&i<5)e.target.nextElementSibling.focus()}));
-
-let vo=$("verifyOtp");
-if(vo)vo.onclick=()=>{let otp=[...document.querySelectorAll(".otp input")].map(x=>x.value).join("");if(otp!=="123456")return toast(lang==="hi"?"डेमो OTP 123456 डालें।":lang==="mr"?"डेमो OTP 123456 टाका.":"Use demo OTP 123456.");let ph=$("phone");user={phone:ph?ph.value.replace(/\D/g,""):"",verified:true};localStorage.setItem("bhavsetu-user",JSON.stringify(user));closeModal("loginModal");openModal("locationModal");populateStates();}
+// OTP Box focus handler for 6 digits
+document.querySelectorAll(".otp-digit,.otp input,.phone-otp-digit").forEach((el,i)=>el.addEventListener("input",e=>{if(e.target.value&&e.target.nextElementSibling)e.target.nextElementSibling.focus()}));
 
 let st=$("state");if(st)st.onchange=populateDistricts;
 let dt=$("district");if(dt)dt.onchange=updateLocationPreview;
 
-let fp=$("finishProfile");
-if(fp)fp.onclick=()=>{user.state=$("state").value;user.district=$("district").value;localStorage.setItem("bhavsetu-user",JSON.stringify(user));closeModal("locationModal");let dash=$("dashboard");if(dash)dash.classList.remove("hidden");let dl=$("dashboardLocation");if(dl)dl.textContent=user.district+", "+user.state;let ml=$("marketLocation");if(ml)ml.textContent=user.district+", "+user.state;let wl=$("warehouseLocation");if(wl)wl.textContent=user.district+", "+user.state;let sl=$("sellerLocation");if(sl)sl.value=user.district+", "+user.state;renderMyListings();if(dash)dash.scrollIntoView({behavior:"smooth"});toast(lang==="hi"?"प्रोफाइल तैयार है!":lang==="mr"?"प्रोफाइल तयार आहे!":"Your profile is ready!");}
+let fp = $("finishProfile");
+if (fp) {
+  fp.onclick = () => {
+    let selectedState = $("state").value;
+    let selectedDistrict = $("district").value;
+    let enteredVillage = $("modalVillageInput") ? $("modalVillageInput").value.trim() : "";
+    
+    if (!selectedState || !selectedDistrict) {
+      toast("Please select State and District");
+      return;
+    }
+
+    user.state = selectedState;
+    user.district = selectedDistrict;
+    user.village = enteredVillage; // Yahin se village user object mein save hoga
+    localStorage.setItem("bhavsetu-user", JSON.stringify(user));
+    
+    window.location.href = "dashboard.html";
+  };
+}
 
 let cropImgInput = $("cropImageInput");
 if(cropImgInput) {
@@ -538,7 +704,7 @@ if(sf) {
 
     if(!crop || !qty || !price || !grade || !moisture || !harvest || !cropImg || !cropImg.name || !notes) {
       if(errBox) {
-        errBox.textContent = lang==="hi" ? "कृपया सभी आवश्यक फ़ील्ड भरें और फसल की फोटो अपलोड करें।" : lang==="mr" ? "कृपया सर्व आवश्यक फील्ड भरा आणि पिकाचा फोटो अपलोड करा." : "Please fill all required fields and upload a crop photo.";
+        errBox.textContent = lang==="hi" ? "कृपया सभी आवश्यक फ़ील्ड भरें और फसल की फोटो अपलोड करें。" : lang==="mr" ? "कृपया सर्व आवश्यक फील्ड भरा आणि पिकाचा फोटो अपलोड करा." : "Please fill all required fields and upload a crop photo.";
         errBox.classList.remove("hidden");
         errBox.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -586,7 +752,7 @@ let cph=$("cropPhoto");
 if(cph)cph.onchange=e=>{let f=e.target.files[0];if(!f)return;let pr=$("preview");if(pr){pr.src=URL.createObjectURL(f);pr.classList.remove("hidden");}let up=$("uploadPrompt");if(up)up.classList.add("hidden");let sn=$("scanNow");if(sn)sn.disabled=false};
 
 let sn=$("scanNow");
-if(sn)sn.onclick=()=>{let score=Math.floor(76+Math.random()*20),m=(9.5+Math.random()*4).toFixed(1),g=score>=90?"A+":score>=82?"A":"B",c=Math.floor(85+Math.random()*12);qualityResult={score,moisture:m,grade:g};let sc=$("score");if(sc)sc.textContent=score;let rg=$("resultGrade");if(rg)rg.textContent=g+" Visual Grade";let rm=$("resultMoisture");if(rm)rm.textContent=m+"%";let rv=$("resultVisual");if(rv)rv.textContent=g;let rc=$("resultConfidence");if(rc)rc.textContent=c+"%";let adv=$("advice");if(adv)adv.textContent=score>=85?(lang==="hi"?"दृश्य स्थिति अच्छी है। व्यावसायिक बिक्री से पहले कैलिब्रेटेड मीटर से नमी की पुष्टि करें।":lang==="mr"?"दृश्य स्थिती चांगली आहे. व्यावसायिक विक्रीपूर्वी ओलावा तपासा.":"Good visual condition."):lang==="hi"?"दृश्य स्थिति स्वीकार्य है। बिक्री से पहले नमी की पुष्टि करें।":lang==="mr"?"दृश्य स्थिती स्वीकार्य आहे.":"Acceptable visual condition.";let ur=$("useResult");if(ur)ur.classList.remove("hidden");}
+if(sn)sn.onclick=()=>{let score=Math.floor(76+Math.random()*20),m=(9.5+Math.random()*4).toFixed(1),g=score>=90?"A+":score>=82?"A":"B",c=Math.floor(85+Math.random()*12);qualityResult={score,moisture:m,grade:g};let sc=$("score");if(sc)sc.textContent=score;let rg=$("resultGrade");if(rg)rg.textContent=g+" Visual Grade";let rm=$("resultMoisture");if(rm)rm.textContent=m+"%";let rv=$("resultVisual");if(rv)rv.textContent=g;let rc=$("resultConfidence");if(rc)rc.textContent=c+"%";let adv=$("advice");if(adv)adv.textContent=score>=85?(lang==="hi"?"दृश्य स्थिति अच्छी है। व्यावसायिक बिक्री से पहले कैलिब्रेटेड मीटर से नमी की पुष्टि करें।":lang==="mr"?"दृश्य स्थिती चांगली आहे. व्यावसायिक विक्रीपूर्वी ओलावा तपासा.":"Good condition."):(lang==="hi"?"दृश्य स्थिति स्वीकार्य है।":"Acceptable condition.");let ur=$("useResult");if(ur)ur.classList.remove("hidden");}
 
 let ur=$("useResult");
 if(ur)ur.onclick=()=>{if(!qualityResult)return;let gd=$("grade");if(gd)gd.value=qualityResult.grade;let ms=$("moisture");if(ms)ms.value=qualityResult.moisture;let sellSec=$("sell");if(sellSec)sellSec.scrollIntoView({behavior:"smooth"});toast(lang==="hi"?"गुणवत्ता परिणाम लिस्टिंग में जोड़ दिया गया।":lang==="mr"?"गुणवत्ता निकाल लिस्टिंगमध्ये जोडला गेला.":"Quality result added.");}
@@ -609,18 +775,24 @@ function openProfile(){
     openModal("loginModal");
     return;
   }
-  populateProfileStates();
-  let pn=$("profileName");if(pn)pn.value=user.name||"";
-  let pv=$("profileVillage");if(pv)pv.value=user.village||"";
-  let pr=$("profileRole");if(pr)pr.value=user.role||"Farmer";
-  let pp=$("profilePhone");if(pp)pp.value="+91 "+(user.phone||"");
-  if(user.state){
-    let ps=$("profileState");if(ps)ps.value=user.state;
-    populateProfileDistricts(user.state);
-    let pd=$("profileDistrict");if(pd)pd.value=user.district||"";
-  }
-  let pst=$("profileStatus");if(pst)pst.textContent=user.name?user.name+" · "+(user.district||"")+(user.state?", "+user.state:""):"";
+  
+  let pn = $("profileName"); if(pn) pn.value = user.name || "";
+  let pe = $("profileEmail"); if(pe) pe.value = user.email || pendingEmail || "";
+  let pv = $("profileVillage"); if(pv) pv.value = user.village || "—";
+  let pp = $("profilePhone"); if(pp) pp.value = "+91 " + (user.phone || "");
+  let ps = $("profileState"); if(ps) ps.value = user.state || "";
+  let pd = $("profileDistrict"); if(pd) pd.value = user.district || "";
+
+  let pst = $("profileStatus"); 
+  let locDisplay = (user.village ? user.village + ", " : "") + (user.district || "") + (user.state ? ", " + user.state : "");
+  if(pst) pst.textContent = user.name ? user.name + " · " + locDisplay : "";
+  
   openModal("profileModal");
+  
+  // Yahan applyLang() chalane se modal khulte hi saare labels active language mein set ho jayenge
+  if(typeof applyLang === "function") {
+      applyLang();
+  }
 }
 
 function populateProfileStates(){
@@ -642,21 +814,6 @@ function populateProfileDistricts(state){
 
 let pb=$("profileBtn");if(pb)pb.onclick=openProfile;
 let ps=$("profileState");if(ps)ps.onchange=e=>populateProfileDistricts(e.target.value);
-let spBtn=$("saveProfile");
-if(spBtn)spBtn.onclick=()=>{
-  if(!user?.verified){openProfile();return;}
-  const name=$("profileName").value.trim();
-  const village=$("profileVillage").value.trim();
-  const state=$("profileState").value;
-  const district=$("profileDistrict").value;
-  if(!name||!state||!district){toast(lang==="hi"?"नाम, राज्य और जिला भरें।":lang==="mr"?"नाव, राज्य आणि जिल्हा भरा.":"Please enter your name, State and District.");return;}
-  user={...user,name,village,role:$("profileRole").value,state,district};
-  localStorage.setItem("bhavsetu-user",JSON.stringify(user));
-  updateProfileUI();
-  let pst=$("profileStatus");if(pst)pst.textContent=lang==="hi"?t.hi.profileSaved:lang==="mr"?t.mr.profileSaved:t.en.profileSaved;
-  setTimeout(()=>closeModal("profileModal"),500);
-  toast(lang==="hi"?t.hi.profileSaved:lang==="mr"?t.mr.profileSaved:t.en.profileSaved);
-};
 
 let setBtn=$("settingsBtn");if(setBtn)setBtn.onclick=()=>openModal("settingsModal");
 
@@ -667,15 +824,39 @@ if(langBtn)langBtn.onclick=()=>{
   else lang="en";
   localStorage.setItem("bhavsetu-lang",lang);
   applyLang();populateStates();populateProfileStates();
-  if(user){let sl=$("sellerLocation");if(sl)sl.value=user.district+", "+user.state}
+  if(user){
+    let sl=$("sellerLocation");
+    if(sl) sl.value = (user.village ? user.village + ", " : "") + user.district + ", " + user.state;
+  }
 };
 let setLang=$("settingLanguage");if(setLang)setLang.onclick=()=>{$("languageBtn").click()};
 
 let thToggle=$("themeToggle");
 if(thToggle)thToggle.onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("bhavsetu-theme",document.body.classList.contains("dark")?"dark":"light")};
 
-let lgBtn=$("logout");
-if(lgBtn)lgBtn.onclick=()=>{user=null;localStorage.removeItem("bhavsetu-user");let dash=$("dashboard");if(dash)dash.classList.add("hidden");closeModal("settingsModal");let psSum=$("profileSummary");if(psSum)psSum.textContent="Not signed in";toast(lang==="hi"?"लॉग आउट हो गया।":lang==="mr"?"लॉग आउट झाले.":"Logged out.")};
+let lgBtn = $("logout");
+if(lgBtn) {
+  lgBtn.onclick = () => {
+    user = null;
+    localStorage.removeItem("bhavsetu-user");
+    closeModal("settingsModal");
+    toast(lang==="hi" ? "लॉग आउट हो गया。" : lang==="mr" ? "लॉग आउट झाले." : "Logged out.");
+    setTimeout(() => { window.location.href = "index.html"; }, 600);
+  };
+}
+
+function requireLoginAndNavigate(e, targetHref) {
+  let savedUser = localStorage.getItem("bhavsetu-user");
+  let parsedUser = savedUser ? JSON.parse(savedUser) : null;
+  if(!parsedUser || !parsedUser.verified || !parsedUser.state) {
+    e.preventDefault();
+    startLogin();
+    toast(lang==="hi" ? "कृपया पहले लॉगिन करें!" : lang==="mr" ? "कृपया प्रथम लॉगिन करा!" : "Please login first!");
+    return false;
+  } else {
+    window.location.href = targetHref;
+  }
+}
 
 document.querySelectorAll(".dash-card").forEach(card => {
   card.onclick = (e) => {
@@ -683,9 +864,7 @@ document.querySelectorAll(".dash-card").forEach(card => {
     let targetId = card.getAttribute("data-target");
     if(targetId) {
       let targetEl = document.querySelector(targetId);
-      if(targetEl) {
-        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      if(targetEl) targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 });
@@ -693,18 +872,268 @@ document.querySelectorAll(".dash-card").forEach(card => {
 function updateProfileUI(){
   let psSum=$("profileSummary");
   if(user?.verified){
-    if(psSum)psSum.textContent=user.phone+(user.state?" · "+user.district+", "+user.state:"");
+    let locStr = (user.village ? user.village + ", " : "") + (user.district || "") + (user.state ? ", " + user.state : "");
+    if(psSum) psSum.textContent = user.phone + (user.state ? " · " + locStr : "");
     if(user.state){
       let dash=$("dashboard");if(dash)dash.classList.remove("hidden");
-      let dl=$("dashboardLocation");if(dl)dl.textContent=user.district+", "+user.state;
-      let ml=$("marketLocation");if(ml)ml.textContent=user.district+", "+user.state;
-      let wl=$("warehouseLocation");if(wl)wl.textContent=user.district+", "+user.state;
-      let sl=$("sellerLocation");if(sl)sl.value=user.district+", "+user.state;
+      let dl=$("dashboardLocation");if(dl)dl.textContent=locStr;
+      let ml=$("marketLocation");if(ml)ml.textContent=locStr;
+      let wl=$("warehouseLocation");if(wl)wl.textContent=locStr;
+      let sl=$("sellerLocation");if(sl)sl.value=locStr;
     }
   }else{
     if(psSum)psSum.textContent=lang==="hi"?"साइन इन नहीं है":lang==="mr"?"साइन इन केलेले नाही":"Not signed in";
   }
 }
+
+let tabBtn = $("tabLoginBtn");
+if(tabBtn) {
+  tabBtn.onclick = () => {
+    let savedUser = localStorage.getItem("bhavsetu-user");
+    let parsedUser = savedUser ? JSON.parse(savedUser) : null;
+    if(parsedUser && parsedUser.verified && parsedUser.state) {
+      window.location.href = "dashboard.html";
+    } else {
+      startLogin();
+    }
+  };
+}
+
+// ==================== NEW EMAIL & PHONE OTP FLOW ====================
+const backendUrl = "http://localhost:5000";
+let pendingEmail = "";
+
+// 1. Send OTP
+let sendOtpBtn = $("sendOtpBtn");
+if(sendOtpBtn) {
+    sendOtpBtn.onclick = async () => {
+        const email = $("emailInput").value.trim();
+        const msg = $("loginStatusMsg");
+
+        if(!email || !email.includes("@")) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].invalidEmail;
+            return;
+        }
+
+        msg.style.color = "black";
+        msg.innerText = t[lang].sendingOtp;
+
+        try {
+            const response = await fetch(`${backendUrl}/api/send-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                pendingEmail = email;
+                msg.style.color = "green";
+                msg.innerText = t[lang].otpSent;
+                $("emailStep").classList.add("hidden");
+                $("otpStep").classList.remove("hidden");
+            } else {
+                msg.style.color = "red";
+                msg.innerText = data.message;
+            }
+        } catch (err) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].serverErr;
+        }
+    };
+}
+
+// 2. Verify OTP
+let verifyOtpBtn = $("verifyOtpBtn");
+if(verifyOtpBtn) {
+    verifyOtpBtn.onclick = async () => {
+        const otpInputs = document.querySelectorAll(".otp-digit");
+        let otp = "";
+        otpInputs.forEach(input => otp += input.value);
+        const msg = $("loginStatusMsg");
+
+        if(otp.length < 6) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].enterFullOtp;
+            return;
+        }
+
+        try {
+            const response = await fetch(`${backendUrl}/api/verify-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: pendingEmail, otp })
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                msg.style.color = "green";
+                msg.innerText = t[lang].verificationSuccess;
+                
+                user = data.user || { email: pendingEmail };
+                user.email = pendingEmail;
+
+                // Cloud database se user ka purana data fetch karke sync kar lo
+                await fetchUserFromCloud(pendingEmail);
+
+                setTimeout(() => {
+                    $("otpStep").classList.add("hidden");
+                    $("phoneStep").classList.remove("hidden");
+                    msg.innerText = "";
+                }, 600);
+            } else {
+                msg.style.color = "red";
+                msg.innerText = t[lang].invalidOtp;
+            }
+        } catch (err) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].serverErr;
+        }
+    };
+}
+
+// Helper function jo cloud se data layega (Isko yahin ya file ke end mein rakh dena)
+async function fetchUserFromCloud(email) {
+    try {
+        let response = await fetch(`${backendUrl}/api/get-profile/${email}`);
+        let data = await response.json();
+        if (data.success && data.user) {
+            user = data.user;
+            localStorage.setItem("bhavsetu-user", JSON.stringify(user));
+            updateProfileUI();
+        }
+    } catch (err) {
+        console.error("Error fetching user from cloud:", err);
+    }
+}
+
+// 3. Send Phone Demo OTP
+let sendPhoneOtpBtn = $("sendPhoneOtpBtn");
+if(sendPhoneOtpBtn) {
+    sendPhoneOtpBtn.onclick = () => {
+        const phone = $("phoneInput").value.trim();
+        const msg = $("loginStatusMsg");
+        const phoneRegex = /^[6-9]\d{9}$/;
+
+        if(!phoneRegex.test(phone)) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].invalidPhone || "Please enter a valid 10-digit phone number!";
+            return;
+        }
+
+        user = user || {};
+        user.phone = phone;
+        msg.style.color = "green";
+        msg.innerText = lang === "hi" ? "OTP भेजा गया। डेमो OTP 123456 है।" : lang === "mr" ? "OTP पाठवला. डेमो OTP 123456 आहे." : "OTP sent. Demo OTP is 123456.";
+        
+        $("phoneStep").classList.add("hidden");
+        $("phoneOtpStep").classList.remove("hidden");
+    };
+}
+
+// 4. Verify Phone Demo OTP
+let verifyPhoneOtpBtn = $("verifyPhoneOtpBtn");
+if(verifyPhoneOtpBtn) {
+    verifyPhoneOtpBtn.onclick = () => {
+        const otpInputs = document.querySelectorAll(".phone-otp-digit");
+        let otp = "";
+        otpInputs.forEach(input => otp += input.value);
+        const msg = $("loginStatusMsg");
+
+        if(otp !== "123456") {
+            msg.style.color = "red";
+            msg.innerText = lang === "hi" ? "डेमो OTP 123456 डालें।" : lang === "mr" ? "डेमो OTP 123456 टाका." : "Use demo OTP 123456.";
+            return;
+        }
+
+        msg.style.color = "green";
+        msg.innerText = "";
+        $("phoneOtpStep").classList.add("hidden");
+        $("nameStep").classList.remove("hidden");
+    };
+}
+
+// 5. Save Name -> Open Location Modal
+let saveNameBtn = $("saveNameBtn");
+if(saveNameBtn) {
+    saveNameBtn.onclick = (e) => {
+        if(e) e.preventDefault();
+        const name = $("userNameInput").value.trim();
+        const msg = $("loginStatusMsg");
+
+        if(!name) {
+            msg.style.color = "red";
+            msg.innerText = t[lang].invalidName || "Please enter your name!";
+            return;
+        }
+
+        user = user || {};
+        user.name = name;
+        user.verified = true;
+        localStorage.setItem("bhavsetu-user", JSON.stringify(user));
+
+        // Pehle login modal band karein
+        closeModal("loginModal");
+
+        // Turant Location Modal kholen taaki user apna State, District aur Village chun sake
+        openModal("locationModal");
+        if(typeof populateStates === "function") {
+            populateStates();
+        }
+    };
+}
+// Location Modal Finish Button -> Save State, District & Village -> Go to Dashboard
+let finishBtn = $("finishProfile");
+if (finishBtn) {
+  finishBtn.onclick = async (e) => {
+    if(e) e.preventDefault();
+    let selectedState = $("state").value;
+    let selectedDistrict = $("district").value;
+    let enteredVillage = $("modalVillageInput") ? $("modalVillageInput").value.trim() : "";
+    
+    if (!selectedState || !selectedDistrict) {
+      toast("Please select State and District");
+      return;
+    }
+
+    user = user || {};
+    user.state = selectedState;
+    user.district = selectedDistrict;
+    user.village = enteredVillage;
+
+    // Cloud Database par data save karne ke liye API call
+    try {
+        await fetch('http://localhost:5000/api/update-profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+    } catch (err) {
+        console.error("Failed to sync with cloud database", err);
+    }
+
+    localStorage.setItem("bhavsetu-user", JSON.stringify(user));
+    
+    updateProfileUI();
+    window.location.href = "dashboard.html";
+  };
+}
+
+async function fetchUserFromCloud(email) {
+    try {
+        let response = await fetch(`http://localhost:5000/api/get-profile/${email}`);
+        let data = await response.json();
+        if (data.success && data.user) {
+            user = data.user;
+            localStorage.setItem("bhavsetu-user", JSON.stringify(user));
+            updateProfileUI();
+        }
+    } catch (err) {
+        console.error("Error fetching user from cloud:", err);
+    }
+}
+
 
 function openPaymentOptions(id){
   let x = listings.find(a=>a.id===id);

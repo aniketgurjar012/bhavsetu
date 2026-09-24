@@ -1,0 +1,22 @@
+{
+  "name": "bhavsetu-backend",
+  "version": "1.0.0",
+  "description": "BhavSetu Backend Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "mongodb": "^7.6.0",
+    "mongoose": "^8.24.4",
+    "nodemailer": "^6.10.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

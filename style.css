@@ -11,19 +11,42 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 .hero{position:relative;width:100%;background:#dff0df;overflow:hidden}.hero-img{display:block;width:100%;height:auto}.hero-actions{position:absolute;inset:0}.hero-hotspot{position:absolute;background:transparent;border:0;height:9%;bottom:4.5%}.hero-hotspot.start{left:4.3%;width:17.5%}.hero-hotspot.join{left:21.5%;width:14.5%}
 .hero{position:relative;width:100%;background:#dff0df;overflow:hidden}
 .hero-img{display:block;width:100%;height:auto}
-
-/* By default mobile image ko chhupa do */
 .mobile-img { display: none; }
 .desktop-img { display: block; }
-
+/* --- Quick Start Tab Hover & Styling --- */
+.quick-access-section h2 {
+  font-family: "Playfair Display", "Noto Sans Devanagari", serif;
+  font-size: clamp(38px, 4.2vw, 56px);
+  color: var(--g);
+}
+.quick-access-section p {
+  font-size: 17px;
+  line-height: 1.9;
+}
+.quick-access-btn {
+  transition: all 0.3s ease;
+}
+.quick-access-btn:hover {
+  background: var(--gd);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(11,109,58,0.3);
+}
 .hero-actions{position:absolute;inset:0}
 .hero-hotspot{position:absolute;background:transparent;border:0;height:9%;bottom:4.5%}
-
-/* Laptop ke liye hotspots */
 .hero-hotspot.start{left:4.3%;width:17.5%}
 .hero-hotspot.join{left:21.5%;width:14.5%}
 
-/* --- Mobile View Settings (Screen width < 700px) --- */
+/* --- 24/7 Blinking / Pulse Animation for Quick Start Button --- */
+@keyframes continuousBlink {
+  0% { opacity: 1; box-shadow: 0 0 0 0 rgba(13, 135, 72, 0.4); }
+  50% { opacity: 0.75; box-shadow: 0 0 15px 5px rgba(11, 109, 58, 0.3); }
+  100% { opacity: 1; box-shadow: 0 0 0 0 rgba(11, 109, 58, 0.4); }
+}
+
+.blinking-btn {
+  animation: continuousBlink 0.8s infinite ease-in-out;
+}
+
 @media(max-width:700px){
   /* Desktop image chhupao, mobile image dikhao */
   .desktop-img { display: none; }
@@ -44,7 +67,7 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 
 .dashboard-section{max-width:none;background:#eaf6ed}body.dark .dashboard-section{background:#111d17}
 .dashboard-head{max-width:1180px;margin:auto;border:1px solid var(--line);border-radius:24px;padding:38px 44px;background:linear-gradient(110deg,#eefaf1,#fff)}body.dark .dashboard-head{background:linear-gradient(110deg,#14231a,#1a2d22)}
-.dashboard-head{display:flex;justify-content:space-between;align-items:center}.dashboard-badge{display:inline-block;background:var(--g);color:#fff;border-radius:20px;padding:8px 15px;font-size:13px;font-weight:800}.dashboard-head h2{font-family:"Noto Sans Devanagari","Playfair Display",serif;font-size:40px;margin:14px 0 4px;color:var(--g)}.dashboard-head p{color:var(--muted);font-size:15px}.tractor{font-size:65px}.location-chip{display:inline-flex;align-items:center;gap:6px;color:var(--g);font-size:13px;background:#e8f6eb;border-radius:20px;padding:8px 12px;margin-top:14px}body.dark .location-chip{background:#193323}
+.dashboard-head{display:flex;justify-content:space-between;align-items:center}.dashboard-badge{display:inline-block;background:var(--g);color:#fff;border-radius:20px;padding:8px 15px;font-size:13px;font-weight:800}.dashboard-head h2{font-family:"Noto Sans Devanagari","Playfair Display",serif;font-size:40px;margin:14px 0 4px;color:var(--g)}.dashboard-head p{color:var(--muted);font-size:15px}.tractor{font-size:65px}.location-chip{display:inline-flex;align-items:center;gap:6px;color:var(--g);font-size:18px;background:#e8f6eb;border-radius:9px;padding:12px 12px;margin-top:14px}body.dark .location-chip{background:#193323}
 
 /* --- Dashboard Cards --- */
 .dash-grid{max-width:1180px;margin:24px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
@@ -106,7 +129,25 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 .steps b{color:var(--gold);font-size:13px}.steps h3{font-family:"Playfair Display",serif;color:var(--g);font-size:25px;margin:16px 0 10px}.steps p{color:var(--muted);font-size:14px}
 .cta{background:linear-gradient(115deg,#073d25,#0b6d3a);color:#fff;padding:115px 9%;display:flex;align-items:end;justify-content:space-between;gap:40px}.cta h2{font-size:clamp(42px,5.2vw,68px)}.cta p{color:#cce3d2;margin-top:22px;font-size:15px}.light{color:#e5d18d}.light-button{background:#d5b760;color:#163622;border-color:#d5b760;padding:15px 24px}
 footer{background:#06291a;color:#fff;padding:65px 9% 25px}.footer-top{max-width:1180px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;padding-bottom:48px}.footer-brand{font-family:"Playfair Display",serif;font-size:26px;color:#e5d18d}.footer-top p{color:#a9c2b0;font-size:13px;max-width:340px;margin-top:16px}.footer-top h4{color:#e5d18d;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}.footer-top a{display:block;color:#b8ccbE;font-size:13px;margin:9px 0}.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;color:#81998a;font-size:12px;text-align:center}
-.modal{position:fixed;inset:0;background:rgba(2,27,14,.55);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px}.modal-card{position:relative;width:min(600px,100%);max-height:92vh;overflow:auto;background:var(--paper);border-radius:20px;padding:36px;box-shadow:0 30px 100px rgba(0,0,0,.3)}.close{position:absolute;right:18px;top:12px;background:none;border:0;color:var(--g);font-size:30px}.auth-card{text-align:center;width:min(500px,100%)}.mini-logo{width:64px;height:64px;border-radius:18px;background:var(--g);color:#e4c878;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;font-weight:800}.modal-card h2{font-family:"Playfair Display","Noto Sans Devanagari",serif;color:var(--g);font-size:35px;margin:10px 0}.modal-card>p,.auth-card>p{color:var(--muted);font-size:14px;margin-bottom:24px}.phone{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}.phone span{background:#edf8ef;padding:14px;font-weight:800;font-size:14px}.phone input{border:0;border-radius:0;font-size:15px}.demo{display:block;color:var(--muted);font-size:12px;margin:12px}.otp{display:flex;gap:8px;margin:10px 0 15px}.otp input{text-align:center;font-size:16px}.location-preview{background:#edf8ef;border:1px solid var(--line);padding:13px;border-radius:9px;color:var(--g);font-size:13px;font-weight:800;margin:16px 0}.profile-btn{cursor:pointer}.profile-avatar{width:76px;height:76px;border-radius:50%;background:#edf8ef;border:1px solid var(--line);display:grid;place-items:center;font-size:35px;margin:0 auto 24px}.profile-status{min-height:20px;color:var(--g);font-size:13px;font-weight:700;margin:14px 0;text-align:center}.setting{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:20px 0}.setting small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.modal{position:fixed;inset:0;background:rgba(2,27,14,.55);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px}.modal-card{position:relative;width:min(600px,100%);max-height:92vh;overflow:auto;background:var(--paper);border-radius:20px;padding:36px;box-shadow:0 30px 100px rgba(0,0,0,.3)}.close{position:absolute;right:18px;top:12px;background:none;border:0;color:var(--g);font-size:30px}.auth-card{text-align:center;width:min(500px,100%)}.mini-logo{width:64px;height:64px;border-radius:18px;background:var(--g);color:#e4c878;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;font-weight:800}.modal-card h2{font-family:"Playfair Display","Noto Sans Devanagari",serif;color:var(--g);font-size:35px;margin:10px 0}.modal-card>p,.auth-card>p{color:var(--muted);font-size:14px;margin-bottom:24px}.phone{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}.phone span{background:#edf8ef;padding:14px;font-weight:800;font-size:14px}.phone input{border:0;border-radius:0;font-size:15px}.demo{display:block;color:var(--muted);font-size:12px;margin:10px}.location-preview{background:#edf8ef;border:1px solid var(--line);padding:10px;border-radius:10px;color:var(--g);font-size:16px;font-weight:800;margin:16px 0}.profile-btn{cursor:pointer}.profile-avatar{width:76px;height:76px;border-radius:50%;background:#edf8ef;border:1px solid var(--line);display:grid;place-items:center;font-size:35px;margin:0 auto 24px}.profile-status{min-height:20px;color:var(--g);font-size:13px;font-weight:700;margin:14px 0;text-align:center}.setting{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:20px 0}.setting small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.otp {
+  display: flex;
+  justify-content: center; /* Yeh boxes ko center me layega */
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 15px;
+}
+
+.otp input {
+  width: 45px;
+  height: 45px;
+  text-align: center;      /* Text ko box ke beech me karega */
+  font-size: 18px;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+}
 
 /* Fixed Detail Modal & Header Spacing */
 .detail-card .detail-hero{background:#edf8ef;border-radius:14px;height:195px;display:grid;place-items:center;font-size:85px;margin-bottom:16px;overflow:hidden}

@@ -30,6 +30,19 @@
   </div>
 </section>
 
+<!-- Multi-Language Quick Access & Login Tab -->
+<section class="quick-access-section section center" style="padding:70px 20px; text-align:center;">
+  <span class="eyebrow" data-i18n="tabEyebrow">त्वरित शुरुआत · Quick Start</span>
+  <h2 data-i18n="tabTitle">भावसेतु के साथ अपनी यात्रा शुरू करें</h2>
+  <p style="color:var(--muted); max-width:720px; margin:28px auto 28px auto;" data-i18n="tabSub">अपनी भाषा चुनें और सीधे अपने किसान या खरीदार डैशबोर्ड से जुड़ें।</p>
+  
+  <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+    <button class="primary quick-access-btn blinking-btn" id="tabLoginBtn" style="padding:15px 35px; font-size:16px; border-radius:12px; cursor:pointer;">
+  🚀 <span data-i18n="tabBtnText">शुरू करें / Get Started →</span>
+</button>
+  </div>
+</section>
+
 <section class="intro section">
   <span class="eyebrow" data-i18n="introEyebrow">भावसेतु की खासियत</span>
   <h1 data-i18n="introTitle">खेत और अवसर के बीच एक नया सेतु।</h1>
@@ -42,154 +55,56 @@
     <h2 data-i18n="featuresTitle">किसान के लिए ज़रूरी सब कुछ। बिना जटिलता के।</h2>
   </div>
   <div class="feature-grid">
-    <article class="feature-card"><span class="num">01</span><div class="icon">📊</div><h3 data-i18n="f1">वास्तविक मंडी भाव</h3><p data-i18n="f1p">बेचने का निर्णय लेने से पहले नज़दीकी मंडी भाव और बाज़ार की चाल देखें।</p><a href="#market" data-i18n="learn">देखें →</a></article>
-    <article class="feature-card"><span class="num">02</span><div class="icon">🤝</div><h3 data-i18n="f2">खरीदारों से जुड़ें</h3><p data-i18n="f2p">किसानों की लिस्ट की गई उपज देखें और सवाल या बातचीत के लिए सीधे संपर्क करें।</p><a href="#marketplace" data-i18n="learn">देखें →</a></article>
-    <article class="feature-card"><span class="num">03</span><div class="icon">🌾</div><h3 data-i18n="f3">अपनी उपज बेचें</h3><p data-i18n="f3p">मात्रा, कीमत, ग्रेड, नमी और स्थान के साथ फसल की लिस्टिंग बनाएं।</p><a href="#sell" data-i18n="learn">देखें →</a></article>
-    <article class="feature-card"><span class="num">04</span><div class="icon">🔬</div><h3 data-i18n="f4">फसल गुणवत्ता मीटर</h3><p data-i18n="f4p">फसल की फोटो अपलोड करके प्रोटोटाइप विजुअल क्वालिटी अनुमान देखें और नमी/ग्रेड दर्ज करें।</p><a href="#quality" data-i18n="learn">देखें →</a></article>
-    <article class="feature-card"><span class="num">05</span><div class="icon">🛒</div><h3 data-i18n="f5">खरीदें और कार्ट</h3><p data-i18n="f5p">लिस्टिंग खोलें, विवरण देखें और किसान से संपर्क करने से पहले उपज कार्ट में जोड़ें।</p><a href="#marketplace" data-i18n="learn">देखें →</a></article>
-    <article class="feature-card"><span class="num">06</span><div class="icon">📍</div><h3 data-i18n="f6">आपके जिले तक</h3><p data-i18n="f6p">राज्य/केंद्र शासित प्रदेश और जिला चुनें ताकि स्थानीय जानकारी अधिक प्रासंगिक हो।</p><a href="#home" data-i18n="learn">शुरू करें →</a></article>
-  </div>
+  <article class="feature-card">
+    <span class="num">01</span>
+    <div class="icon">📊</div>
+    <h3 data-i18n="f1">वास्तविक मंडी भाव</h3>
+    <p data-i18n="f1p">बेचने का निर्णय लेने से पहले नज़दीकी मंडी भाव और बाज़ार की चाल देखें।</p>
+    <a href="#market" onclick="requireLoginAndNavigate(event, '#market')" data-i18n="learn">देखें →</a>
+  </article>
+
+  <article class="feature-card">
+    <span class="num">02</span>
+    <div class="icon">🤝</div>
+    <h3 data-i18n="f2">खरीदारों से जुड़ें</h3>
+    <p data-i18n="f2p">किसानों की लिस्ट की गई उपज देखें और सवाल या बातचीत के लिए सीधे संपर्क करें।</p>
+    <a href="#marketplace" onclick="requireLoginAndNavigate(event, '#marketplace')" data-i18n="learn">देखें →</a>
+  </article>
+
+  <article class="feature-card">
+    <span class="num">03</span>
+    <div class="icon">🌾</div>
+    <h3 data-i18n="f3">अपनी उपज बेचें</h3>
+    <p data-i18n="f3p">मात्रा, कीमत, ग्रेड, नमी और स्थान के साथ फसल की लिस्टिंग बनाएं।</p>
+    <a href="#sell" onclick="requireLoginAndNavigate(event, '#sell')" data-i18n="learn">देखें →</a>
+  </article>
+
+  <article class="feature-card">
+    <span class="num">04</span>
+    <div class="icon">🔬</div>
+    <h3 data-i18n="f4">फसल गुणवत्ता मीटर</h3>
+    <p data-i18n="f4p">फसल की फोटो अपलोड करके प्रोटोटाइप विजुअल क्वालिटी अनुमान देखें और नमी/ग्रेड दर्ज करें।</p>
+    <a href="#quality" onclick="requireLoginAndNavigate(event, '#quality')" data-i18n="learn">देखें →</a>
+  </article>
+
+  <article class="feature-card">
+    <span class="num">05</span>
+    <div class="icon">🛒</div>
+    <h3 data-i18n="f5">खरीदें और कार्ट</h3>
+    <p data-i18n="f5p">लिस्टिंग खोलें, विवरण देखें और किसान से संपर्क करने से पहले उपज कार्ट में जोड़ें।</p>
+    <a href="#marketplace" onclick="requireLoginAndNavigate(event, '#marketplace')" data-i18n="learn">देखें →</a>
+  </article>
+
+  <article class="feature-card">
+    <span class="num">06</span>
+    <div class="icon">📍</div>
+    <h3 data-i18n="f6">आपके जिले तक</h3>
+    <p data-i18n="f6p">राज्य/केंद्र शासित प्रदेश और जिला चुनें ताकि स्थानीय जानकारी अधिक प्रासंगिक हो।</p>
+    <a href="#home" onclick="requireLoginAndNavigate(event, '#home')" data-i18n="learn">शुरू करें →</a>
+  </article>
+</div>
 </section>
 
-<!-- LOGIN / DASHBOARD PAGE -->
-<section id="dashboard" class="dashboard-section section hidden">
-  <div class="dashboard-head">
-    <div>
-      <span class="dashboard-badge">🌾 <span data-i18n="farmerPortal">किसान पोर्टल · Farmer Dashboard</span></span>
-      <h2 data-i18n="welcome">स्वागत है, किसान मित्र!</h2>
-      <p data-i18n="welcomeSub">अपनी फसल, नज़दीकी मंडी भाव और बिक्री के विकल्प एक ही जगह देखें।</p>
-      <span class="location-chip">⌖ <span id="dashboardLocation">—</span></span>
-    </div><div class="tractor">🚜</div>
-  </div>
-  
-  <div class="dash-grid">
-    <button class="dash-card" data-target="#market"><div class="dash-icon blue">📊</div><h3 data-i18n="nearby">नज़दीकी मंडी भाव</h3><p data-i18n="nearbySub">अपने क्षेत्र के मंडी रेट देखें।</p><b data-i18n="seePrices">भाव देखें →</b></button>
-    <button class="dash-card" data-target="#sell"><div class="dash-icon yellow">🌾</div><h3 data-i18n="list">फसल लिस्ट करें</h3><p data-i18n="listSub">अपनी उपज खरीदारों के लिए पोस्ट करें।</p><b data-i18n="add">फसल जोड़ें →</b></button>
-    <button class="dash-card" data-target="#myListings"><div class="dash-icon orange">📋</div><h3 data-i18n="mine">मेरी लिस्ट की गई फसलें</h3><p data-i18n="mineSub">अपनी सक्रिय लिस्टिंग देखें।</p><b data-i18n="viewMine">मेरी लिस्ट देखें →</b></button>
-    <button class="dash-card" data-target="#marketplace"><div class="dash-icon green">🛒</div><h3 data-i18n="buyDash">फसल खरीदें</h3><p data-i18n="buySub">बाज़ार में उपलब्ध उपज देखें।</p><b data-i18n="viewMarket">बाज़ार देखें →</b></button>
-    <button class="dash-card" data-target="#warehouse"><div class="dash-icon blue">🏭</div><h3 data-i18n="whTitle">फसल भंडारण गोदाम</h3><p data-i18n="whSub">नज़दीकी कोल्ड स्टोरेज व गोदाम देखें।</p><b data-i18n="viewWh">गोदाम देखें →</b></button>
-    <button class="dash-card" data-target="#weather"><div class="dash-icon yellow">🌤</div><h3 data-i18n="weTitle">मौसम</h3><p data-i18n="weSub">आज और अगले 7 दिनों का मौसम।</p><b data-i18n="viewWe">मौसम देखें →</b></button>
-    <button class="dash-card" data-target="#history"><div class="dash-icon orange">📜</div><h3 data-i18n="hiTitle">हिस्ट्री</h3><p data-i18n="hiSub">अपनी गतिविधि का इतिहास देखें।</p><b data-i18n="viewHi">हिस्ट्री देखें →</b></button>
-  </div>
-
-  <section id="market" class="market-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="live">लाइव मार्केट</span><h2 data-i18n="marketTitle">आज का मंडी भाव</h2></div>
-      <span class="location-chip">⌖ <span id="marketLocation">Indore, Madhya Pradesh</span></span>
-    </div>
-    <div class="price-grid" id="priceGrid"></div>
-  </section>
-
-  <section id="marketplace" class="marketplace section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="marketplaceEyebrow">किसान मार्केटप्लेस</span><h2 data-i18n="marketplaceTitle">किसानों से सीधे खरीदें।</h2><p data-i18n="marketplaceSub">फसल खोलें, विवरण देखें, कार्ट में जोड़ें या किसान से पूछताछ करें।</p></div>
-      <button class="cart-button" id="cartButton">🛒 <span data-i18n="cart">कार्ट</span> <b id="cartCount">0</b></button>
-    </div>
-    <div class="market-filters">
-      <input id="searchCrop" placeholder="फसल खोजें..." data-i18n-placeholder="search">
-      <select id="gradeFilter"><option value="">सभी ग्रेड</option><option>A+</option><option>A</option><option>B</option></select>
-      <select id="sortPrice"><option value="default">मूल्य के अनुसार क्रमबद्ध करें</option><option value="low">कीमत: कम से ज्यादा</option><option value="high">कीमत: ज्यादा से कम</option></select>
-    </div>
-    <div class="listing-grid" id="marketplaceGrid"></div>
-  </section>
-
-  <section id="sell" class="sell-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="sellEyebrow">अपनी उपज बेचें</span><h2 data-i18n="sellTitle">खरीदारों को अपनी उपज बताएं।</h2><p data-i18n="sellSub">फसल का प्रश्नावली फॉर्म भरें। गुणवत्ता मीटर का परिणाम अपने आप जोड़ा जा सकता है।</p></div>
-    </div>
-    <form class="form-card" id="sellForm">
-      <div id="formErrorBox" class="hidden" style="background:#ffe6e6;color:#a40000;padding:12px 16px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:18px;border:1px solid #ff9999;text-align:center;"></div>
-      <div class="form-title"><span>01</span><h3 data-i18n="cropDetails">फसल का विवरण</h3></div>
-      <div class="form-grid">
-        <label><span data-i18n="crop">फसल</span><select name="crop" required><option value="">फसल चुनें</option><option>Wheat</option><option>Soybean</option><option>Cotton</option><option>Maize</option><option>Chana</option><option>Onion</option></select></label>
-        <label><span data-i18n="variety">किस्म (वैकल्पिक)</span><input name="variety" placeholder="उदा. लोकवन"></label>
-        <label><span data-i18n="quantity">मात्रा (क्विंटल)</span><input name="qty" type="number" min="1" required></label>
-        <label><span data-i18n="price">अपेक्षित कीमत / क्विंटल</span><input name="price" type="number" min="1" required></label>
-        <label><span data-i18n="grade">ग्रेड</span><select name="grade" required><option value="">ग्रेड चुनें</option><option>A+</option><option>A</option><option>B</option></select></label>
-        
-        <label><span data-i18n="moisture">नमी %</span>
-          <select name="moisture" id="moistureSelect" required>
-            <option value="" data-i18n="selMoisture">नमी चुनें</option>
-            <option value="8% (Dry / सूखा / कोरडा)" data-i18n="m1">8% - सूखा / Dry / कोरडा</option>
-            <option value="10% (Slightly Dry / हल्का सूखा / थोडे कोरडे)" data-i18n="m2">10% - हल्का सूखा / Slightly Dry / थोडे कोरडे</option>
-            <option value="12% (Normal / सामान्य / साधारण)" data-i18n="m3">12% - सामान्य / Normal / साधारण</option>
-            <option value="14% (Slightly Wet / हल्का गीला / थोडे ओले)" data-i18n="m4">14% - हल्का गीला / Slightly Wet / थोडे ओले</option>
-            <option value="16%+ (Wet / गीला / ओले)" data-i18n="m5">16%+ - गीला / Wet / ओले</option>
-            <option value="Not Known / नहीं पता / माहीत नाही" data-i18n="m6">नहीं पता / Don't know / माहीत नाही</option>
-          </select>
-        </label>
-      </div>
-      <div class="form-title"><span>02</span><h3 data-i18n="listingDetails">लिस्टिंग विवरण</h3></div>
-      <div class="form-grid">
-        <label><span data-i18n="harvest">कटाई की तारीख</span><input name="harvest" type="date" required></label>
-        <label><span data-i18n="location">स्थान</span><input name="location" id="sellerLocation" readonly required></label>
-        
-        <label class="wide">
-          <span data-i18n="cropImgLabel">फसल की फोटो (आवश्यक)</span>
-          <input name="cropImage" id="cropImageInput" type="file" accept="image/*" required style="margin-top:6px;">
-          <div id="imagePreviewContainer" class="hidden" style="display:flex;align-items:center;gap:12px;margin-top:10px;background:var(--cream);padding:8px;border-radius:8px;border:1px solid var(--line);">
-            <img id="thumbPreview" src="" alt="Preview" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">
-            <span id="fileNameDisplay" style="font-size:12px;font-weight:700;color:var(--g);"></span>
-          </div>
-        </label>
-
-        <label class="wide"><span data-i18n="notes">खरीदारों के लिए जानकारी</span><textarea name="notes" rows="4" placeholder="गुणवत्ता, पैकिंग, पसंदीदा मात्रा आदि" required></textarea></label>
-      </div>
-      <div class="sell-actions"><a href="#quality" class="outline-btn" data-i18n="scanFirst">पहले गुणवत्ता स्कैन करें</a><button class="primary" type="submit" data-i18n="publish">फसल प्रकाशित करें →</button></div>
-    </form>
-  </section>
-
-  <section id="quality" class="quality-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="qualityEyebrow">फसल गुणवत्ता मीटर</span><h2 data-i18n="qualityTitle">बेचने से पहले गुणवत्ता देखें।</h2><p data-i18n="qualitySub">साफ फसल फोटो अपलोड करें। यह फ्रंट-एंड प्रोटोटाइप विजुअल अनुमान देता है; वास्तविक नमी के लिए कैलिब्रेटेड सेंसर/मॉडल चाहिए।</p></div>
-    </div>
-    <div class="quality-layout">
-      <div class="dropzone" id="dropzone">
-        <input id="cropPhoto" type="file" accept="image/*" hidden>
-        <div id="uploadPrompt"><div class="camera">📷</div><h3 data-i18n="uploadTitle">फसल की फोटो अपलोड करें</h3><p data-i18n="uploadSub">अनाज/फसल की साफ और अच्छी रोशनी वाली फोटो लें।</p><button class="outline-btn" type="button" id="choosePhoto" data-i18n="choosePhoto">फोटो चुनें</button></div>
-        <img id="preview" class="hidden" alt="Crop preview">
-      </div>
-      <div class="quality-result">
-        <span class="eyebrow" data-i18n="analysis">विजुअल विश्लेषण</span>
-        <div class="score"><strong id="score">—</strong><small>/100</small></div>
-        <h3 id="resultGrade">—</h3>
-        <div class="metrics"><div><b id="resultMoisture">—</b></div><div><span data-i18n="grade">ग्रेड</span><b id="resultVisual">—</b></div><div><span data-i18n="confidence">विश्वसनीयता</span><b id="resultConfidence">—</b></div></div>
-        <p id="advice" data-i18n="qualityAdvice">फोटो अपलोड करके स्कैन शुरू करें।</p>
-        <button class="primary full" id="scanNow" disabled data-i18n="scan">फसल स्कैन करें →</button>
-        <button class="outline-btn full hidden" id="useResult" data-i18n="useResult">परिणाम लिस्टिंग में लगाएं</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="myListings" class="my-listings section">
-    <div class="section-head"><div><span class="eyebrow" data-i18n="myEyebrow">आपकी उपज</span><h2 data-i18n="myTitle">मेरी सक्रिय लिस्टिंग</h2></div></div>
-    <div id="myListingsGrid" class="my-grid"></div>
-  </section>
-
-  <section id="warehouse" class="warehouse-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="whEyebrow">भंडारण और गोदाम</span><h2 data-i18n="whMainTitle">फसल भंडारण गोदाम</h2><p data-i18n="whMainSub">अपने क्षेत्र के पास सत्यापित कोल्ड स्टोरेज और गोदामों की उपलब्धता और किराया देखें।</p></div>
-    </div>
-    <div class="warehouse-grid" id="warehouseGrid"></div>
-  </section>
-
-  <section id="weather" class="weather-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="weEyebrow">लाइव मौसम पूर्वानुमान</span><h2 data-i18n="weMainTitle">आज और अगले 7 दिनों का मौसम</h2><p data-i18n="weMainSub">आपकी फसल और खेती के लिए सटीक तापमान और बारिश का पूर्वानुमान।</p></div>
-    </div>
-    <div class="weather-today-card" id="weatherToday"></div>
-    <div class="forecast-grid" id="forecastGrid"></div>
-  </section>
-
-  <section id="history" class="history-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="hiEyebrow">गतिविधि इतिहास</span><h2 data-i18n="hiMainTitle">आपकी गतिविधि इतिहास</h2><p data-i18n="hiMainSub">आपके द्वारा की गई पिछली लिस्टिंग और पूछताछ का विवरण।</p></div>
-    </div>
-    <div class="history-content">
-      <div class="form-card" style="text-align:center;color:var(--muted);font-size:14px;" data-i18n="noHistory">अभी आपकी कोई हिस्ट्री नहीं है।</div>
-    </div>
-  </section>
-</section>
 
 <section class="how section">
   <div class="section-head center"><span class="eyebrow" data-i18n="howEyebrow">कैसे काम करता है</span><h2 data-i18n="howTitle">जानकारी से बेहतर सौदे तक।</h2></div>
@@ -208,9 +123,111 @@
 </footer>
 
 <!-- Modals -->
-<div class="modal hidden" id="loginModal"><div class="modal-card auth-card"><button class="close" data-close="loginModal">×</button><div class="mini-logo">भ</div><span class="eyebrow">BHAVSETU</span><h2 data-i18n="loginTitle">भावसेतु में आपका स्वागत है</h2><p data-i18n="loginSub">अपना किसान प्रोफाइल बनाने या खोलने के लिए मोबाइल नंबर डालें।</p><label data-i18n="phone">मोबाइल नंबर</label><div class="phone"><span>+91</span><input id="phone" maxlength="10" inputmode="numeric" placeholder="98765 43210"></div><button class="primary full" id="sendOtp" data-i18n="sendOtp">OTP भेजें →</button><small class="demo" data-i18n="demoOtp">डेमो OTP: 123456</small><div id="otpBox" class="hidden"><label data-i18n="enterOtp">6 अंकों का OTP डालें</label><div class="otp"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><button class="primary full" id="verifyOtp" data-i18n="verify">सत्यापित करें और आगे बढ़ें →</button></div></div></div>
+<div class="modal hidden" id="loginModal">
+    <div class="modal-card auth-card">
+        <button class="close" data-close="loginModal">×</button>
+        <div class="mini-logo">भ</div>
+        <span class="eyebrow">BHAVSETU</span>
+        
+        <!-- Step 1: Email Input -->
+        <div id="emailStep">
+            <h2 data-i18n="loginTitle">Welcome to BhavSetu</h2>
+            <p data-i18n="emailSub">Enter your email ID to login or create your profile.</p>
+            <label style="display:block; text-align:left; font-weight:700; margin-bottom:5px; font-size:13px;" data-i18n="emailLabel">Email ID</label>
+            <div class="phone">
+                <span style="font-size:16px;">📧</span>
+                <input id="emailInput" type="email" placeholder="name@example.com" style="width:100%; border:0; outline:none; background:transparent; padding:0 10px;">
+            </div>
+            <button class="primary full" id="sendOtpBtn" data-i18n="sendOtp">Send OTP →</button>
+        </div>
 
-<div class="modal hidden" id="locationModal"><div class="modal-card"><button class="close" data-close="locationModal">×</button><span class="eyebrow">02 / PROFILE</span><h2 data-i18n="where">आप कहाँ से हैं?</h2><p data-i18n="whereSub">अपना राज्य/केंद्रशासित प्रदेश और जिला चुनें।</p><div class="form-grid"><label><span data-i18n="state">राज्य / केंद्र शासित प्रदेश</span><select id="state"></select></label><label><span data-i18n="district">जिला</span><select id="district" disabled><option>पहले राज्य चुनें</option></select></label></div><div class="location-preview" id="locationPreview">—</div><button class="primary full" id="finishProfile" disabled data-i18n="continue">आगे बढ़ें →</button></div></div>
+        <!-- Step 2: Email OTP Verification -->
+        <div id="otpStep" class="hidden">
+            <h2 data-i18n="otpTitle">OTP Verification</h2>
+            <p data-i18n="otpSub">Enter the 6-digit OTP sent to your email.</p>
+            <div class="otp">
+                <input class="otp-digit" maxlength="1" />
+                <input class="otp-digit" maxlength="1" />
+                <input class="otp-digit" maxlength="1" />
+                <input class="otp-digit" maxlength="1" />
+                <input class="otp-digit" maxlength="1" />
+                <input class="otp-digit" maxlength="1" />
+            </div>
+            <button class="primary full" id="verifyOtpBtn" data-i18n="verify">Verify & Continue →</button>
+        </div>
+
+        <!-- Step 3: Phone Number Input -->
+        <div id="phoneStep" class="hidden">
+            <h2 data-i18n="phoneTitle">Enter Mobile Number</h2>
+            <p data-i18n="phoneSub">Add a mobile number to secure your account.</p>
+            <label style="display:block; text-align:left; font-weight:700; margin-bottom:5px; font-size:13px;" data-i18n="phone">Mobile number</label>
+            <div class="phone">
+                <span>+91</span>
+                <input id="phoneInput" maxlength="10" inputmode="numeric" placeholder="98765 43210">
+            </div>
+            <button class="primary full" id="sendPhoneOtpBtn" style="margin-top: 10px;" data-i18n="sendOtp">Send OTP →</button>
+        </div>
+
+        <!-- Step 4: Phone Demo OTP Verification -->
+        <div id="phoneOtpStep" class="hidden">
+            <h2 data-i18n="otpTitle">OTP Verification</h2>
+            <p data-i18n="enterOtp">Enter 6-digit OTP</p>
+            <div class="otp">
+                <input class="phone-otp-digit" maxlength="1" />
+                <input class="phone-otp-digit" maxlength="1" />
+                <input class="phone-otp-digit" maxlength="1" />
+                <input class="phone-otp-digit" maxlength="1" />
+                <input class="phone-otp-digit" maxlength="1" />
+                <input class="phone-otp-digit" maxlength="1" />
+            </div>
+            <small class="demo" data-i18n="demoOtp">Demo OTP: 123456</small>
+            <button class="primary full" id="verifyPhoneOtpBtn" data-i18n="verify">Verify & Continue →</button>
+        </div>
+
+        <!-- Step 5: Enter Name -->
+        <div id="nameStep" class="hidden">
+            <h2 data-i18n="nameTitle">Enter your full name</h2>
+            <p data-i18n="nameSub">Please enter your name to complete your profile.</p>
+            <label style="display:block; text-align:left; font-weight:700; margin-bottom:5px; font-size:13px;" data-i18n="nameLabel">Full Name</label>
+            <div class="phone" style="padding: 0 10px;">
+                <input id="userNameInput" type="text" data-i18n-placeholder="namePlaceholder" placeholder="e.g. Ramesh Patidar" style="width:100%; border:0; outline:none; background:transparent; padding:12px 0; font-size:15px;">
+            </div>
+            <button class="primary full" id="saveNameBtn" style="margin-top: 10px;" data-i18n="continue">Continue →</button>
+        </div>
+
+        <p id="loginStatusMsg" style="margin-top: 12px; font-size: 14px; text-align: center; font-weight: bold;"></p>
+    </div>
+</div>
+
+<div class="modal hidden" id="locationModal">
+    <div class="modal-card">
+        <button class="close" data-close="locationModal">×</button>
+        <span class="eyebrow">02 / PROFILE</span>
+        <h2 data-i18n="where">आप कहाँ से हैं?</h2>
+        <p data-i18n="whereSub">अपना राज्य/केंद्रशासित प्रदेश और जिला चुनें।</p>
+        
+        <div class="form-grid">
+            <label>
+                <span data-i18n="state">राज्य / केंद्र शासित प्रदेश</span>
+                <select id="state"></select>
+            </label>
+            <label>
+                <span data-i18n="district">जिला</span>
+                <select id="district" disabled><option>पहले राज्य चुनें</option></select>
+            </label>
+        </div>
+
+        <!-- Village / Town Input Box with i18n support -->
+        <label style="display: block; margin-top: 15px;">
+            <span style="font-weight: 700; font-size: 13px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="villageLabel">गाँव / शहर (Village / Town)</span>
+            <input id="modalVillageInput" type="text" data-i18n-placeholder="villagePlaceholder" placeholder="अपने गाँव या शहर का नाम लिखें" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--text); outline: none; font-size: 14px;">
+        </label>
+
+        <div class="location-preview" id="locationPreview">—</div>
+        <button class="primary full" id="finishProfile" disabled data-i18n="continue">आगे बढ़ें →</button>
+    </div>
+</div>
+
 
 <div class="modal hidden" id="detailModal"><div class="modal-card detail-card"><button class="close" data-close="detailModal">×</button><div id="detailContent"></div></div></div>
 
@@ -219,24 +236,46 @@
 
 <div class="drawer hidden" id="cartDrawer"><div class="drawer-card"><div class="drawer-head"><h2 data-i18n="cart">कार्ट</h2><button class="close" data-close="cartDrawer">×</button></div><div id="cartItems"></div><div class="total"><b data-i18n="total">कुल</b><strong id="cartTotal">₹0</strong></div><button class="primary full" id="checkout" data-i18n="enquireCart">कार्ट के बारे में पूछें →</button></div></div>
 
+
 <div class="modal hidden" id="profileModal">
-  <div class="modal-card profile-card">
-    <button class="close" data-close="profileModal">×</button>
-    <span class="eyebrow" data-i18n="profileEyebrow">मेरी प्रोफाइल</span>
-    <h2 data-i18n="profileTitle">अपनी प्रोफाइल बनाएं</h2>
-    <p data-i18n="profileSub">अपनी जानकारी जोड़ें ताकि भावसेतु आपके अनुभव को बेहतर बना सके।</p>
-    <div class="profile-avatar">👤</div>
-    <div class="form-grid">
-      <label><span data-i18n="fullName">पूरा नाम</span><input id="profileName" type="text" placeholder="आपका नाम"></label>
-      <label><span data-i18n="role">मैं हूँ</span><select id="profileRole"><option value="Farmer">किसान</option><option value="Buyer">खरीदार</option><option value="Both">किसान और खरीदार</option></select></label>
-      <label><span data-i18n="village">गाँव / शहर</span><input id="profileVillage" type="text" placeholder="गाँव या शहर"></label>
-      <label><span data-i18n="profileState">राज्य / केंद्र शासित प्रदेश</span><select id="profileState"></select></label>
-      <label><span data-i18n="profileDistrict">जिला</span><select id="profileDistrict" disabled><option>पहले राज्य चुनें</option></select></label>
-      <label><span data-i18n="profilePhone">मोबाइल नंबर</span><input id="profilePhone" type="tel" readonly></label>
+    <div class="modal-card auth-card" style="text-align: left; max-width: 550px;">
+        <button class="close" data-close="profileModal">×</button>
+        <div style="text-align: center;">
+            <div class="profile-avatar">👤</div>
+            <span class="eyebrow" data-i18n="profileEyebrow">मेरी प्रोफाइल</span>
+            <h2 data-i18n="profileTitle" style="font-size: 26px; margin: 8px 0;">अपनी प्रोफाइल देखें</h2>
+            <p data-i18n="profileSub" style="margin-bottom: 20px;">भावसेतु पर आपकी सत्यापित खाता जानकारी।</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="fullName">पूरा नाम</label>
+                <input id="profileName" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="emailLabel">ईमेल आईडी</label>
+                <input id="profileEmail" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="village">गाँव / शहर</label>
+                <input id="profileVillage" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="profileState">राज्य / केंद्र शासित प्रदेश</label>
+                <input id="profileState" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="profileDistrict">जिला</label>
+                <input id="profileDistrict" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+            <div>
+                <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 5px; color: var(--text);" data-i18n="profilePhone">मोबाइल नंबर</label>
+                <input id="profilePhone" type="text" readonly style="width: 100%; padding: 10px; background: rgba(0,0,0,0.04); border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--text); cursor: not-allowed;">
+            </div>
+        </div>
+
+        <p id="profileStatus" class="profile-status" style="margin-top: 20px; text-align: center; font-weight: 600; color: var(--g);"></p>
     </div>
-    <div class="profile-status" id="profileStatus"></div>
-    <button class="primary full" id="saveProfile" data-i18n="saveProfile">प्रोफाइल सेव करें →</button>
-  </div>
 </div>
 
 <div class="modal hidden" id="settingsModal">
