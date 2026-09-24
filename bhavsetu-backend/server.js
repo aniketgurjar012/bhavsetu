@@ -101,3 +101,6 @@ app.get('/api/get-profile/:email', async (req, res) => {
 app.listen(5000, () => {
     console.log('Server is running on port 5000 🚀');
 });
+app.get('/', (req, res) => {
+    res.send('Bhavsetu Server is running!');
+});
