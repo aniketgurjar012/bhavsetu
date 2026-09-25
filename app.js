@@ -367,21 +367,20 @@ function applyLang(){
   if (typeof renderPrices === "function") {renderPrices()};;renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();updateProfileUI();
 }
 
-// ==========================================================
-// BHAVSETU MANDI UI
-// ==========================================================
 
-const MANDI_INITIAL_CARDS = 12;
-const MANDI_LOAD_MORE = 12;
-const MANDI_HISTORY_PAGE = 20;
 
 
 // ==========================================================
-// SAFE HTML
+// BHAVSETU MANDI UI - FAST LAZY VERSION
 // ==========================================================
+
+
+const MANDI_BACKEND =
+    "https://bhavsetu-0758.onrender.com";
+// Live deployment me apna existing Render URL yahan rakho
+
 
 function mandiEscape(value) {
-
     return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -391,55 +390,35 @@ function mandiEscape(value) {
 }
 
 
-// ==========================================================
-// DATE HELPERS
-// ==========================================================
-
-function mandiDateTimestamp(value) {
-
-    if (!value) return 0;
+function mandiTime(value) {
 
     const p =
-        String(value)
-            .trim()
+        String(value || "")
             .split(/[\/-]/);
 
     if (p.length !== 3) {
         return 0;
     }
 
-
-    const date =
-        new Date(
-            Number(p[2]),
-            Number(p[1]) - 1,
-            Number(p[0])
-        );
-
-
-    return isNaN(date.getTime())
-        ? 0
-        : date.getTime();
+    return new Date(
+        Number(p[2]),
+        Number(p[1]) - 1,
+        Number(p[0])
+    ).getTime() || 0;
 }
 
 
 function mandiFormatDate(value) {
 
-    if (!value) return "—";
-
-
     const p =
-        String(value)
-            .trim()
+        String(value || "")
             .split(/[\/-]/);
 
-
     if (p.length !== 3) {
-        return value;
+        return value || "—";
     }
 
-
-    const date =
+    const d =
         new Date(
             Number(p[2]),
             Number(p[1]) - 1,
@@ -447,19 +426,16 @@ function mandiFormatDate(value) {
         );
 
 
-    if (isNaN(date.getTime())) {
-        return value;
-    }
-
-
-    return date.toLocaleDateString(
-        "hi-IN",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    );
+    return isNaN(d.getTime())
+        ? value
+        : d.toLocaleDateString(
+            "hi-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
 }
 
 
@@ -475,7 +451,6 @@ function getBhavSetuMandiLocation() {
 
     try {
 
-        // Existing global user
         if (
             typeof user !== "undefined" &&
             user
@@ -489,65 +464,44 @@ function getBhavSetuMandiLocation() {
         }
 
 
-        // currentUser
-        if (!state || !district) {
+        for (
+            const key
+            of ["currentUser", "user"]
+        ) {
+
+            if (
+                state &&
+                district
+            ) {
+                break;
+            }
+
 
             const raw =
                 localStorage.getItem(
-                    "currentUser"
+                    key
                 );
 
 
             if (raw) {
 
-                const u =
+                const saved =
                     JSON.parse(raw);
 
 
                 state =
                     state ||
-                    u.state ||
+                    saved.state ||
                     "";
-
 
                 district =
                     district ||
-                    u.district ||
+                    saved.district ||
                     "";
             }
         }
 
 
-        // user
-        if (!state || !district) {
-
-            const raw =
-                localStorage.getItem(
-                    "user"
-                );
-
-
-            if (raw) {
-
-                const u =
-                    JSON.parse(raw);
-
-
-                state =
-                    state ||
-                    u.state ||
-                    "";
-
-
-                district =
-                    district ||
-                    u.district ||
-                    "";
-            }
-        }
-
-
-        // Old separate keys
         state =
             state ||
             localStorage.getItem(
@@ -567,7 +521,7 @@ function getBhavSetuMandiLocation() {
     } catch (error) {
 
         console.error(
-            "Mandi location error:",
+            "Mandi location:",
             error
         );
     }
@@ -584,138 +538,156 @@ function getBhavSetuMandiLocation() {
 
 
 // ==========================================================
-// NORMALIZE HISTORY
+// STATE
 // ==========================================================
 
-function getBhavSetuCropHistory(
-    market,
-    item
-) {
-
-    const historyKey =
-        `${String(
-            item.Commodity || ""
-        )
-            .trim()
-            .toLowerCase()}|${String(
-            item.Variety || ""
-        )
-            .trim()
-            .toLowerCase()}`;
-
-
-    const source =
-        Array.isArray(
-            market.history?.[historyKey]
-        )
-            ? market.history[
-                historyKey
-            ]
-            : [];
-
+let bhavSetuMandiState = {
+    location: null,
+    nextOffset: 0,
+    hasMore: true,
 
     /*
-     * Date-wise duplicate remove.
-     *
-     * Same mandi + exact commodity + exact variety.
+     * market name =>
+     * {
+     *   element,
+     *   cards,
+     *   seen
+     * }
      */
-    const dateMap =
-        new Map();
+    markets: new Map(),
+
+    loadingMore: false
+};
 
 
-    source.forEach(entry => {
+// ==========================================================
+// CREATE MARKET
+// ==========================================================
 
-        if (
-            !entry ||
-            !entry.date
-        ) {
-            return;
-        }
+function getOrCreateMandiMarket(
+    marketData,
+    grid
+) {
 
-
-        const dateKey =
-            String(
-                entry.date
-            ).trim();
-
-
-        /*
-         * Ek hi date multiple baar aaye
-         * to ek entry rakhenge.
-         */
-        if (!dateMap.has(dateKey)) {
-
-            dateMap.set(
-                dateKey,
-                {
-                    date:
-                        dateKey,
-
-                    price:
-                        entry.price
-                }
-            );
-        }
-    });
-
-
-    // ======================================================
-    // IMPORTANT:
-    // Current/latest card bhi history me ensure karo
-    // ======================================================
-
-    const currentDate =
-        String(
-            item.Arrival_Date || ""
-        ).trim();
+    const marketName =
+        marketData.market;
 
 
     if (
-        currentDate &&
-        !dateMap.has(currentDate)
+        bhavSetuMandiState
+            .markets
+            .has(marketName)
     ) {
 
-        dateMap.set(
-            currentDate,
-            {
-                date:
-                    currentDate,
-
-                price:
-                    item.Modal_Price
-            }
-        );
+        return bhavSetuMandiState
+            .markets
+            .get(marketName);
     }
 
 
-    const history =
-        Array.from(
-            dateMap.values()
+    const section =
+        document.createElement(
+            "section"
         );
 
 
-    // Newest → oldest
-    history.sort(
-        (a, b) =>
-            mandiDateTimestamp(
-                b.date
-            ) -
-            mandiDateTimestamp(
-                a.date
-            )
+    section.className =
+        "bhavsetu-mandi-group";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+
+    header.className =
+        "bhavsetu-mandi-head";
+
+
+    header.innerHTML = `
+
+        <div>
+            <small>मंडी</small>
+
+            <h3>
+                ${mandiEscape(
+                    marketName
+                )}
+            </h3>
+        </div>
+
+
+        <span class="mandi-latest-date">
+
+            नवीनतम:
+            ${mandiEscape(
+                mandiFormatDate(
+                    marketData.latestDate
+                )
+            )}
+
+        </span>
+    `;
+
+
+    const cards =
+        document.createElement(
+            "div"
+        );
+
+
+    cards.className =
+        "bhavsetu-mandi-grid";
+
+
+    section.appendChild(
+        header
+    );
+
+    section.appendChild(
+        cards
     );
 
 
-    return history;
+    grid.appendChild(
+        section
+    );
+
+
+    const state = {
+
+        element:
+            section,
+
+        cards,
+
+        seen:
+            new Set(),
+
+        latestDate:
+            marketData.latestDate
+    };
+
+
+    bhavSetuMandiState
+        .markets
+        .set(
+            marketName,
+            state
+        );
+
+
+    return state;
 }
 
 
 // ==========================================================
-// CREATE ONE CROP CARD
+// CREATE CARD
 // ==========================================================
 
-function createBhavSetuMandiCard(
-    market,
+function createMandiCard(
+    marketName,
     item
 ) {
 
@@ -729,69 +701,47 @@ function createBhavSetuMandiCard(
         "bhavsetu-rate-card";
 
 
-    /*
-     * Important:
-     * Grid row ke doosre cards history open hone
-     * par stretch nahi honge.
-     */
-    card.style.alignSelf =
-        "start";
-
-
     card.innerHTML = `
 
         <div class="mandi-card-top">
 
             <h4>
-
                 🌾
-
                 ${mandiEscape(
                     item.Commodity ||
                     "N/A"
                 )}
-
             </h4>
 
 
             <span>
-
                 ${mandiEscape(
                     item.Variety ||
                     "Standard"
                 )}
-
             </span>
 
         </div>
 
 
         <p>
-
             Grade:
-
             <b>
-
                 ${mandiEscape(
                     item.Grade ||
                     "—"
                 )}
-
             </b>
-
         </p>
 
 
         <p>
-
             📅
-
             ${mandiEscape(
                 mandiFormatDate(
                     item.Arrival_Date
                 )
             )}
-
         </p>
 
 
@@ -803,16 +753,12 @@ function createBhavSetuMandiCard(
                     Modal Bhav
                 </small>
 
-
                 <strong>
-
                     ₹${mandiEscape(
                         item.Modal_Price ??
                         "0"
                     )}
-
                 </strong>
-
 
                 <small>
                     / Quintal
@@ -824,22 +770,17 @@ function createBhavSetuMandiCard(
             <div class="mandi-range">
 
                 <span>
-
                     Min ₹${mandiEscape(
                         item.Min_Price ??
                         "0"
                     )}
-
                 </span>
 
-
                 <span>
-
                     Max ₹${mandiEscape(
                         item.Max_Price ??
                         "0"
                     )}
-
                 </span>
 
             </div>
@@ -861,7 +802,7 @@ function createBhavSetuMandiCard(
     `;
 
 
-    const historyButton =
+    const button =
         card.querySelector(
             ".mandi-history-button"
         );
@@ -873,210 +814,15 @@ function createBhavSetuMandiCard(
         );
 
 
-    const history =
-        getBhavSetuCropHistory(
-            market,
-            item
-        );
-
-
-    let historyShown =
-        MANDI_HISTORY_PAGE;
-
-
-    let historyOpened =
-        false;
-
-
-    // ======================================================
-    // DRAW HISTORY
-    // ======================================================
-
-    function drawHistory() {
-
-        const visible =
-            history.slice(
-                0,
-                historyShown
-            );
-
-
-        if (!history.length) {
-
-            historyBox.innerHTML = `
-
-                <div class="history-finished">
-
-                    पिछले 3 महीनों में
-                    इस फसल और किस्म का
-                    इतिहास उपलब्ध नहीं है।
-
-                </div>
-            `;
-
-            return;
-        }
-
-
-        historyBox.innerHTML = `
-
-            <div class="history-title">
-
-                ${mandiEscape(
-                    item.Commodity ||
-                    ""
-                )}
-
-                ·
-
-                ${mandiEscape(
-                    item.Variety ||
-                    "Standard"
-                )}
-
-                का भाव इतिहास
-
-            </div>
-
-
-            <div class="history-list">
-
-                ${visible
-                    .map(
-                        entry => `
-
-                            <div>
-
-                                <span>
-
-                                    ${mandiEscape(
-                                        mandiFormatDate(
-                                            entry.date
-                                        )
-                                    )}
-
-                                </span>
-
-
-                                <strong>
-
-                                    ₹${mandiEscape(
-                                        entry.price ??
-                                        "—"
-                                    )}
-
-                                </strong>
-
-                            </div>
-
-                        `
-                    )
-                    .join("")}
-
-            </div>
-        `;
-
-
-        // ==================================================
-        // MORE HISTORY AVAILABLE
-        // ==================================================
-
-        if (
-            historyShown <
-            history.length
-        ) {
-
-            const more =
-                document.createElement(
-                    "button"
-                );
-
-
-            more.type =
-                "button";
-
-
-            more.className =
-                "history-more";
-
-
-            more.textContent =
-                `View More (${Math.min(
-                    MANDI_HISTORY_PAGE,
-                    history.length -
-                    historyShown
-                )})`;
-
-
-            more.addEventListener(
-                "click",
-                function () {
-
-                    historyShown +=
-                        MANDI_HISTORY_PAGE;
-
-
-                    drawHistory();
-                }
-            );
-
-
-            historyBox.appendChild(
-                more
-            );
-
-        } else {
-
-            // ==================================================
-            // COMPLETE
-            // ==================================================
-
-            const finished =
-                document.createElement(
-                    "div"
-                );
-
-
-            finished.className =
-                "history-finished";
-
-
-            finished.textContent =
-                "पिछले 3 महीनों का उपलब्ध इतिहास पूरा हुआ।";
-
-
-            historyBox.appendChild(
-                finished
-            );
-        }
-    }
-
-
-    // ======================================================
-    // OPEN / CLOSE HISTORY
-    // ======================================================
-
-    historyButton.addEventListener(
+    button.addEventListener(
         "click",
         function () {
 
-            historyOpened =
-                !historyOpened;
-
-
-            if (!historyOpened) {
-
-                historyBox.classList.add(
-                    "hidden"
-                );
-
-
-                historyButton.textContent =
-                    "View History";
-
-
-                return;
-            }
+            /*
+             * View History button disappears.
+             */
+            button.style.display =
+                "none";
 
 
             historyBox.classList.remove(
@@ -1084,18 +830,20 @@ function createBhavSetuMandiCard(
             );
 
 
-            historyButton.textContent =
-                "Hide History";
+            historyBox.innerHTML = `
+
+                <div class="history-finished">
+                    इतिहास लोड हो रहा है...
+                </div>
+            `;
 
 
-            /*
-             * Har baar open karne par start 20 se.
-             */
-            historyShown =
-                MANDI_HISTORY_PAGE;
-
-
-            drawHistory();
+            loadMandiHistory(
+                marketName,
+                item,
+                historyBox,
+                button
+            );
         }
     );
 
@@ -1105,298 +853,127 @@ function createBhavSetuMandiCard(
 
 
 // ==========================================================
-// RENDER ONE MARKET
+// APPEND MARKET DATA
+//
+// Already seen crop+variety won't repeat.
 // ==========================================================
 
-function renderBhavSetuMarket(
-    market,
-    parent
+function appendMandiData(
+    markets,
+    grid
 ) {
 
-    if (
-        !market ||
-        !Array.isArray(
-            market.records
-        )
-    ) {
-        return;
-    }
+    markets.forEach(
+        marketData => {
 
-
-    const section =
-        document.createElement(
-            "section"
-        );
-
-
-    section.className =
-        "bhavsetu-mandi-group";
-
-
-    // ======================================================
-    // HEADER
-    // ======================================================
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-
-    header.className =
-        "bhavsetu-mandi-head";
-
-
-    header.innerHTML = `
-
-        <div>
-
-            <small>
-                मंडी
-            </small>
-
-
-            <h3>
-
-                ${mandiEscape(
-                    market.market ||
-                    "—"
-                )}
-
-            </h3>
-
-        </div>
-
-
-        <span>
-
-            नवीनतम:
-
-            ${mandiEscape(
-                mandiFormatDate(
-                    market.latestDate
-                )
-            )}
-
-        </span>
-    `;
-
-
-    section.appendChild(
-        header
-    );
-
-
-    // ======================================================
-    // GRID
-    // ======================================================
-
-    const cards =
-        document.createElement(
-            "div"
-        );
-
-
-    cards.className =
-        "bhavsetu-mandi-grid";
-
-
-    /*
-     * History open hone par same row ke
-     * cards stretch na hon.
-     */
-    cards.style.alignItems =
-        "start";
-
-
-    section.appendChild(
-        cards
-    );
-
-
-    // ======================================================
-    // ORDER RECORDS NEWEST → OLDEST
-    // ======================================================
-
-    const records =
-        [...market.records]
-            .sort(
-                (a, b) => {
-
-                    const dateDiff =
-                        mandiDateTimestamp(
-                            b.Arrival_Date
-                        ) -
-                        mandiDateTimestamp(
-                            a.Arrival_Date
-                        );
-
-
-                    if (
-                        dateDiff !== 0
-                    ) {
-                        return dateDiff;
-                    }
-
-
-                    const commodity =
-                        String(
-                            a.Commodity ||
-                            ""
-                        ).localeCompare(
-                            String(
-                                b.Commodity ||
-                                ""
-                            )
-                        );
-
-
-                    if (
-                        commodity !== 0
-                    ) {
-                        return commodity;
-                    }
-
-
-                    return String(
-                        a.Variety ||
-                        ""
-                    ).localeCompare(
-                        String(
-                            b.Variety ||
-                            ""
-                        )
-                    );
-                }
-            );
-
-
-    let renderedCount = 0;
-
-
-    // ======================================================
-    // APPEND NEXT CARDS
-    // ======================================================
-
-    function appendNextCards(
-        amount
-    ) {
-
-        const next =
-            records.slice(
-                renderedCount,
-                renderedCount +
-                amount
-            );
-
-
-        next.forEach(
-            item => {
-
-                cards.appendChild(
-                    createBhavSetuMandiCard(
-                        market,
-                        item
-                    )
+            const market =
+                getOrCreateMandiMarket(
+                    marketData,
+                    grid
                 );
-            }
-        );
 
-
-        renderedCount +=
-            next.length;
-
-
-        updateLoadMore();
-    }
-
-
-    // ======================================================
-    // LOAD MORE BUTTON
-    // ======================================================
-
-    function updateLoadMore() {
-
-        const existing =
-            section.querySelector(
-                ".mandi-load-more"
-            );
-
-
-        if (existing) {
-            existing.remove();
-        }
-
-
-        if (
-            renderedCount >=
-            records.length
-        ) {
 
             /*
-             * All unique crop/variety cards shown.
+             * Update latest market date
+             * only if newer.
              */
-            return;
-        }
+            if (
+                mandiTime(
+                    marketData.latestDate
+                ) >
+                mandiTime(
+                    market.latestDate
+                )
+            ) {
+
+                market.latestDate =
+                    marketData.latestDate;
 
 
-        const remaining =
-            records.length -
-            renderedCount;
+                const dateChip =
+                    market.element
+                        .querySelector(
+                            ".mandi-latest-date"
+                        );
 
 
-        const button =
-            document.createElement(
-                "button"
+                if (dateChip) {
+
+                    dateChip.textContent =
+                        `नवीनतम: ${mandiFormatDate(
+                            market.latestDate
+                        )}`;
+                }
+            }
+
+
+            const records =
+                Array.isArray(
+                    marketData.records
+                )
+                    ? marketData.records
+                    : [];
+
+
+            records.sort(
+                (a, b) =>
+                    mandiTime(
+                        b.Arrival_Date
+                    ) -
+                    mandiTime(
+                        a.Arrival_Date
+                    )
             );
 
 
-        button.type =
-            "button";
+            records.forEach(
+                item => {
+
+                    const key =
+                        `${String(
+                            item.Commodity || ""
+                        )
+                            .trim()
+                            .toLowerCase()}|${String(
+                            item.Variety || ""
+                        )
+                            .trim()
+                            .toLowerCase()}`;
 
 
-        button.className =
-            "mandi-load-more";
+                    if (
+                        market.seen.has(
+                            key
+                        )
+                    ) {
+
+                        return;
+                    }
 
 
-        button.textContent =
-            `Load More (${Math.min(
-                MANDI_LOAD_MORE,
-                remaining
-            )})`;
+                    market.seen.add(
+                        key
+                    );
 
 
-        button.addEventListener(
-            "click",
-            function () {
-
-                appendNextCards(
-                    MANDI_LOAD_MORE
-                );
-            }
-        );
-
-
-        section.appendChild(
-            button
-        );
-    }
-
-
-    // Initial 12
-    appendNextCards(
-        MANDI_INITIAL_CARDS
-    );
-
-
-    parent.appendChild(
-        section
+                    market.cards
+                        .appendChild(
+                            createMandiCard(
+                                marketData.market,
+                                item
+                            )
+                        );
+                }
+            );
+        }
     );
 }
 
 
+
+
 // ==========================================================
-// MAIN FETCH
+// INITIAL 5 DAYS
 // ==========================================================
 
 async function bhavSetuFetchLiveMandiPrices() {
@@ -1416,43 +993,23 @@ async function bhavSetuFetchLiveMandiPrices() {
         getBhavSetuMandiLocation();
 
 
-    const locationText =
-        document.getElementById(
-            "marketLocation"
-        );
-
-
-    // ======================================================
-    // LOCATION MISSING
-    // ======================================================
-
     if (
         !location.state ||
         !location.district
     ) {
 
-        grid.innerHTML = `
-
-            <p style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:25px;
-            ">
-
-                कृपया प्रोफाइल में
-                राज्य और जिला चुनें।
-
-            </p>
-        `;
-
+        grid.innerHTML =
+            "<p style='grid-column:1/-1;text-align:center'>कृपया प्रोफाइल में राज्य और जिला चुनें।</p>";
 
         return;
     }
 
 
-    // ======================================================
-    // LOCATION DISPLAY
-    // ======================================================
+    const locationText =
+        document.getElementById(
+            "marketLocation"
+        );
+
 
     if (locationText) {
 
@@ -1461,70 +1018,57 @@ async function bhavSetuFetchLiveMandiPrices() {
     }
 
 
-    // ======================================================
-    // LOADING
-    // ======================================================
+    // Reset
+    bhavSetuMandiState = {
 
-    grid.innerHTML = `
+        location,
 
-        <p style="
-            grid-column:1/-1;
-            text-align:center;
-            padding:25px;
-        ">
+        nextOffset: 0,
 
-            नवीनतम मंडी भाव लोड हो रहे हैं...
+        hasMore: true,
 
-        </p>
-    `;
+        markets:
+            new Map(),
+
+        loadingMore:
+            false
+    };
+
+
+    grid.innerHTML =
+        "<p style='grid-column:1/-1;text-align:center;padding:25px'>नवीनतम मंडी भाव लोड हो रहे हैं...</p>";
 
 
     try {
 
-        /*
-         * LOCAL TESTING.
-         *
-         * Live deployment me tumhara existing
-         * Render backend URL yahan rehna chahiye.
-         */
-
-        const backend =
-            "http://localhost:5000";
-
-
         const url =
-            `${backend}/api/mandi-prices` +
-
+            `${MANDI_BACKEND}/api/mandi-prices` +
             `?state=${encodeURIComponent(
                 location.state
             )}` +
-
             `&district=${encodeURIComponent(
                 location.district
-            )}`;
+            )}` +
+            `&offset=0` +
+            `&days=5`;
 
 
         const response =
             await fetch(url);
 
 
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-        }
-
-
         const data =
             await response.json();
 
 
-        if (!data.success) {
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             throw new Error(
                 data.message ||
-                "Mandi request failed"
+                `HTTP ${response.status}`
             );
         }
 
@@ -1532,73 +1076,362 @@ async function bhavSetuFetchLiveMandiPrices() {
         grid.innerHTML = "";
 
 
-        // ==================================================
-        // NO DATA
-        // ==================================================
+        appendMandiData(
+            data.markets || [],
+            grid
+        );
+
+
+        bhavSetuMandiState.nextOffset =
+            data.nextOffset ?? 5;
+
+
+        bhavSetuMandiState.hasMore =
+            Boolean(
+                data.hasMore
+            );
+
 
         if (
-            !Array.isArray(
-                data.markets
-            ) ||
-            !data.markets.length
+            !bhavSetuMandiState
+                .markets
+                .size
         ) {
 
-            grid.innerHTML = `
-
-                <p style="
-                    grid-column:1/-1;
-                    text-align:center;
-                    padding:25px;
-                ">
-
-                    पिछले 3 महीनों में
-                    मंडी डेटा उपलब्ध नहीं है।
-
-                </p>
-            `;
-
-
-            return;
-        }
-
-
-        // ==================================================
-        // RENDER ALL MARKETS
-        // ==================================================
-
-        data.markets.forEach(
-            market => {
-
-                renderBhavSetuMarket(
-                    market,
-                    grid
+            const empty =
+                document.createElement(
+                    "p"
                 );
-            }
-        );
+
+
+            empty.style.cssText =
+                "grid-column:1/-1;text-align:center;padding:25px";
+
+
+            empty.textContent =
+                "इन 5 दिनों में मंडी डेटा उपलब्ध नहीं मिला। ";
+
+
+            grid.appendChild(
+                empty
+            );
+        }
 
 
     } catch (error) {
 
         console.error(
-            "Mandi frontend:",
+            "Mandi initial:",
             error
         );
 
 
-        grid.innerHTML = `
-
-            <p style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:25px;
-                color:#a40000;
-            ">
-
-                मंडी भाव लोड नहीं हो पाए।
-
-            </p>
-        `;
+        grid.innerHTML =
+            "<p style='grid-column:1/-1;text-align:center;color:#a40000'>मंडी भाव लोड नहीं हो पाए।</p>";
     }
+}
+
+
+
+// ==========================================================
+// HISTORY
+// 5 matching dates at a time
+// ==========================================================
+
+async function loadMandiHistory(
+    market,
+    item,
+    box,
+    originalButton
+) {
+
+    let historyOffset = 0;
+
+    let allHistory = [];
+
+    let hasMore = true;
+
+    let loading = false;
+
+
+    async function requestNext() {
+
+        if (
+            loading ||
+            !hasMore
+        ) {
+            return;
+        }
+
+
+        loading = true;
+
+
+        try {
+
+            const location =
+                bhavSetuMandiState
+                    .location;
+
+
+            const url =
+                `${MANDI_BACKEND}/api/mandi-history` +
+
+                `?state=${encodeURIComponent(
+                    location.state
+                )}` +
+
+                `&district=${encodeURIComponent(
+                    location.district
+                )}` +
+
+                `&market=${encodeURIComponent(
+                    market
+                )}` +
+
+                `&commodity=${encodeURIComponent(
+                    item.Commodity || ""
+                )}` +
+
+                `&variety=${encodeURIComponent(
+                    item.Variety || ""
+                )}` +
+
+                `&offset=${encodeURIComponent(
+                    historyOffset
+                )}`;
+
+
+            const response =
+                await fetch(url);
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    `HTTP ${response.status}`
+                );
+            }
+
+
+            const incoming =
+                Array.isArray(
+                    data.history
+                )
+                    ? data.history
+                    : [];
+
+
+            /*
+             * Date duplicate safety.
+             */
+            const seenDates =
+                new Set(
+                    allHistory.map(
+                        x => x.date
+                    )
+                );
+
+
+            incoming.forEach(
+                entry => {
+
+                    if (
+                        !seenDates.has(
+                            entry.date
+                        )
+                    ) {
+
+                        seenDates.add(
+                            entry.date
+                        );
+
+                        allHistory.push(
+                            entry
+                        );
+                    }
+                }
+            );
+
+
+            allHistory.sort(
+                (a, b) =>
+                    mandiTime(
+                        b.date
+                    ) -
+                    mandiTime(
+                        a.date
+                    )
+            );
+
+
+            historyOffset =
+                data.nextOffset;
+
+
+            hasMore =
+                Boolean(
+                    data.hasMore
+                );
+
+
+            drawHistory();
+
+
+        } catch (error) {
+
+            console.error(
+                "Mandi history:",
+                error
+            );
+
+
+            box.innerHTML = `
+
+                <div class="history-finished">
+                    इतिहास लोड नहीं हो पाया।
+                </div>
+            `;
+
+
+            addHideButton();
+
+        } finally {
+
+            loading = false;
+        }
+    }
+
+
+    function drawHistory() {
+
+        box.innerHTML = `
+
+            <div class="history-title">
+
+                ${mandiEscape(
+                    item.Commodity ||
+                    ""
+                )}
+
+                ·
+
+                ${mandiEscape(
+                    item.Variety ||
+                    "Standard"
+                )}
+
+            </div>
+
+
+            <div class="history-list">
+
+                ${allHistory.length
+
+                    ? allHistory
+                        .map(
+                            entry => `
+
+                                <div>
+
+                                    <span>
+                                        ${mandiEscape(
+                                            mandiFormatDate(
+                                                entry.date
+                                            )
+                                        )}
+                                    </span>
+
+
+                                    <strong>
+                                        ₹${mandiEscape(
+                                            entry.price ??
+                                            "—"
+                                        )}
+                                    </strong>
+
+                                </div>
+
+                            `
+                        )
+                        .join("")
+
+                    : `
+                        <div class="history-finished">
+                            पिछले 3 महीनों में इतिहास उपलब्ध नहीं है।
+                        </div>
+                    `
+                }
+
+            </div>
+        `;
+
+
+        /*
+         * Hide History ALWAYS last.
+         */
+        addHideButton();
+    }
+
+
+    function addHideButton() {
+
+        const hide =
+            document.createElement(
+                "button"
+            );
+
+
+        hide.type =
+            "button";
+
+        hide.className =
+            "mandi-history-button";
+
+        hide.textContent =
+            "Hide History";
+
+
+        hide.addEventListener(
+            "click",
+            function () {
+
+                box.classList.add(
+                    "hidden"
+                );
+
+
+                box.innerHTML =
+                    "";
+
+
+                originalButton.style.display =
+                    "";
+
+
+                /*
+                 * User reopens history:
+                 * fresh request from beginning.
+                 */
+            }
+        );
+
+
+        box.appendChild(
+            hide
+        );
+    }
+
+
+    await requestNext();
 }
 
 
