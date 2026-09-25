@@ -19,7 +19,7 @@
 
 
     <!-- LOGIN / DASHBOARD PAGE -->
-<section id="dashboard" class="dashboard-section section hidden">
+<section id="dashboard" class="dashboard-section section">
   <div class="dashboard-head">
     <div>
       <span class="dashboard-badge">🌾 <span data-i18n="farmerPortal">किसान पोर्टल · Farmer Dashboard</span></span>
@@ -40,12 +40,19 @@
   </div>
 
   <section id="market" class="market-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="live">लाइव मार्केट</span><h2 data-i18n="marketTitle">आज का मंडी भाव</h2></div>
-      <span class="location-chip">⌖ <span id="marketLocation">Indore, Madhya Pradesh</span></span>
+  <div class="section-head">
+    <div>
+      <span class="eyebrow" data-i18n="live">लाइव मार्केट</span>
+      <h2 data-i18n="marketTitle">आज का मंडी भाव</h2>
     </div>
-    <div class="price-grid" id="priceGrid"></div>
-  </section>
+
+    <span class="location-chip">
+      ⌖ <span id="marketLocation">—</span>
+    </span>
+  </div>
+
+  <div class="price-grid" id="priceGrid"></div>
+</section>
 
     <section id="quality" class="quality-section section">
     <div class="section-head">

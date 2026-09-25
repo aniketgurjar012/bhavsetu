@@ -157,3 +157,623 @@ footer{background:#06291a;color:#fff;padding:65px 9% 25px}.footer-top{max-width:
 .drawer{position:fixed;inset:0;background:rgba(2,27,14,.4);z-index:3100;display:flex;justify-content:flex-end}.drawer-card{width:min(450px,100%);background:var(--paper);height:100%;padding:28px;overflow:auto}.drawer-head{display:flex;justify-content:space-between;align-items:center}.cart-item{padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.cart-item strong{float:right}.total{display:flex;justify-content:space-between;padding:22px 0;font-size:15px}.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,100px);opacity:0;background:var(--g);color:#fff;padding:13px 20px;border-radius:24px;z-index:4000;font-size:13px;transition:.3s}.toast.show{transform:translate(-50%,0);opacity:1}
 @media(max-width:1050px){.warehouse-grid{grid-template-columns:repeat(2,1fr)}.forecast-grid{grid-template-columns:repeat(3,1fr)}.feature-grid{grid-template-columns:repeat(2,1fr)}.price-grid{grid-template-columns:repeat(2,1fr)}.listing-grid{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){html{scroll-padding-top:74px}.navbar{height:74px;padding:0 4%}.brand small{display:none}.brand b{font-size:20px}.profile-btn span{display:none}.section{padding:85px 6%}.hero-img{min-height:420px;object-fit:cover;object-position:center}.hero-hotspot.start{left:4%;width:35%;bottom:5%}.hero-hotspot.join{left:39%;width:30%;bottom:5%}.warehouse-grid,.forecast-grid,.feature-grid,.price-grid,.listing-grid,.dash-grid,.steps{grid-template-columns:1fr}.dashboard-head{padding:26px;align-items:flex-start}.tractor{font-size:45px}.form-grid,.market-filters,.quality-layout{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.sell-actions,.cta{flex-direction:column;align-items:stretch}.footer-top{grid-template-columns:1fr;gap:30px}.modal-card{padding:26px 20px}.detail-actions{grid-template-columns:1fr}.my-item{align-items:flex-start;gap:15px;flex-direction:column}}
+/* =========================================================
+   BHAVSETU MANDI CARDS - FINAL LAYOUT
+   Desktop: 4 cards
+   Mobile: 2 cards
+   Equal card height + bottom aligned history button
+   ========================================================= */
+
+.bhavsetu-mandi-group {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-bottom: 42px;
+}
+
+
+/* =========================================================
+   MANDI HEADER
+   ========================================================= */
+
+.bhavsetu-mandi-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    border-bottom: 1px solid var(--line, #dce7dd);
+
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+}
+
+.bhavsetu-mandi-head small {
+    display: block;
+
+    color: #2e7d32;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.bhavsetu-mandi-head h3 {
+    margin: 3px 0 0;
+
+    color: var(--g, #173d20);
+
+    font-size: 20px;
+}
+
+.bhavsetu-mandi-head > span {
+    background: #eef7ef;
+
+    border: 1px solid #d7ead9;
+
+    color: #287336;
+
+    border-radius: 20px;
+
+    padding: 7px 12px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CARDS GRID
+   ========================================================= */
+
+.bhavsetu-mandi-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+    /*
+     * IMPORTANT:
+     * Har row ke cards equal height.
+     */
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.bhavsetu-rate-card {
+    background: #ffffff;
+
+    border: 1px solid #e4e8e5;
+
+    border-radius: 14px;
+
+    padding: 16px;
+
+    min-width: 0;
+
+    /*
+     * Normal closed cards equal height.
+     */
+    min-height: 300px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.055);
+
+    /*
+     * IMPORTANT:
+     * Button bottom me push hoga.
+     */
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CARD TOP
+   ========================================================= */
+
+.mandi-card-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    /*
+     * Long/short crop names ke bawajood
+     * next content same position ke paas rahe.
+     */
+    min-height: 76px;
+}
+
+
+.mandi-card-top h4 {
+    margin: 0;
+
+    flex: 1;
+
+    min-width: 0;
+
+    color: #171717;
+
+    font-size: 16px;
+
+    line-height: 1.45;
+
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+
+    word-break: normal;
+}
+
+
+.mandi-card-top > span {
+    flex-shrink: 0;
+
+    max-width: 42%;
+
+    background: #e8f5e9;
+
+    color: #258235;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    line-height: 1.3;
+
+    text-align: center;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   GRADE + DATE
+   ========================================================= */
+
+.bhavsetu-rate-card > p {
+    margin: 5px 0;
+
+    color: #747474;
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+
+.bhavsetu-rate-card > p b {
+    color: #626262;
+}
+
+
+/* =========================================================
+   PRICE AREA
+   ========================================================= */
+
+.mandi-price {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+
+.mandi-price > div:first-child {
+    min-width: 0;
+}
+
+
+.mandi-price small {
+    display: block;
+
+    color: #777;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+.mandi-price strong {
+    display: block;
+
+    margin: 2px 0;
+
+    color: #126b24;
+
+    font-size: 20px;
+
+    line-height: 1.2;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   MIN / MAX
+   ========================================================= */
+
+.mandi-range {
+    flex-shrink: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    background: #f7f7f7;
+
+    border-radius: 7px;
+
+    padding: 7px 9px;
+
+    color: #555;
+
+    font-size: 10px;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   VIEW HISTORY BUTTON
+   ========================================================= */
+
+.mandi-history-button,
+.mandi-load-more,
+.history-more {
+    cursor: pointer;
+
+    border: 1px solid #2e7d32;
+
+    color: #187228;
+
+    background: transparent;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.mandi-history-button:hover,
+.mandi-load-more:hover,
+.history-more:hover {
+    background: #2e7d32;
+
+    color: #ffffff;
+}
+
+
+.mandi-history-button {
+    width: 100%;
+
+    /*
+     * THIS pushes button to bottom.
+     */
+    margin-top: auto;
+
+    padding: 10px 8px;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   LOAD MORE
+   ========================================================= */
+
+.mandi-load-more {
+    display: block;
+
+    margin: 22px auto 0;
+
+    padding: 10px 28px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+.mandi-history {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-top: 10px;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #eeeeee;
+
+    /*
+     * History bahut lambi ho to card
+     * giant nahi hoga.
+     */
+    max-height: 420px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+}
+
+
+.mandi-history.hidden {
+    display: none;
+}
+
+
+.history-title {
+    margin-bottom: 8px;
+
+    color: #333;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+}
+
+
+.history-list > div {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 6px 1px;
+
+    border-bottom: 1px dashed #eeeeee;
+
+    font-size: 10px;
+}
+
+
+.history-list > div:last-child {
+    border-bottom: 0;
+}
+
+
+.history-list strong {
+    color: #176d27;
+
+    white-space: nowrap;
+}
+
+
+.history-more {
+    width: 100%;
+
+    margin-top: 9px;
+
+    padding: 7px;
+
+    font-size: 10px;
+}
+
+
+.history-finished {
+    margin-top: 9px;
+
+    color: #888;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .bhavsetu-mandi-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   EXACTLY 2 CARDS PER ROW
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .bhavsetu-mandi-group {
+        margin-bottom: 32px;
+    }
+
+
+    .bhavsetu-mandi-head {
+        margin-bottom: 12px;
+
+        gap: 8px;
+    }
+
+
+    .bhavsetu-mandi-head h3 {
+        font-size: 16px;
+    }
+
+
+    .bhavsetu-mandi-head > span {
+        padding: 5px 8px;
+
+        font-size: 9px;
+    }
+
+
+    .bhavsetu-mandi-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+
+        align-items: stretch;
+    }
+
+
+    .bhavsetu-rate-card {
+        min-height: 275px;
+
+        padding: 10px;
+
+        border-radius: 11px;
+    }
+
+
+    /* =============================================
+       CARD TOP
+       ============================================= */
+
+    .mandi-card-top {
+        display: block;
+
+        min-height: 88px;
+    }
+
+
+    .mandi-card-top h4 {
+        margin-bottom: 6px;
+
+        font-size: 12px;
+
+        line-height: 1.4;
+    }
+
+
+    .mandi-card-top > span {
+        display: inline-block;
+
+        max-width: 100%;
+
+        padding: 3px 6px;
+
+        font-size: 8px;
+    }
+
+
+    /* =============================================
+       TEXT
+       ============================================= */
+
+    .bhavsetu-rate-card > p {
+        margin: 4px 0;
+
+        font-size: 9px;
+    }
+
+
+    /* =============================================
+       PRICE
+       ============================================= */
+
+    .mandi-price {
+        display: block;
+
+        margin-top: 9px;
+    }
+
+
+    .mandi-price strong {
+        font-size: 16px;
+    }
+
+
+    .mandi-price small {
+        font-size: 8px;
+    }
+
+
+    .mandi-range {
+        margin-top: 7px;
+
+        padding: 5px 6px;
+
+        font-size: 8px;
+    }
+
+
+    /* =============================================
+       BUTTON
+       ============================================= */
+
+    .mandi-history-button {
+        margin-top: auto;
+
+        padding: 8px 4px;
+
+        font-size: 9px;
+    }
+
+
+    /* =============================================
+       HISTORY
+       ============================================= */
+
+    .mandi-history {
+        max-height: 330px;
+    }
+
+
+    .history-title {
+        font-size: 9px;
+    }
+
+
+    .history-list > div {
+        padding: 5px 0;
+
+        font-size: 8px;
+    }
+
+
+    .history-more {
+        font-size: 8px;
+    }
+
+
+    .history-finished {
+        font-size: 8px;
+    }
+}
