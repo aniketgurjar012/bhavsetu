@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -112,34 +114,104 @@ app.get('/', (req, res) => {
 
 
 // ==========================================================
-// BHAVSETU MANDI - FAST / LAZY LOAD
-// Initial: 3 days
-// Load More: next 10 days
-// History: exact market + crop + variety
-// RAM cache only
+// BHAVSETU MANDI - FAST + PERSISTENT SMALL CACHE
+//
+// Current prices: latest 3 days
+// No Load More
+// History: max 5 entries
+//
+// Only requested districts are cached.
+// User model is NOT touched.
 // ==========================================================
 
-const mandiCache = new Map();
-const mandiPending = new Map();
+
+// ==========================================================
+// MONGODB CACHE MODEL
+// ==========================================================
+
+const mandiCacheSchema = new mongoose.Schema(
+    {
+        key: {
+            type: String,
+            unique: true,
+            index: true,
+            required: true
+        },
+
+        state: {
+            type: String,
+            required: true
+        },
+
+        district: {
+            type: String,
+            required: true
+        },
+
+        markets: {
+            type: Array,
+            default: []
+        },
+
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        },
+
+        expireAt: {
+            type: Date,
+            required: true
+        }
+    },
+    {
+        versionKey: false
+    }
+);
+
+
+// Auto-delete after 2 days
+mandiCacheSchema.index(
+    {
+        expireAt: 1
+    },
+    {
+        expireAfterSeconds: 0
+    }
+);
+
+
+const MandiFastCache =
+    mongoose.models.MandiFastCache ||
+    mongoose.model(
+        "MandiFastCache",
+        mandiCacheSchema
+    );
+
+
+// ==========================================================
+// SETTINGS
+// ==========================================================
 
 const MANDI_RESOURCE_ID =
     "35985678-0d79-46b4-9ed6-6f13308a1d24";
 
 const MANDI_API_KEY =
-    process.env.AGMARKNET_API_KEY ||
-    "579b464db66ec23bdd0000015a9fed0d92794b2374297ff3b6e5fdc7";
+    process.env.AGMARKNET_API_KEY;
 
-const MANDI_PAGE_SIZE = 1000;
 
-const MANDI_CACHE_MS =
-    30 * 60 * 1000;
+const MANDI_CACHE_FRESH_MS =
+    15 * 60 * 1000;
 
-const MANDI_HISTORY_CACHE_MS =
-    30 * 60 * 1000;
 
-const MANDI_MAX_DAYS = 93;
+const MANDI_CACHE_EXPIRE_MS =
+    48 * 60 * 60 * 1000;
 
-const mandiHistoryCache =
+
+const mandiPending =
+    new Map();
+
+
+const mandiHistoryMemory =
     new Map();
 
 
@@ -147,381 +219,284 @@ const mandiHistoryCache =
 // HELPERS
 // ==========================================================
 
-function mandiSleep(ms) {
-    return new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
-}
-
-
-function mandiDateString(date) {
-
-    const dd =
-        String(date.getDate())
-            .padStart(2, "0");
-
-    const mm =
-        String(date.getMonth() + 1)
-            .padStart(2, "0");
-
-    const yyyy =
-        date.getFullYear();
-
-    return `${dd}-${mm}-${yyyy}`;
-}
-
-
 function mandiDateTime(value) {
 
-    if (!value) return 0;
+    if (!value) {
+        return 0;
+    }
+
 
     const parts =
         String(value)
             .trim()
             .split(/[\/-]/);
 
-    if (parts.length !== 3) {
+
+    if (
+        parts.length !== 3
+    ) {
         return 0;
     }
 
-    const date =
+
+    const d =
         new Date(
             Number(parts[2]),
             Number(parts[1]) - 1,
             Number(parts[0])
         );
 
-    return isNaN(date.getTime())
+
+    return isNaN(
+        d.getTime()
+    )
         ? 0
-        : date.getTime();
+        : d.getTime();
 }
 
 
-function getMandiDateByOffset(offset) {
+function mandiDayKey(value) {
 
-    const date =
-        new Date();
-
-    date.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-    date.setDate(
-        date.getDate() - offset
-    );
-
-    return mandiDateString(date);
-}
+    const time =
+        mandiDateTime(value);
 
 
-// ==========================================================
-// RAM CACHE CLEANUP
-// Keeps memory bounded
-// ==========================================================
-
-function cleanupMandiCache() {
-
-    const now =
-        Date.now();
-
-    for (
-        const [key, value]
-        of mandiCache.entries()
-    ) {
-
-        if (
-            now - value.savedAt >
-            MANDI_CACHE_MS
-        ) {
-            mandiCache.delete(key);
-        }
+    if (!time) {
+        return "";
     }
 
 
-    for (
-        const [key, value]
-        of mandiHistoryCache.entries()
-    ) {
-
-        if (
-            now - value.savedAt >
-            MANDI_HISTORY_CACHE_MS
-        ) {
-            mandiHistoryCache.delete(key);
-        }
-    }
+    const d =
+        new Date(time);
 
 
-    // Hard safety limits
-    while (
-        mandiCache.size > 150
-    ) {
-
-        const first =
-            mandiCache.keys().next().value;
-
-        mandiCache.delete(first);
-    }
-
-
-    while (
-        mandiHistoryCache.size > 300
-    ) {
-
-        const first =
-            mandiHistoryCache
-                .keys()
-                .next()
-                .value;
-
-        mandiHistoryCache.delete(first);
-    }
-}
-
-
-// ==========================================================
-// GOVERNMENT API REQUEST
-// ==========================================================
-
-async function mandiApiGet(url) {
-
-    let lastError;
-
-
-    for (
-        let attempt = 0;
-        attempt < 3;
-        attempt++
-    ) {
-
-        try {
-
-            return await axios.get(
-                url,
-                {
-                    timeout: 20000
-                }
-            );
-
-        } catch (error) {
-
-            lastError = error;
-
-
-            const rateLimited =
-                error.response?.status === 429 ||
-                error.response?.data?.error ===
-                    "Rate limit exceeded";
-
-
-            const timeout =
-                error.code === "ECONNABORTED" ||
-                String(
-                    error.message || ""
-                )
-                    .toLowerCase()
-                    .includes("timeout");
-
-
-            if (
-                !rateLimited &&
-                !timeout
-            ) {
-                throw error;
-            }
-
-
-            if (attempt < 2) {
-
-                await mandiSleep(
-                    rateLimited
-                        ? 1200 * (attempt + 1)
-                        : 500 * (attempt + 1)
-                );
-            }
-        }
-    }
-
-
-    throw lastError;
-}
-
-
-// ==========================================================
-// FETCH ONE DATE COMPLETELY
-// 1000 is page size, not total limit
-// ==========================================================
-
-async function fetchMandiOneDate(
-    state,
-    district,
-    date
-) {
-
-    const all = [];
-
-    let offset = 0;
-
-
-    while (true) {
-
-        const url =
-            `https://api.data.gov.in/resource/${MANDI_RESOURCE_ID}` +
-            `?api-key=${encodeURIComponent(MANDI_API_KEY)}` +
-            `&format=json` +
-            `&limit=${MANDI_PAGE_SIZE}` +
-            `&offset=${offset}` +
-            `&filters[State]=${encodeURIComponent(state)}` +
-            `&filters[District]=${encodeURIComponent(district)}` +
-            `&filters[Arrival_Date]=${encodeURIComponent(date)}`;
-
-
-        const response =
-            await mandiApiGet(url);
-
-
-        const records =
-            Array.isArray(
-                response.data?.records
-            )
-                ? response.data.records
-                : [];
-
-
-        all.push(...records);
-
-
-        if (
-            records.length <
-            MANDI_PAGE_SIZE
-        ) {
-            break;
-        }
-
-
-        offset += records.length;
-
-
-        await mandiSleep(80);
-    }
-
-
-    return all;
-}
-
-
-// ==========================================================
-// FETCH DATE RANGE
-// offsetDays = start day
-// days = number of days
-// ==========================================================
-
-async function fetchMandiDays(
-    state,
-    district,
-    offsetDays,
-    days
-) {
-
-    const all = [];
-
-    const end =
-        Math.min(
-            offsetDays + days,
-            MANDI_MAX_DAYS
+    const dd =
+        String(
+            d.getDate()
+        ).padStart(
+            2,
+            "0"
         );
 
 
-    /*
-     * Only 2 Government requests simultaneously.
-     */
-
-    for (
-        let i = offsetDays;
-        i < end;
-        i += 2
-    ) {
-
-        const offsets =
-            [i, i + 1]
-                .filter(
-                    value =>
-                        value < end
-                );
+    const mm =
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-        const results =
-            await Promise.all(
-                offsets.map(
-                    async dayOffset => {
-
-                        const date =
-                            getMandiDateByOffset(
-                                dayOffset
-                            );
-
-
-                        try {
-
-                            return await fetchMandiOneDate(
-                                state,
-                                district,
-                                date
-                            );
-
-                        } catch (error) {
-
-                            console.warn(
-                                `Mandi ${date} failed:`,
-                                error.response?.data?.error ||
-                                error.message
-                            );
-
-                            return [];
-                        }
-                    }
-                )
-            );
-
-
-        for (
-            const records
-            of results
-        ) {
-
-            all.push(...records);
-        }
-
-
-        if (i + 2 < end) {
-            await mandiSleep(100);
-        }
-    }
-
-
-    return {
-        records: all,
-        nextOffset: end,
-        hasMore:
-            end < MANDI_MAX_DAYS
-    };
+    return `${dd}-${mm}-${d.getFullYear()}`;
 }
 
 
 // ==========================================================
-// PROCESS RANGE RECORDS
-// Group by market.
-// Same market + commodity + variety => latest only.
+// GOVERNMENT API
+//
+// ONE REQUEST FIRST.
+// No 3 parallel date requests.
 // ==========================================================
 
-function processMandiCards(
+async function fetchMandiGovernment(
+    state,
+    district
+) {
+
+    const params =
+        new URLSearchParams();
+
+
+    params.set(
+        "api-key",
+        MANDI_API_KEY
+    );
+
+
+    params.set(
+        "format",
+        "json"
+    );
+
+
+    params.set(
+        "limit",
+        "1000"
+    );
+
+
+    params.set(
+        "offset",
+        "0"
+    );
+
+
+    params.set(
+        "filters[State]",
+        state
+    );
+
+
+    params.set(
+        "filters[District]",
+        district
+    );
+
+
+    // Ask API for newest records first
+    params.set(
+        "sort[Arrival_Date]",
+        "desc"
+    );
+
+
+    const url =
+        `https://api.data.gov.in/resource/${MANDI_RESOURCE_ID}?${params.toString()}`;
+
+
+    const response =
+        await axios.get(
+            url,
+            {
+                timeout: 12000,
+
+                headers: {
+                    Accept:
+                        "application/json"
+                }
+            }
+        );
+
+
+    if (
+        response.data?.error
+    ) {
+        throw new Error(
+            String(
+                response.data.error
+            )
+        );
+    }
+
+
+    return Array.isArray(
+        response.data?.records
+    )
+        ? response.data.records
+        : [];
+}
+
+
+// ==========================================================
+// GET LATEST 3 AVAILABLE DATES
+//
+// Important:
+// "3 days" here means latest 3 dates actually available
+// in the returned mandi data.
+// This avoids blank result on holidays/no-arrival days.
+// ==========================================================
+
+function getLatest3MandiDates(
     records
 ) {
 
-    records.sort(
+    const dates =
+        new Map();
+
+
+    for (
+        const item
+        of records
+    ) {
+
+        const time =
+            mandiDateTime(
+                item.Arrival_Date
+            );
+
+
+        if (!time) {
+            continue;
+        }
+
+
+        const key =
+            mandiDayKey(
+                item.Arrival_Date
+            );
+
+
+        if (!key) {
+            continue;
+        }
+
+
+        if (
+            !dates.has(key)
+        ) {
+
+            dates.set(
+                key,
+                time
+            );
+        }
+    }
+
+
+    return Array
+        .from(
+            dates.entries()
+        )
+        .sort(
+            (a, b) =>
+                b[1] - a[1]
+        )
+        .slice(
+            0,
+            3
+        )
+        .map(
+            item => item[0]
+        );
+}
+
+
+// ==========================================================
+// PROCESS DATA
+// ==========================================================
+
+function processMandiRecords(
+    records
+) {
+
+    const latestDates =
+        new Set(
+            getLatest3MandiDates(
+                records
+            )
+        );
+
+
+    if (
+        latestDates.size === 0
+    ) {
+        return [];
+    }
+
+
+    const selected =
+        records.filter(
+            item =>
+                latestDates.has(
+                    mandiDayKey(
+                        item.Arrival_Date
+                    )
+                )
+        );
+
+
+    selected.sort(
         (a, b) =>
             mandiDateTime(
                 b.Arrival_Date
@@ -536,17 +511,22 @@ function processMandiCards(
         new Map();
 
 
-    for (const item of records) {
+    for (
+        const item
+        of selected
+    ) {
 
         const market =
             String(
                 item.Market || ""
             ).trim();
 
+
         const commodity =
             String(
                 item.Commodity || ""
             ).trim();
+
 
         const variety =
             String(
@@ -562,12 +542,17 @@ function processMandiCards(
         }
 
 
-        if (!markets.has(market)) {
+        if (
+            !markets.has(
+                market
+            )
+        ) {
 
             markets.set(
                 market,
                 {
                     market,
+
                     latestDate:
                         item.Arrival_Date,
 
@@ -579,7 +564,9 @@ function processMandiCards(
 
 
         const marketData =
-            markets.get(market);
+            markets.get(
+                market
+            );
 
 
         if (
@@ -596,111 +583,230 @@ function processMandiCards(
         }
 
 
-        const key =
+        const recordKey =
             `${commodity.toLowerCase()}|${variety.toLowerCase()}`;
 
 
         if (
-            !marketData.records.has(key)
+            !marketData
+                .records
+                .has(
+                    recordKey
+                )
         ) {
 
-            marketData.records.set(
-                key,
-                item
-            );
+            marketData
+                .records
+                .set(
+                    recordKey,
+                    item
+                );
         }
     }
 
 
-    const result = [];
+    return Array
+        .from(
+            markets.values()
+        )
+        .map(
+            market => ({
 
+                market:
+                    market.market,
 
-    for (
-        const market
-        of markets.values()
-    ) {
+                latestDate:
+                    market.latestDate,
 
-        result.push({
-
-            market:
-                market.market,
-
-            latestDate:
-                market.latestDate,
-
-            records:
-                Array.from(
-                    market.records.values()
-                )
-        });
-    }
-
-
-    result.sort(
-        (a, b) => {
-
-            const diff =
+                records:
+                    Array.from(
+                        market.records
+                            .values()
+                    )
+            })
+        )
+        .sort(
+            (a, b) =>
                 mandiDateTime(
                     b.latestDate
                 ) -
                 mandiDateTime(
                     a.latestDate
-                );
-
-            if (diff !== 0) {
-                return diff;
-            }
-
-            return a.market.localeCompare(
-                b.market
-            );
-        }
-    );
-
-
-    return result;
+                )
+        );
 }
 
 
 // ==========================================================
-// INITIAL / LOAD MORE ENDPOINT
-//
-// Initial:
-// /api/mandi-prices?...&offset=0&days=3
-//
-// Load more:
-// offset=3&days=10
-// offset=13&days=10
-// etc.
+// SAVE SMALL PROCESSED CACHE
+// ==========================================================
+
+async function saveMandiCache(
+    state,
+    district,
+    markets
+) {
+
+    // Empty upstream response should not destroy
+    // last successful cache.
+    if (
+        !Array.isArray(markets) ||
+        markets.length === 0
+    ) {
+        return;
+    }
+
+
+    const key =
+        `${state}|${district}`
+            .toLowerCase();
+
+
+    const now =
+        new Date();
+
+
+    const expireAt =
+        new Date(
+            Date.now() +
+            MANDI_CACHE_EXPIRE_MS
+        );
+
+
+    await MandiFastCache
+        .findOneAndUpdate(
+            {
+                key
+            },
+
+            {
+                $set: {
+                    state,
+                    district,
+                    markets,
+
+                    updatedAt:
+                        now,
+
+                    expireAt
+                }
+            },
+
+            {
+                upsert: true,
+                new: true
+            }
+        );
+}
+
+
+// ==========================================================
+// BACKGROUND REFRESH
+// ==========================================================
+
+async function refreshMandi(
+    state,
+    district
+) {
+
+    const key =
+        `${state}|${district}`
+            .toLowerCase();
+
+
+    if (
+        mandiPending.has(
+            key
+        )
+    ) {
+
+        return mandiPending.get(
+            key
+        );
+    }
+
+
+    const job =
+        (async () => {
+
+            const records =
+                await fetchMandiGovernment(
+                    state,
+                    district
+                );
+
+
+            const markets =
+                processMandiRecords(
+                    records
+                );
+
+
+            if (
+                markets.length
+            ) {
+
+                await saveMandiCache(
+                    state,
+                    district,
+                    markets
+                );
+            }
+
+
+            return markets;
+        })();
+
+
+    mandiPending.set(
+        key,
+        job
+    );
+
+
+    try {
+
+        return await job;
+
+    } finally {
+
+        mandiPending.delete(
+            key
+        );
+    }
+}
+
+
+// ==========================================================
+// MANDI PRICES
 // ==========================================================
 
 app.get(
     "/api/mandi-prices",
-    async (req, res) => {
 
-        cleanupMandiCache();
+    async (
+        req,
+        res
+    ) => {
+
+        res.set(
+            "Cache-Control",
+            "no-store"
+        );
 
 
         const state =
             String(
-                req.query.state || ""
+                req.query.state ||
+                ""
             ).trim();
+
 
         const district =
             String(
-                req.query.district || ""
+                req.query.district ||
+                ""
             ).trim();
-
-
-        let offset =
-            Number(
-                req.query.offset || 0
-            );
-
-        let days =
-            Number(
-                req.query.days || 3
-            );
 
 
         if (
@@ -708,144 +814,470 @@ app.get(
             !district
         ) {
 
-            return res.status(400).json({
-                success: false,
-                message:
-                    "State and district required"
-            });
-        }
+            return res
+                .status(400)
+                .json({
+                    success:
+                        false,
 
-
-        if (
-            !Number.isFinite(offset) ||
-            offset < 0
-        ) {
-            offset = 0;
-        }
-
-
-        /*
-         * Initial = 3
-         * Load More = 10
-         * Don't allow arbitrary huge scans.
-         */
-        days =
-            days === 10
-                ? 10
-                : 3;
-
-
-        offset =
-            Math.min(
-                offset,
-                MANDI_MAX_DAYS
-            );
-
-
-        const cacheKey =
-            [
-                state.toLowerCase(),
-                district.toLowerCase(),
-                offset,
-                days
-            ].join("|");
-
-
-        const cached =
-            mandiCache.get(cacheKey);
-
-
-        if (
-            cached &&
-            Date.now() -
-                cached.savedAt <
-                MANDI_CACHE_MS
-        ) {
-
-            return res.json(
-                cached.data
-            );
-        }
-
-
-        if (
-            mandiPending.has(cacheKey)
-        ) {
-
-            try {
-
-                return res.json(
-                    await mandiPending.get(
-                        cacheKey
-                    )
-                );
-
-            } catch {
-
-                return res.status(500).json({
-                    success: false,
                     message:
-                        "Mandi data failed"
+                        "State and district required"
                 });
-            }
         }
 
 
-        const job =
-            (async () => {
+        const key =
+            `${state}|${district}`
+                .toLowerCase();
 
-                const fetched =
-                    await fetchMandiDays(
+
+        try {
+
+            // ------------------------------------------
+            // 1. CHECK MONGODB CACHE
+            // ------------------------------------------
+
+            const cached =
+                await MandiFastCache
+                    .findOne({
+                        key
+                    })
+                    .lean();
+
+
+            if (
+                cached &&
+                Array.isArray(
+                    cached.markets
+                ) &&
+                cached.markets.length
+            ) {
+
+                const age =
+                    Date.now() -
+                    new Date(
+                        cached.updatedAt
+                    ).getTime();
+
+
+                // Fresh cache
+                if (
+                    age <
+                    MANDI_CACHE_FRESH_MS
+                ) {
+
+                    return res.json({
+                        success:
+                            true,
+
                         state,
+
                         district,
-                        offset,
-                        days
+
+                        days:
+                            3,
+
+                        markets:
+                            cached.markets,
+
+                        cached:
+                            true,
+
+                        hasMore:
+                            false,
+
+                        nextOffset:
+                            null
+                    });
+                }
+
+
+                // --------------------------------------
+                // OLD CACHE:
+                // return immediately
+                // refresh silently in background
+                // --------------------------------------
+
+                refreshMandi(
+                    state,
+                    district
+                )
+                    .catch(
+                        error => {
+
+                            console.error(
+                                "Mandi background refresh:",
+                                error.message
+                            );
+                        }
                     );
 
 
-                const markets =
-                    processMandiCards(
-                        fetched.records
-                    );
-
-
-                return {
-
-                    success: true,
+                return res.json({
+                    success:
+                        true,
 
                     state,
 
                     district,
 
-                    offset,
+                    days:
+                        3,
 
-                    days,
+                    markets:
+                        cached.markets,
 
-                    nextOffset:
-                        fetched.nextOffset,
+                    cached:
+                        true,
+
+                    refreshing:
+                        true,
 
                     hasMore:
-                        fetched.hasMore,
+                        false,
 
-                    markets
-                };
-            })();
+                    nextOffset:
+                        null
+                });
+            }
 
 
-        mandiPending.set(
-            cacheKey,
-            job
+            // ------------------------------------------
+            // 2. FIRST REQUEST
+            // No saved cache yet.
+            // ------------------------------------------
+
+            try {
+
+                const markets =
+                    await refreshMandi(
+                        state,
+                        district
+                    );
+
+
+                return res.json({
+                    success:
+                        true,
+
+                    state,
+
+                    district,
+
+                    days:
+                        3,
+
+                    markets,
+
+                    cached:
+                        false,
+
+                    hasMore:
+                        false,
+
+                    nextOffset:
+                        null
+                });
+
+
+            } catch (upstreamError) {
+
+                console.error(
+                    "Mandi Government API:",
+                    upstreamError.message
+                );
+
+
+                return res
+                    .status(502)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Government mandi API temporarily unavailable"
+                    });
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Mandi endpoint:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Mandi service failed"
+                });
+        }
+    }
+);
+
+
+// ==========================================================
+// HISTORY
+//
+// Uses cached 3-day data first.
+// Returns max 5 matching date-price values.
+// ==========================================================
+
+app.get(
+    "/api/mandi-history",
+
+    async (
+        req,
+        res
+    ) => {
+
+        res.set(
+            "Cache-Control",
+            "no-store"
         );
+
+
+        const state =
+            String(
+                req.query.state ||
+                ""
+            ).trim();
+
+
+        const district =
+            String(
+                req.query.district ||
+                ""
+            ).trim();
+
+
+        const market =
+            String(
+                req.query.market ||
+                ""
+            ).trim();
+
+
+        const commodity =
+            String(
+                req.query.commodity ||
+                ""
+            ).trim();
+
+
+        const variety =
+            String(
+                req.query.variety ||
+                ""
+            ).trim();
+
+
+        if (
+            !state ||
+            !district ||
+            !market ||
+            !commodity
+        ) {
+
+            return res
+                .status(400)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Missing history parameters"
+                });
+        }
+
+
+        const historyKey =
+            [
+                state,
+                district,
+                market,
+                commodity,
+                variety
+            ]
+                .join("|")
+                .toLowerCase();
+
+
+        const memoryCached =
+            mandiHistoryMemory.get(
+                historyKey
+            );
+
+
+        if (
+            memoryCached &&
+            Date.now() -
+                memoryCached.savedAt <
+                30 * 60 * 1000
+        ) {
+
+            return res.json(
+                memoryCached.data
+            );
+        }
 
 
         try {
 
-            const result =
-                await job;
+            const cacheKey =
+                `${state}|${district}`
+                    .toLowerCase();
 
 
-            mandiCache.set(
-                cacheKey,
+            const cached =
+                await MandiFastCache
+                    .findOne({
+                        key:
+                            cacheKey
+                    })
+                    .lean();
+
+
+            const history =
+                [];
+
+
+            const seenDates =
+                new Set();
+
+
+            if (
+                cached &&
+                Array.isArray(
+                    cached.markets
+                )
+            ) {
+
+                const selectedMarket =
+                    cached.markets.find(
+                        m =>
+                            String(
+                                m.market || ""
+                            )
+                                .trim()
+                                .toLowerCase() ===
+                            market.toLowerCase()
+                    );
+
+
+                if (
+                    selectedMarket &&
+                    Array.isArray(
+                        selectedMarket.records
+                    )
+                ) {
+
+                    const matching =
+                        selectedMarket.records
+                            .filter(
+                                item =>
+
+                                    String(
+                                        item.Commodity ||
+                                        ""
+                                    )
+                                        .trim()
+                                        .toLowerCase() ===
+                                    commodity.toLowerCase()
+
+                                    &&
+
+                                    String(
+                                        item.Variety ||
+                                        ""
+                                    )
+                                        .trim()
+                                        .toLowerCase() ===
+                                    variety.toLowerCase()
+                            )
+                            .sort(
+                                (a, b) =>
+                                    mandiDateTime(
+                                        b.Arrival_Date
+                                    ) -
+                                    mandiDateTime(
+                                        a.Arrival_Date
+                                    )
+                            );
+
+
+                    for (
+                        const item
+                        of matching
+                    ) {
+
+                        const date =
+                            String(
+                                item.Arrival_Date ||
+                                ""
+                            ).trim();
+
+
+                        if (
+                            !date ||
+                            seenDates.has(
+                                date
+                            )
+                        ) {
+                            continue;
+                        }
+
+
+                        seenDates.add(
+                            date
+                        );
+
+
+                        history.push({
+                            date,
+
+                            price:
+                                item.Modal_Price
+                        });
+
+
+                        if (
+                            history.length >=
+                            5
+                        ) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            const result = {
+                success:
+                    true,
+
+                history:
+                    history.slice(
+                        0,
+                        5
+                    ),
+
+                hasMore:
+                    false,
+
+                nextOffset:
+                    null
+            };
+
+
+            mandiHistoryMemory.set(
+                historyKey,
                 {
                     savedAt:
                         Date.now(),
@@ -864,259 +1296,20 @@ app.get(
         } catch (error) {
 
             console.error(
-                "Mandi endpoint:",
-                error.response?.data ||
+                "Mandi history:",
                 error.message
             );
 
 
-            return res.status(500).json({
-                success: false,
-                message:
-                    "Mandi data failed"
-            });
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
 
-        } finally {
-
-            mandiPending.delete(
-                cacheKey
-            );
-        }
-    }
-);
-
-
-// ==========================================================
-// HISTORY ENDPOINT
-//
-// Exact:
-// district + market + commodity + variety
-//
-// offset = history day offset
-// scans up to 3 months
-// returns max 5 date-price entries
-// ==========================================================
-
-app.get(
-    "/api/mandi-history",
-    async (req, res) => {
-
-        cleanupMandiCache();
-
-
-        const state =
-            String(
-                req.query.state || ""
-            ).trim();
-
-        const district =
-            String(
-                req.query.district || ""
-            ).trim();
-
-        const market =
-            String(
-                req.query.market || ""
-            ).trim();
-
-        const commodity =
-            String(
-                req.query.commodity || ""
-            ).trim();
-
-        const variety =
-            String(
-                req.query.variety || ""
-            ).trim();
-
-
-        let offset =
-            Number(
-                req.query.offset || 0
-            );
-
-
-        if (
-            !state ||
-            !district ||
-            !market ||
-            !commodity
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Missing history parameters"
-            });
-        }
-
-
-        if (
-            !Number.isFinite(offset) ||
-            offset < 0
-        ) {
-            offset = 0;
-        }
-
-
-        const key =
-            [
-                state,
-                district,
-                market,
-                commodity,
-                variety,
-                offset
-            ]
-                .join("|")
-                .toLowerCase();
-
-
-        const cached =
-            mandiHistoryCache.get(
-                key
-            );
-
-
-        if (
-            cached &&
-            Date.now() -
-                cached.savedAt <
-                MANDI_HISTORY_CACHE_MS
-        ) {
-
-            return res.json(
-                cached.data
-            );
-        }
-
-
-        // Maximum 5 matching dates per request
-        const history = [];
-
-        let cursor = offset;
-
-
-        /*
-         * Sequential here intentionally.
-         *
-         * Stop as soon as 5 history dates found.
-         */
-        while (
-            cursor <
-                MANDI_MAX_DAYS &&
-            history.length < 5
-        ) {
-
-            const date =
-                getMandiDateByOffset(
-                    cursor
-                );
-
-
-            let records = [];
-
-
-            try {
-
-                records =
-                    await fetchMandiOneDate(
-                        state,
-                        district,
-                        date
-                    );
-
-            } catch (error) {
-
-                console.warn(
-                    `History ${date}:`,
-                    error.response?.data?.error ||
-                    error.message
-                );
-            }
-
-
-            const match =
-                records.find(
-                    item =>
-                        String(
-                            item.Market || ""
-                        )
-                            .trim()
-                            .toLowerCase() ===
-                        market.toLowerCase() &&
-
-                        String(
-                            item.Commodity || ""
-                        )
-                            .trim()
-                            .toLowerCase() ===
-                        commodity.toLowerCase() &&
-
-                        String(
-                            item.Variety || ""
-                        )
-                            .trim()
-                            .toLowerCase() ===
-                        variety.toLowerCase()
-                );
-
-
-            if (match) {
-
-                history.push({
-                    date:
-                        match.Arrival_Date,
-
-                    price:
-                        match.Modal_Price
+                    message:
+                        "Mandi history failed"
                 });
-            }
-
-
-            cursor++;
-
-
-            if (
-                cursor <
-                    MANDI_MAX_DAYS &&
-                history.length < 5
-            ) {
-
-                await mandiSleep(80);
-            }
         }
-
-
-        const result = {
-
-            success: true,
-
-            history,
-
-            nextOffset:
-                cursor,
-
-            hasMore:
-                cursor <
-                MANDI_MAX_DAYS
-        };
-
-
-        mandiHistoryCache.set(
-            key,
-            {
-                savedAt:
-                    Date.now(),
-
-                data:
-                    result
-            }
-        );
-
-
-        return res.json(
-            result
-        );
     }
 );

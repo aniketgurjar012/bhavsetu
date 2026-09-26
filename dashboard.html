@@ -50,7 +50,72 @@
       ⌖ <span id="marketLocation">—</span>
     </span>
   </div>
+   <div class="mandi-location-card">
 
+    <div class="mandi-location-header">
+        <div class="mandi-location-icon">
+            📍
+        </div>
+
+        <div class="mandi-location-title">
+            <h4>मंडी जिला बदलें</h4>
+            <p>
+                किसी अन्य जिले का मंडी भाव देखने के लिए स्थान चुनें
+            </p>
+        </div>
+    </div>
+
+
+    <div class="mandi-location-fields">
+
+        <label class="mandi-location-field">
+            <span>राज्य</span>
+
+            <select
+                id="mandiState"
+                class="mandi-location-select"
+            >
+                <option value="">
+                    -- राज्य चुनें --
+                </option>
+            </select>
+        </label>
+
+
+        <label class="mandi-location-field">
+            <span>जिला</span>
+
+            <select
+                id="mandiTempDistrict"
+                class="mandi-location-select"
+                disabled
+            >
+                <option value="">
+                    -- पहले राज्य चुनें --
+                </option>
+            </select>
+        </label>
+
+    </div>
+
+
+    <div class="mandi-location-bottom">
+
+        <span class="mandi-location-note">
+            प्रोफाइल का जिला डिफ़ॉल्ट रूप से उपयोग होता है
+        </span>
+
+        <button
+            type="button"
+            id="resetMandiDistrict"
+            class="mandi-location-reset"
+        >
+            ↻ डिफ़ॉल्ट
+        </button>
+
+    </div>
+
+</div>
   <div class="price-grid" id="priceGrid"></div>
 </section>
 

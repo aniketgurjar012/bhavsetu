@@ -777,3 +777,334 @@ footer{background:#06291a;color:#fff;padding:65px 9% 25px}.footer-top{max-width:
         font-size: 8px;
     }
 }
+
+/* =========================================
+   MANDI LOCATION SELECTOR
+   ========================================= */
+
+.mandi-location-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 16px;
+    margin-bottom: 20px;
+
+    background: var(--bg-card, #ffffff);
+    color: var(--text-main, #222);
+
+    border: 1px solid var(--border-color, #e4e7e5);
+    border-radius: 14px;
+
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header */
+
+.mandi-location-header {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 15px;
+}
+
+
+.mandi-location-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+
+    background: rgba(46, 125, 50, 0.1);
+
+    border-radius: 10px;
+}
+
+
+.mandi-location-title {
+    min-width: 0;
+}
+
+
+.mandi-location-title h4 {
+    margin: 0 0 3px;
+
+    color: var(--text-main, #222);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+.mandi-location-title p {
+    margin: 0;
+
+    color: var(--text-muted, #6b7280);
+
+    font-size: 12px;
+
+    line-height: 1.45;
+}
+
+
+/* Fields */
+
+.mandi-location-fields {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 12px;
+}
+
+
+.mandi-location-field {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    gap: 6px;
+}
+
+
+.mandi-location-field > span {
+    color: var(--text-main, #333);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.mandi-location-select {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+
+    box-sizing: border-box;
+
+    padding: 0 34px 0 11px;
+
+    color: var(--text-main, #222);
+    background-color: var(--bg-card, #fff);
+
+    border: 1px solid var(--border-color, #d8dedb);
+    border-radius: 9px;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.mandi-location-select:hover:not(:disabled) {
+    border-color: #2e7d32;
+}
+
+
+.mandi-location-select:focus {
+    border-color: #2e7d32;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(46, 125, 50, 0.12);
+}
+
+
+.mandi-location-select:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.58;
+
+    background:
+        var(--bg-soft, #f4f5f4);
+}
+
+
+/* Bottom */
+
+.mandi-location-bottom {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 13px;
+}
+
+
+.mandi-location-note {
+    color: var(--text-muted, #777);
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+
+.mandi-location-reset {
+    flex-shrink: 0;
+
+    min-height: 34px;
+
+    padding: 6px 12px;
+
+    color: var(--text-main, #333);
+    background: var(--bg-soft, #f1f3f2);
+
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.1s ease;
+}
+
+
+.mandi-location-reset:hover {
+    color: #1b5e20;
+
+    background:
+        rgba(46, 125, 50, 0.08);
+
+    border-color:
+        rgba(46, 125, 50, 0.28);
+}
+
+
+.mandi-location-reset:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .mandi-location-card {
+        padding: 14px;
+
+        margin-bottom: 16px;
+
+        border-radius: 12px;
+    }
+
+
+    .mandi-location-header {
+        align-items: flex-start;
+
+        margin-bottom: 14px;
+    }
+
+
+    .mandi-location-icon {
+        width: 35px;
+        height: 35px;
+
+        flex-basis: 35px;
+
+        font-size: 17px;
+
+        border-radius: 9px;
+    }
+
+
+    .mandi-location-title h4 {
+        font-size: 14px;
+    }
+
+
+    .mandi-location-title p {
+        font-size: 11px;
+    }
+
+
+    .mandi-location-fields {
+        grid-template-columns: 1fr;
+
+        gap: 11px;
+    }
+
+
+    .mandi-location-select {
+        height: 44px;
+
+        font-size: 13px;
+    }
+
+
+    .mandi-location-bottom {
+        align-items: flex-end;
+
+        margin-top: 12px;
+    }
+
+
+    .mandi-location-note {
+        max-width: 65%;
+
+        font-size: 10px;
+    }
+
+
+    .mandi-location-reset {
+        min-height: 34px;
+
+        padding: 6px 10px;
+
+        font-size: 11px;
+    }
+}
+
+
+/* Very small phones */
+
+@media (max-width: 360px) {
+
+    .mandi-location-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .mandi-location-note {
+        max-width: 100%;
+    }
+
+
+    .mandi-location-reset {
+        width: 100%;
+    }
+}
