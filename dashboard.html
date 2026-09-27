@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script async src="https://docs.opencv.org/4.8.0/opencv.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -32,6 +33,7 @@
   <div class="dash-grid">
     <button class="dash-card" data-target="#market"><div class="dash-icon blue">📊</div><h3 data-i18n="nearby">नज़दीकी मंडी भाव</h3><p data-i18n="nearbySub">अपने क्षेत्र के मंडी रेट देखें।</p><b data-i18n="seePrices">भाव देखें →</b></button>
     <button class="dash-card" data-target="#sell"><div class="dash-icon yellow">🌾</div><h3 data-i18n="list">फसल लिस्ट करें</h3><p data-i18n="listSub">अपनी उपज खरीदारों के लिए पोस्ट करें।</p><b data-i18n="add">फसल जोड़ें →</b></button>
+    <button class="dash-card" data-target="#disease"><div class="dash-icon green">🩺</div><h3 data-i18n="diseaseTitle">फसल रोग जाँच</h3><p data-i18n="diseaseSub">फोटो से संभावित बीमारी और उपाय जानें।</p><b data-i18n="diseaseOpen">रोग जाँचें →</b></button>
     <button class="dash-card" data-target="#myListings"><div class="dash-icon orange">📋</div><h3 data-i18n="mine">मेरी लिस्ट की गई फसलें</h3><p data-i18n="mineSub">अपनी सक्रिय लिस्टिंग देखें।</p><b data-i18n="viewMine">मेरी लिस्ट देखें →</b></button>
     <button class="dash-card" data-target="#marketplace"><div class="dash-icon green">🛒</div><h3 data-i18n="buyDash">फसल खरीदें</h3><p data-i18n="buySub">बाज़ार में उपलब्ध उपज देखें।</p><b data-i18n="viewMarket">बाज़ार देखें →</b></button>
     <button class="dash-card" data-target="#warehouse"><div class="dash-icon blue">🏭</div><h3 data-i18n="whTitle">फसल भंडारण गोदाम</h3><p data-i18n="whSub">नज़दीकी कोल्ड स्टोरेज व गोदाम देखें।</p><b data-i18n="viewWh">गोदाम देखें →</b></button>
@@ -58,8 +60,8 @@
         </div>
 
         <div class="mandi-location-title">
-            <h4>मंडी जिला बदलें</h4>
-            <p>
+            <h4 data-i18n="mandiTitle">मंडी का जिला बदलें</h4>
+              <p data-i18n="mandiDescription">
                 किसी अन्य जिले का मंडी भाव देखने के लिए स्थान चुनें
             </p>
         </div>
@@ -69,7 +71,7 @@
     <div class="mandi-location-fields">
 
         <label class="mandi-location-field">
-            <span>राज्य</span>
+            <span data-i18n="mandiState">राज्य</span>
 
             <select
                 id="mandiState"
@@ -83,7 +85,7 @@
 
 
         <label class="mandi-location-field">
-            <span>जिला</span>
+            <span data-i18n="mandiDistrict">जिला</span>
 
             <select
                 id="mandiTempDistrict"
@@ -102,7 +104,7 @@
     <div class="mandi-location-bottom">
 
         <span class="mandi-location-note">
-            प्रोफाइल का जिला डिफ़ॉल्ट रूप से उपयोग होता है
+            <span data-i18n="mandiDefaultNote">डिफ़ॉल्ट रूप से आपकी प्रोफाइल का जिला दिखेगा</span>
         </span>
 
         <button
@@ -110,7 +112,7 @@
             id="resetMandiDistrict"
             class="mandi-location-reset"
         >
-            ↻ डिफ़ॉल्ट
+            <span data-i18n="mandiReset">↻ डिफ़ॉल्ट</span>
         </button>
 
     </div>
@@ -121,7 +123,7 @@
 
     <section id="quality" class="quality-section section">
     <div class="section-head">
-      <div><span class="eyebrow" data-i18n="qualityEyebrow">फसल गुणवत्ता मीटर</span><h2 data-i18n="qualityTitle">बेचने से पहले गुणवत्ता देखें।</h2><p data-i18n="qualitySub">साफ फसल फोटो अपलोड करें। यह फ्रंट-एंड प्रोटोटाइप विजुअल अनुमान देता है; वास्तविक नमी के लिए कैलिब्रेटेड सेंसर/मॉडल चाहिए।</p></div>
+      <div><span class="eyebrow" data-i18n="qualityEyebrow">फसल गुणवत्ता मीटर</span><h2 data-i18n="qualityTitle">बेचने से पहले गुणवत्ता देखें।</h2><p data-i18n="qualitySub">साफ फसल फोटो अपलोड करें। परिणाम फोटो में दिखाई देने वाली गुणवत्ता का अनुमान है।</p></div>
     </div>
     <div class="quality-layout">
       <div class="dropzone" id="dropzone">
@@ -131,12 +133,45 @@
       </div>
       <div class="quality-result">
         <span class="eyebrow" data-i18n="analysis">विजुअल विश्लेषण</span>
-        <div class="score"><strong id="score">—</strong><small>/100</small></div>
-        <h3 id="resultGrade">—</h3>
-        <div class="metrics"><div><b id="resultMoisture">—</b></div><div><span data-i18n="grade">ग्रेड</span><b id="resultVisual">—</b></div><div><span data-i18n="confidence">विश्वसनीयता</span><b id="resultConfidence">—</b></div></div>
-        <p id="advice" data-i18n="qualityAdvice">फोटो अपलोड करके स्कैन शुरू करें।</p>
-        <button class="primary full" id="scanNow" disabled data-i18n="scan">फसल स्कैन करें →</button>
+        <div class="score"><strong id="score">—</strong><small id="scoreUnit" data-i18n="qualityScoreUnit">अंक / 100</small></div>
+        <div class="quality-lines" aria-live="polite">
+          <div class="quality-line"><span data-i18n="qualityGrade">ग्रेड</span><strong id="resultGrade">—</strong></div>
+          <div class="quality-line quality-copy"><span data-i18n="qualityObservation">अवलोकन</span><p id="resultObservation">—</p></div>
+          <div class="quality-line quality-copy"><span data-i18n="qualityAdviceLabel">सलाह</span><p id="advice" data-i18n="qualityAdvice">फोटो अपलोड करके स्कैन शुरू करें।</p></div>
+        </div>
+        <button class="primary full scan-button" id="scanNow" disabled>
+          <span class="scan-spinner hidden" id="scanSpinner" aria-hidden="true"></span>
+          <span id="scanText" data-i18n="scan">फसल स्कैन करें →</span>
+        </button>
         <button class="outline-btn full hidden" id="useResult" data-i18n="useResult">परिणाम लिस्टिंग में लगाएं</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="disease" class="quality-section disease-section section">
+    <div class="section-head">
+      <div><span class="eyebrow" data-i18n="diseaseEyebrow">फसल रोग जाँच</span><h2 data-i18n="diseaseTitle">फसल रोग जाँच</h2><p data-i18n="diseaseSub">पत्ते, फल या पूरी फसल की साफ फोटो से संभावित रोग और उपाय जानें।</p></div>
+    </div>
+    <div class="quality-layout">
+      <div class="dropzone" id="diseaseDropzone">
+        <input id="diseasePhoto" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+        <div id="diseaseUploadPrompt"><div class="camera">🌿</div><h3 data-i18n="diseaseUploadTitle">फसल की फोटो चुनें</h3><p data-i18n="diseaseUploadSub">रोग वाले पत्ते, फल या तने की साफ और रोशनी वाली फोटो लें।</p><button class="outline-btn" type="button" id="diseaseChoosePhoto" data-i18n="choosePhoto">फोटो चुनें</button></div>
+        <img id="diseasePreview" class="hidden" alt="Crop disease preview">
+      </div>
+      <div class="quality-result disease-result">
+        <span class="eyebrow" data-i18n="diseaseAnalysis">रोग विश्लेषण</span>
+        <div class="quality-lines" aria-live="polite">
+          <div class="quality-line"><span data-i18n="diseaseCropLabel">फसल</span><strong id="diseaseCrop">—</strong></div>
+          <div class="quality-line quality-copy"><span data-i18n="diseaseNameLabel">संभावित बीमारी</span><p id="diseaseName">—</p></div>
+          <div class="quality-line quality-copy"><span data-i18n="diseaseSignsLabel">दिखने वाले लक्षण</span><p id="diseaseSigns">—</p></div>
+          <div class="quality-line quality-copy"><span data-i18n="diseaseCauseLabel">संभावित कारण</span><p id="diseaseCause">—</p></div>
+          <div class="quality-line quality-copy"><span data-i18n="diseaseSolutionLabel">सुझाया गया उपाय</span><p id="diseaseSolution">—</p></div>
+        </div>
+        <button class="primary full scan-button" id="diseaseScanNow" disabled>
+          <span class="scan-spinner hidden" id="diseaseSpinner" aria-hidden="true"></span>
+          <span id="diseaseScanText" data-i18n="diseaseScan">रोग जाँचें →</span>
+        </button>
+        <p class="disease-note" data-i18n="diseaseNote">यह फोटो-आधारित संभावित सुझाव है; इलाज से पहले स्थानीय कृषि विशेषज्ञ से पुष्टि करें।</p>
       </div>
     </div>
   </section>
@@ -149,7 +184,7 @@
       <div id="formErrorBox" class="hidden" style="background:#ffe6e6;color:#a40000;padding:12px 16px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:18px;border:1px solid #ff9999;text-align:center;"></div>
       <div class="form-title"><span>01</span><h3 data-i18n="cropDetails">फसल का विवरण</h3></div>
       <div class="form-grid">
-        <label><span data-i18n="crop">फसल</span><select name="crop" required><option value="">फसल चुनें</option><option>Wheat</option><option>Soybean</option><option>Cotton</option><option>Maize</option><option>Chana</option><option>Onion</option></select></label>
+        <label><span data-i18n="crop">फसल</span><select name="crop" required><option value="" data-i18n="selectCrop">फसल चुनें</option><option data-i18n="cropWheat">Wheat</option><option data-i18n="cropSoybean">Soybean</option><option data-i18n="cropCotton">Cotton</option><option data-i18n="cropMaize">Maize</option><option data-i18n="cropChana">Chickpea</option><option data-i18n="cropOnion">Onion</option></select></label>
         <label><span data-i18n="variety">किस्म (वैकल्पिक)</span><input name="variety" placeholder="उदा. लोकवन"></label>
         <label><span data-i18n="quantity">मात्रा (क्विंटल)</span><input name="qty" type="number" min="1" required></label>
         <label><span data-i18n="price">अपेक्षित कीमत / क्विंटल</span><input name="price" type="number" min="1" required></label>
@@ -201,8 +236,8 @@
     </div>
     <div class="market-filters">
       <input id="searchCrop" placeholder="फसल खोजें..." data-i18n-placeholder="search">
-      <select id="gradeFilter"><option value="">सभी ग्रेड</option><option>A+</option><option>A</option><option>B</option></select>
-      <select id="sortPrice"><option value="default">मूल्य के अनुसार क्रमबद्ध करें</option><option value="low">कीमत: कम से ज्यादा</option><option value="high">कीमत: ज्यादा से कम</option></select>
+      <select id="gradeFilter"><option value="" data-i18n="allGrades">सभी ग्रेड</option><option>A+</option><option>A</option><option>B</option></select>
+      <select id="sortPrice"><option value="default" data-i18n="sortDefault">मूल्य के अनुसार क्रमबद्ध करें</option><option value="low" data-i18n="sortLow">कीमत: कम से ज्यादा</option><option value="high" data-i18n="sortHigh">कीमत: ज्यादा से कम</option></select>
     </div>
     <div class="listing-grid" id="marketplaceGrid"></div>
   </section>
@@ -219,8 +254,17 @@
     <div class="section-head">
       <div><span class="eyebrow" data-i18n="weEyebrow">लाइव मौसम पूर्वानुमान</span><h2 data-i18n="weMainTitle">आज और अगले 7 दिनों का मौसम</h2><p data-i18n="weMainSub">आपकी फसल और खेती के लिए सटीक तापमान और बारिश का पूर्वानुमान।</p></div>
     </div>
-    <div class="weather-today-card" id="weatherToday"></div>
-    <div class="forecast-grid" id="forecastGrid"></div>
+    <div class="weather-location-card mandi-location-card">
+      <label class="mandi-location-field"><span data-i18n="weatherState">राज्य</span><select id="weatherState" class="mandi-location-select"></select></label>
+      <label class="mandi-location-field"><span data-i18n="weatherDistrict">जिला</span><select id="weatherDistrict" class="mandi-location-select" disabled></select></label>
+      <button type="button" class="mandi-location-reset" id="weatherUseProfile" data-i18n="weatherUseProfile">प्रोफाइल का जिला</button>
+      <span class="weather-location-label" id="weatherLocationLabel"></span>
+    </div>
+    <p class="weather-status" id="weatherStatus" role="status" aria-live="polite"></p>
+    <div class="weather-today-card hidden" id="weatherToday"></div>
+    <section class="weather-block hidden" id="weatherHourlyBlock"><h3 data-i18n="weatherHourlyTitle">आज का हर घंटे का मौसम</h3><div class="weather-hourly-grid" id="weatherHourly"></div></section>
+    <section class="weather-block hidden" id="weatherDailyBlock"><h3 data-i18n="weatherDailyTitle">आज और अगले 7 दिन</h3><div class="forecast-grid" id="forecastGrid"></div></section>
+    <section class="weather-block hidden" id="weatherAlertsBlock"><h3 data-i18n="weatherAlertsTitle">मौसम चेतावनी</h3><div id="weatherAlerts"></div></section>
   </section>
 
   <section id="history" class="history-section section">

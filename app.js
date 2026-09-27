@@ -1,3 +1,7 @@
+const BACKEND_API_URL = window.location.protocol === "file:" || ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname)
+    ? `http://${window.location.hostname || "localhost"}:5000`
+    : "https://bhavsetu-0758.onrender.com";
+
 const indiaDistricts={
 "Andaman and Nicobar Islands":["Nicobars","North and Middle Andaman","South Andaman"],
 "Andhra Pradesh":["Alluri Sitharama Raju","Anakapalli","Anantapur","Annamayya","Bapatla","Chittoor","Dr. B. R. Ambedkar Konaseema","East Godavari","Eluru","Guntur","Kakinada","Krishna","Kurnool","Nandyal","Nellore","Palnadu","Parvathipuram Manyam","Prakasam","Sri Sathya Sai","Srikakulam","Tirupati","Visakhapatnam","Vizianagaram","West Godavari"],
@@ -120,6 +124,11 @@ document.getElementById('mandi-search-btn')?.addEventListener('click', () => {
     fetchLiveMandiData(selectedState, selectedDistrict);
 });
 
+// Default language is Hindi ("hi")
+let lang=localStorage.getItem("bhavsetu-lang")||"hi";
+let user=JSON.parse(localStorage.getItem("bhavsetu-user")||"null");
+document.body.classList.toggle("dark", localStorage.getItem("bhavsetu-theme") === "dark");
+
 const starterListings=[
 {id:1,crop:"Wheat",hi:"गेहूं",mr:"गहू",emoji:"🌾",seller:"Ramesh Patidar",location:"Indore, Madhya Pradesh",qty:40,price:2480,grade:"A",moisture:"12% (Normal / सामान्य / साधारण)",variety:"Lokwan",phone:"9876543210",notes:"Clean, machine-cleaned wheat. Ready for pickup."},
 {id:2,crop:"Soybean",hi:"सोयाबीन",mr:"सोयाबीन",emoji:"🌱",seller:"Suresh Yadav",location:"Ujjain, Madhya Pradesh",qty:25,price:4780,grade:"A+",moisture:"10% (Slightly Dry / हल्का सूखा / थोडे कोरडे)",variety:"JS 9560",phone:"9876543211",notes:"Good colour and clean lot."},
@@ -138,12 +147,9 @@ const starterWarehouses=[
 {id:6,name:"Narmada Valley Warehouse",hi:"नर्मदा वैली वेयरहाउस",mr:"नर्मदा व्हॅली वेअरहाउस",location:"Hoshangabad Road",capacity:"4,500 क्विंटल",available:"1,500 क्विंटल खाली",rate:"₹3.2 per quintal / day",crops:"Soybean, Chana, Wheat",cropsHi:"सोयाबीन, चना, गेहूं",cropsMr:"सोयाबीन, हरभरा, गहू"}
 ];
 
-// Default language is Hindi ("hi")
-let lang=localStorage.getItem("bhavsetu-lang")||"hi";
-let user=JSON.parse(localStorage.getItem("bhavsetu-user")||"null");
-
-// Clean reset: Reset user listings to only starterListings so no unuploaded dummy crops appear
-let listings=starterListings;
+const savedListings=JSON.parse(localStorage.getItem("bhavsetu-listings")||"[]");
+const starterPhones=new Set(starterListings.map(listing=>listing.phone));
+let listings=[...starterListings,...savedListings.filter(listing=>!starterPhones.has(listing.phone))];
 localStorage.setItem("bhavsetu-listings", JSON.stringify(listings));
 
 let cart=JSON.parse(localStorage.getItem("bhavsetu-cart")||"[]");
@@ -165,12 +171,17 @@ hiTitle:"History",hiSub:"Check your activity history.",viewHi:"View History →"
 live:"LIVE MARKET",marketTitle:"Today's Mandi Bhav",marketSub:"Sample interface — connect a live mandi API later.",
 marketplaceEyebrow:"FARMER MARKETPLACE",marketplaceTitle:"Buy directly from farmers.",marketplaceSub:"Open a crop, inspect its details, add it to your cart or enquire with the farmer.",cart:"Cart",search:"Search crop...",sellEyebrow:"SELL YOUR PRODUCE",sellTitle:"Tell buyers what you have.",sellSub:"Fill the crop questionnaire. Your quality-meter result can be added automatically.",
 cropDetails:"Crop details",crop:"Crop",variety:"Variety",quantity:"Quantity (quintal)",price:"Expected price / quintal",grade:"Grade",listingDetails:"Listing details",harvest:"Harvest date",location:"Location",notes:"Notes for buyers",scanFirst:"Scan quality first",publish:"Publish crop →",
-qualityEyebrow:"CROP QUALITY METER",qualityTitle:"See the quality before you sell.",qualitySub:"Upload a clear crop photo. This front-end prototype generates a visual estimate; actual moisture measurement needs a calibrated sensor/model.",uploadTitle:"Upload crop photo",uploadSub:"Use a clear, well-lit photo of the grains/crop.",choosePhoto:"Choose photo",analysis:"VISUAL ANALYSIS",confidence:"Confidence",qualityAdvice:"Upload a photo and start the scan.",scan:"Scan crop →",useResult:"Use result in my listing",
+qualityEyebrow:"CROP QUALITY METER",qualityTitle:"See the quality before you sell.",qualitySub:"Upload a clear crop photo. Results estimate only the quality visible in the image.",uploadTitle:"Upload crop photo",uploadSub:"Use a clear, well-lit photo of the grains/crop.",choosePhoto:"Choose photo",analysis:"VISUAL ANALYSIS",confidence:"Confidence",qualityAdvice:"Upload a photo and start the scan.",scan:"Scan crop →",useResult:"Use result in my listing",
 myEyebrow:"YOUR PRODUCE",myTitle:"My active listings.",
+qualityScoreUnit:"points / 100",qualityGrade:"Grade",qualityObservation:"Observation",qualityAdviceLabel:"Advice",qualityLoading:"Analyzing photo...",qualityInvalid:"The AI did not return a valid score. Please scan again.",qualityScanFailed:"Photo analysis failed.",qualityNoObservation:"No clear crop details were detected.",qualityNoAdvice:"Review the visible crop condition before selling.",themeToLight:"☀ Light theme",themeToDark:"◐ Dark theme",emptyMarketplace:"No crop listings are available yet.",emptyWarehouses:"No verified warehouse information is available yet.",weatherUnavailable:"Live weather data is not available yet.",
 whEyebrow:"STORAGE & WAREHOUSES",whMainTitle:"Crop Storage Godowns",whMainSub:"Check nearby verified storage capacity, rental rates, and accepted crops.",
 weEyebrow:"LIVE WEATHER FORECAST",weMainTitle:"Today & Next 7 Days Weather",weMainSub:"Accurate temperature, humidity, and rain forecast for your farming.",
 hiEyebrow:"ACTIVITY HISTORY",hiMainTitle:"Activity History",hiMainSub:"Track your past crop listings, warehouse bookings, and inquiries.",
 noHistory:"No history available yet.",
+mandiGrade:"Grade",mandiModalPrice:"Modal price",mandiPerQuintal:"/ Quintal",mandiMin:"Min",mandiMax:"Max",mandiHistory:"View history",mandiHideHistory:"Hide history",mandiLoading:"Loading the latest mandi prices...",mandiHistoryLoading:"Loading price history...",mandiNoHistory:"No history available.",mandiHistoryFailed:"Could not load price history.",mandiNoRecords:"No mandi prices were reported for the latest available dates.",mandiNeedLocation:"Choose a state and district in your profile to load mandi prices.",mandiUnavailableTitle:"Mandi service is temporarily unavailable.",mandiUnavailableMessage:"The government data service did not respond in time. Please try again shortly.",mandiRetry:"Retry",
+mandiTitle:"Change mandi district",mandiDescription:"Choose a location to view another district's mandi prices.",mandiState:"State",mandiDistrict:"District",mandiDefaultNote:"Your profile district is used by default",mandiReset:"↻ Default",allGrades:"All grades",sortDefault:"Sort by price",sortLow:"Price: low to high",sortHigh:"Price: high to low",selectCrop:"Select crop",cropWheat:"Wheat",cropSoybean:"Soybean",cropCotton:"Cotton",cropMaize:"Maize",cropChana:"Chickpea",cropOnion:"Onion",
+diseaseTitle:"Crop disease check",diseaseSub:"Get a possible disease and treatment from a clear photo of a leaf, fruit, or plant.",diseaseOpen:"Check disease →",diseaseEyebrow:"CROP DISEASE CHECK",diseaseUploadTitle:"Choose a crop photo",diseaseUploadSub:"Use a clear, well-lit photo of the affected leaf, fruit, or stem.",diseaseAnalysis:"DISEASE ANALYSIS",diseaseCropLabel:"Crop",diseaseNameLabel:"Possible disease",diseaseSignsLabel:"Visible signs",diseaseCauseLabel:"Likely cause",diseaseSolutionLabel:"Suggested action",diseaseScan:"Check disease →",diseaseLoading:"Checking the crop photo...",diseaseFailed:"Disease analysis failed.",diseasePhotoReady:"Photo ready. Start the check.",diseaseNote:"This is a photo-based possibility, not a confirmed diagnosis. Ask a local agricultural expert before treatment.",
+weatherState:"State",weatherDistrict:"District",weatherUseProfile:"Use profile district",weatherSelectState:"Select state",weatherSelectDistrict:"Select district",weatherSelectStateFirst:"Select a state first",weatherHourlyTitle:"Today's hourly weather",weatherDailyTitle:"Today + next 7 days",weatherAlertsTitle:"Weather alerts",weatherLoading:"Loading live weather...",weatherChooseLocation:"Select a state and district to see live weather.",weatherKeyMissing:"OpenWeather API key is not configured on the server.",weatherKeyInvalid:"The OpenWeather API key is invalid.",weatherSubscriptionRequired:"Enable OpenWeather One Call subscription for hourly and daily forecasts.",weatherDistrictNotFound:"Could not find this district in OpenWeather.",weatherRateLimited:"OpenWeather request limit reached. Try again later.",weatherTimeout:"OpenWeather took too long to respond. Try again.",weatherFailed:"Live weather could not be loaded.",weatherCurrentTitle:"Current conditions",weatherFeels:"Feels like",weatherHumidity:"Humidity",weatherWind:"Wind",weatherGust:"Gust",weatherDirection:"Direction",weatherPressure:"Pressure",weatherVisibility:"Visibility",weatherDewPoint:"Dew point",weatherUv:"UV index",weatherClouds:"Cloud cover",weatherSunrise:"Sunrise",weatherSunset:"Sunset",weatherRain:"Rain",weatherSnow:"Snow",weatherPrecipitation:"Precipitation",weatherProbability:"Rain chance",weatherMin:"Low",weatherMax:"High",weatherMorning:"Morning",weatherDay:"Day",weatherEvening:"Evening",weatherNight:"Night",weatherNoAlerts:"No active weather alerts.",weatherNoHours:"No hourly forecast available for today.",weatherAlertUntil:"Until",
 howEyebrow:"HOW IT WORKS",howTitle:"From information to a better deal.",step1:"Create your profile",step1p:"Verify your phone and select your State/UT and District.",step2:"Check or list crops",step2p:"See mandi prices, buy produce or publish your own crop listing.",step3:"Connect directly",step3p:"Ask questions or negotiate with the farmer using the enquiry call option.",
 ctaTitle:"Better information. Better decisions. Better tomorrow.",ctaText:"Because every farmer deserves to know the true value of their work.",getStarted:"Get started →",footerText:"Building a smarter connection between Indian farmers and the market.",explore:"Explore",support:"Support",help:"Help Center",contact:"Contact",privacy:"Privacy",footerMade:"Made for Indian agriculture.",
 loginTitle:"Welcome to BhavSetu",loginSub:"Enter your mobile number to create or access your farmer profile.",phone:"Mobile number",sendOtp:"Send OTP →",demoOtp:"Demo OTP: 123456",enterOtp:"Enter 6-digit OTP",verify:"Verify & Continue →",where:"Where are you from?",whereSub:"Choose your State / UT and District.",state:"State / Union Territory",district:"District",continue:"Continue →",preferences:"Preferences",language:"Language",languageSub:"Switch the entire interface.",appearance:"Appearance",appearanceSub:"Switch light/dark mode.",profile:"Profile",logout:"Log out",total:"Total",enquireCart:"Enquire about cart →",
@@ -236,12 +247,17 @@ hiTitle:"हिस्ट्री",hiSub:"अपनी गतिविधि क
 live:"LIVE MARKET",marketTitle:"आज का मंडी भाव",marketSub:"डेमो इंटरफेस — बाद में लाइव मंडी API जोड़ी जा सकती है।",
 marketplaceEyebrow:"किसान मार्केटप्लेस",marketplaceTitle:"किसानों से सीधे खरीदें।",marketplaceSub:"फसल खोलें, विवरण देखें, कार्ट में जोड़ें या किसान से पूछताछ करें।",cart:"कार्ट",search:"फसल खोजें...",sellEyebrow:"अपनी उपज बेचें",sellTitle:"खरीदारों को अपनी उपज बताएं।",sellSub:"फसल का प्रश्नावली फॉर्म भरें। गुणवत्ता मीटर का परिणाम अपने आप जोड़ा जा सकता है।",
 cropDetails:"फसल का विवरण",crop:"फसल",variety:"किस्म",quantity:"मात्रा (क्विंटल)",price:"अपेक्षित कीमत / क्विंटल",grade:"ग्रेड",moisture:"नमी %",listingDetails:"लिस्टिंग विवरण",harvest:"कटाई की तारीख",location:"स्थान",notes:"खरीदारों के लिए जानकारी",scanFirst:"पहले गुणवत्ता स्कैन करें",publish:"फसल प्रकाशित करें →",
-qualityEyebrow:"फसल गुणवत्ता मीटर",qualityTitle:"बेचने से पहले गुणवत्ता देखें।",qualitySub:"साफ फसल फोटो अपलोड करें। यह फ्रंट-एंड प्रोटोटाइप विजुअल अनुमान देता है; वास्तविक नमी के लिए कैलिब्रेटेड सेंसर/मॉडल चाहिए।",uploadTitle:"फसल की फोटो अपलोड करें",uploadSub:"अनाज/फसल की साफ और अच्छी रोशनी वाली फोटो लें।",choosePhoto:"फोटो चुनें",analysis:"विजुअल विश्लेषण",confidence:"विश्वसनीयता",qualityAdvice:"फोटो अपलोड करके स्कैन शुरू करें।",scan:"फसल स्कैन करें →",useResult:"परिणाम लिस्टिंग में लगाएं",
+qualityEyebrow:"फसल गुणवत्ता मीटर",qualityTitle:"बेचने से पहले गुणवत्ता देखें।",qualitySub:"साफ फसल फोटो अपलोड करें। परिणाम में केवल फोटो में दिखने वाली गुणवत्ता का अनुमान है।",uploadTitle:"फसल की फोटो अपलोड करें",uploadSub:"अनाज/फसल की साफ और अच्छी रोशनी वाली फोटो लें।",choosePhoto:"फोटो चुनें",analysis:"विजुअल विश्लेषण",confidence:"विश्वसनीयता",qualityAdvice:"फोटो अपलोड करके स्कैन शुरू करें।",scan:"फसल स्कैन करें →",useResult:"परिणाम लिस्टिंग में लगाएं",
 myEyebrow:"आपकी उपज",myTitle:"मेरी सक्रिय लिस्टिंग",
+qualityScoreUnit:"अंक / 100",qualityGrade:"ग्रेड",qualityObservation:"अवलोकन",qualityAdviceLabel:"सलाह",qualityLoading:"फोटो का विश्लेषण हो रहा है...",qualityInvalid:"AI से सही स्कोर नहीं मिला। कृपया दोबारा स्कैन करें।",qualityScanFailed:"फोटो का विश्लेषण नहीं हो सका।",qualityNoObservation:"फसल की स्पष्ट जानकारी नहीं दिखी।",qualityNoAdvice:"बेचने से पहले फसल की दिखने वाली स्थिति जाँचें।",themeToLight:"☀ लाइट थीम",themeToDark:"◐ डार्क थीम",emptyMarketplace:"अभी फसल की कोई लिस्टिंग उपलब्ध नहीं है।",emptyWarehouses:"अभी सत्यापित गोदाम की जानकारी उपलब्ध नहीं है।",weatherUnavailable:"लाइव मौसम की जानकारी अभी उपलब्ध नहीं है।",
 whEyebrow:"भंडारण और गोदाम",whMainTitle:"फसल भंडारण गोदाम",whMainSub:"अपने क्षेत्र के पास सत्यापित कोल्ड स्टोरेज और गोदामों की उपलब्धता और किराया देखें।",
 weEyebrow:"लाइव मौसम पूर्वानुमान",weMainTitle:"आज और अगले 7 दिनों का मौसम",weMainSub:"आपकी फसल और खेती के लिए सटीक तापमान और बारिश का पूर्वानुमान।",
 hiEyebrow:"गतिविधि इतिहास",hiMainTitle:"आपकी गतिविधि इतिहास",hiMainSub:"आपके द्वारा की गई पिछली लिस्टिंग और पूछताछ का विवरण।",
 noHistory:"अभी आपकी कोई हिस्ट्री नहीं है।",
+mandiGrade:"ग्रेड",mandiModalPrice:"मॉडल भाव",mandiPerQuintal:"/ क्विंटल",mandiMin:"न्यूनतम",mandiMax:"अधिकतम",mandiHistory:"इतिहास देखें",mandiHideHistory:"इतिहास छिपाएं",mandiLoading:"नवीनतम मंडी भाव लोड हो रहे हैं...",mandiHistoryLoading:"भाव का इतिहास लोड हो रहा है...",mandiNoHistory:"इतिहास उपलब्ध नहीं है।",mandiHistoryFailed:"भाव का इतिहास लोड नहीं हो सका।",mandiNoRecords:"हाल की उपलब्ध तारीखों के लिए मंडी भाव नहीं मिले।",mandiNeedLocation:"मंडी भाव देखने के लिए प्रोफाइल में राज्य और जिला चुनें।",mandiUnavailableTitle:"मंडी सेवा फिलहाल उपलब्ध नहीं है।",mandiUnavailableMessage:"सरकारी डेटा सेवा समय पर जवाब नहीं दे रही है। थोड़ी देर बाद फिर कोशिश करें।",mandiRetry:"दोबारा कोशिश करें",
+mandiTitle:"मंडी का जिला बदलें",mandiDescription:"दूसरे जिले का मंडी भाव देखने के लिए स्थान चुनें।",mandiState:"राज्य",mandiDistrict:"जिला",mandiDefaultNote:"डिफ़ॉल्ट रूप से आपकी प्रोफाइल का जिला दिखेगा",mandiReset:"↻ डिफ़ॉल्ट",allGrades:"सभी ग्रेड",sortDefault:"कीमत के अनुसार क्रम",sortLow:"कीमत: कम से ज़्यादा",sortHigh:"कीमत: ज़्यादा से कम",selectCrop:"फसल चुनें",cropWheat:"गेहूं",cropSoybean:"सोयाबीन",cropCotton:"कपास",cropMaize:"मक्का",cropChana:"चना",cropOnion:"प्याज़",
+diseaseTitle:"फसल रोग जाँच",diseaseSub:"पत्ते, फल या पौधे की साफ फोटो से संभावित बीमारी और उपाय जानें।",diseaseOpen:"रोग जाँचें →",diseaseEyebrow:"फसल रोग जाँच",diseaseUploadTitle:"फसल की फोटो चुनें",diseaseUploadSub:"प्रभावित पत्ते, फल या तने की साफ और अच्छी रोशनी वाली फोटो लें।",diseaseAnalysis:"रोग विश्लेषण",diseaseCropLabel:"फसल",diseaseNameLabel:"संभावित बीमारी",diseaseSignsLabel:"दिखने वाले लक्षण",diseaseCauseLabel:"संभावित कारण",diseaseSolutionLabel:"सुझाया गया उपाय",diseaseScan:"रोग जाँचें →",diseaseLoading:"फसल की फोटो जाँची जा रही है...",diseaseFailed:"रोग का विश्लेषण नहीं हो सका।",diseasePhotoReady:"फोटो तैयार है। जाँच शुरू करें।",diseaseNote:"यह फोटो पर आधारित संभावना है, पक्की पहचान नहीं। इलाज से पहले स्थानीय कृषि विशेषज्ञ से पुष्टि करें।",
+weatherState:"राज्य",weatherDistrict:"जिला",weatherUseProfile:"प्रोफाइल का जिला",weatherSelectState:"राज्य चुनें",weatherSelectDistrict:"जिला चुनें",weatherSelectStateFirst:"पहले राज्य चुनें",weatherHourlyTitle:"आज का हर घंटे का मौसम",weatherDailyTitle:"आज और अगले 7 दिन",weatherAlertsTitle:"मौसम चेतावनी",weatherLoading:"लाइव मौसम लोड हो रहा है...",weatherChooseLocation:"लाइव मौसम देखने के लिए राज्य और जिला चुनें।",weatherKeyMissing:"सर्वर पर OpenWeather API key सेट नहीं है।",weatherKeyInvalid:"OpenWeather API key सही नहीं है।",weatherSubscriptionRequired:"घंटे और दिन के पूर्वानुमान के लिए OpenWeather One Call चालू करें।",weatherDistrictNotFound:"OpenWeather में यह जिला नहीं मिला।",weatherRateLimited:"OpenWeather की अनुरोध सीमा पूरी हुई। बाद में कोशिश करें।",weatherTimeout:"OpenWeather से जवाब मिलने में देर हो रही है। दोबारा कोशिश करें।",weatherFailed:"लाइव मौसम लोड नहीं हो सका।",weatherCurrentTitle:"अभी का मौसम",weatherFeels:"अनुभव तापमान",weatherHumidity:"नमी",weatherWind:"हवा",weatherGust:"झोंका",weatherDirection:"दिशा",weatherPressure:"वायुदाब",weatherVisibility:"दृश्यता",weatherDewPoint:"ओसांक",weatherUv:"UV सूचकांक",weatherClouds:"बादल",weatherSunrise:"सूर्योदय",weatherSunset:"सूर्यास्त",weatherRain:"बारिश",weatherSnow:"बर्फ",weatherPrecipitation:"वर्षा",weatherProbability:"बारिश की संभावना",weatherMin:"न्यूनतम",weatherMax:"अधिकतम",weatherMorning:"सुबह",weatherDay:"दिन",weatherEvening:"शाम",weatherNight:"रात",weatherNoAlerts:"मौसम की कोई सक्रिय चेतावनी नहीं है।",weatherNoHours:"आज का घंटेवार पूर्वानुमान उपलब्ध नहीं है।",weatherAlertUntil:"तक",
 howEyebrow:"कैसे काम करता है",howTitle:"जानकारी से बेहतर सौदे तक।",step1:"प्रोफाइल बनाएं",step1p:"फोन सत्यापित करें और अपना राज्य/केंद्र शासित प्रदेश व जिला चुनें।",step2:"फसल देखें या लिस्ट करें",step2p:"मंडी भाव देखें, उपज खरीदें या अपनी फसल की लिस्टिंग प्रकाशित करें।",step3:"सीधे जुड़ें",step3p:"पूछताछ या बातचीत के लिए किसान को कॉल करें।",
 ctaTitle:"बेहतर जानकारी। बेहतर निर्णय। बेहतर कल।",ctaText:"क्योंकि हर किसान को अपनी मेहनत की सही कीमत जानने का अधिकार है।",getStarted:"शुरू करें →",footerText:"भारतीय किसानों और बाज़ार के बीच बेहतर संबंध बनाने की दिशा में।",explore:"एक्सप्लोर करें",support:"सहायता",help:"सहायता केंद्र",contact:"संपर्क करें",privacy:"गोपनीयता",footerMade:"भारतीय कृषि के लिए बनाया गया।",
 loginTitle:"भावसेतु में आपका स्वागत है",loginSub:"अपना किसान प्रोफाइल बनाने या खोलने के लिए मोबाइल नंबर डालें।",phone:"मोबाइल नंबर",sendOtp:"OTP भेजें →",demoOtp:"Demo OTP: 123456",enterOtp:"6 अंकों का OTP डालें",verify:"सत्यापित करें और आगे बढ़ें →",where:"आप कहाँ से हैं?",whereSub:"अपना राज्य/केंद्रशासित प्रदेश और जिला चुनें।",state:"राज्य / केंद्र शासित प्रदेश",district:"जिला",continue:"आगे बढ़ें →",preferences:"प्राथमिकताएं",language:"भाषा",languageSub:"पूरे इंटरफेस की भाषा बदलें।",appearance:"दिखावट",appearanceSub:"लाइट/डार्क मोड बदलें।",profile:"प्रोफाइल",logout:"लॉग आउट",total:"कुल",enquireCart:"कार्ट के बारे में पूछें →",
@@ -308,10 +324,15 @@ marketplaceEyebrow:"शेतकरी मार्केटप्लेस",mar
 cropDetails:"पिकाचा तपशील",crop:"पीक",variety:"जात",quantity:"प्रमाण (क्विंटल)",price:"अपेक्षित किंमत / क्विंटल",grade:"ग्रेड",moisture:"ओलावा %",listingDetails:"लिस्टिंग तपशील",harvest:"काढणीची तारीख",location:"ठिकाण",notes:"खरेदीदारांसाठी टीप",scanFirst:"प्रथम गुणवत्ता स्कॅन करा",publish:"पीक प्रकाशित करा →",
 qualityEyebrow:"पीक गुणवत्ता मीटर",qualityTitle:"विक्रीपूर्वी गुणवत्ता तपासा.",qualitySub:"स्वच्छ फोटो अपलोड करा.",uploadTitle:"पिकाचा फोटो अपलोड करा",uploadSub:"धान्याची स्वच्छ फोटो अपलोड करा.",choosePhoto:"फोटो निवडा",analysis:"दृश्य विश्लेषण",confidence:"विश्वासार्हता",qualityAdvice:"फोटो अपलोड करून स्कॅन सुरू करा.",scan:"पीक स्कॅन करा →",useResult:"लिस्टिंगमध्ये परिणाम वापरा",
 myEyebrow:"तुमचे पीक",myTitle:"माझ्या सक्रिय लिस्टिंग",
+qualityScoreUnit:"गुण / 100",qualityGrade:"ग्रेड",qualityObservation:"निरीक्षण",qualityAdviceLabel:"सल्ला",qualityLoading:"फोटोचे विश्लेषण सुरू आहे...",qualityInvalid:"AI कडून योग्य गुण मिळाले नाहीत. कृपया पुन्हा स्कॅन करा.",qualityScanFailed:"फोटोचे विश्लेषण करता आले नाही.",qualityNoObservation:"पिकाची स्पष्ट माहिती दिसली नाही.",qualityNoAdvice:"विक्रीपूर्वी फोटोमध्ये दिसणारी पिकाची स्थिती तपासा.",themeToLight:"☀ लाइट थीम",themeToDark:"◐ डार्क थीम",emptyMarketplace:"सध्या पिकांची कोणतीही लिस्टिंग उपलब्ध नाही.",emptyWarehouses:"सध्या सत्यापित गोदामांची माहिती उपलब्ध नाही.",weatherUnavailable:"लाइव्ह हवामानाची माहिती सध्या उपलब्ध नाही.",
 whEyebrow:"साठवणूक आणि गोडाऊन",whMainTitle:"पीक साठवणूक गोडाऊन",whMainSub:"जवळील कोल्ड स्टोरेज आणि गोडाऊनची उपलब्धता व भाडे तपासा.",
 weEyebrow:"लाइव हवामान अंदाज",weMainTitle:"आज आणि पुढील ७ दिवसांचे हवामान",weMainSub:"तुमच्या शेतीसाठी अचूक तापमान आणि पाण्याचा अंदाज.",
 hiEyebrow:"क्रियाकलाप इतिहास",hiMainTitle:"तुमचा क्रियाकलाप इतिहास",hiMainSub:"मागील लिस्टिंग आणि चौकशीचा तपशील.",
 noHistory:"सध्या तुमचा कोणताही इतिहास उपलब्ध नाही.",
+mandiGrade:"ग्रेड",mandiModalPrice:"मॉडेल दर",mandiPerQuintal:"/ क्विंटल",mandiMin:"किमान",mandiMax:"कमाल",mandiHistory:"इतिहास पहा",mandiHideHistory:"इतिहास लपवा",mandiLoading:"नवीनतम मंडी भाव लोड होत आहेत...",mandiHistoryLoading:"भावाचा इतिहास लोड होत आहे...",mandiNoHistory:"इतिहास उपलब्ध नाही.",mandiHistoryFailed:"भावाचा इतिहास लोड करता आला नाही.",mandiNoRecords:"अलीकडील उपलब्ध तारखांसाठी मंडी भाव मिळाले नाहीत.",mandiNeedLocation:"मंडी भाव पाहण्यासाठी प्रोफाइलमध्ये राज्य आणि जिल्हा निवडा.",mandiUnavailableTitle:"मंडी सेवा सध्या उपलब्ध नाही.",mandiUnavailableMessage:"सरकारी डेटा सेवा वेळेत प्रतिसाद देत नाही. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.",mandiRetry:"पुन्हा प्रयत्न करा",
+mandiTitle:"मंडीचा जिल्हा बदला",mandiDescription:"दुसऱ्या जिल्ह्याचे मंडी भाव पाहण्यासाठी ठिकाण निवडा.",mandiState:"राज्य",mandiDistrict:"जिल्हा",mandiDefaultNote:"डीफॉल्ट म्हणून तुमच्या प्रोफाइलचा जिल्हा वापरला जाईल",mandiReset:"↻ डीफॉल्ट",allGrades:"सर्व ग्रेड",sortDefault:"किमतीनुसार क्रम",sortLow:"किंमत: कमी ते जास्त",sortHigh:"किंमत: जास्त ते कमी",selectCrop:"पीक निवडा",cropWheat:"गहू",cropSoybean:"सोयाबीन",cropCotton:"कापूस",cropMaize:"मका",cropChana:"हरभरा",cropOnion:"कांदा",
+diseaseTitle:"पीक रोग तपासणी",diseaseSub:"पान, फळ किंवा पिकाच्या स्पष्ट फोटोवरून संभाव्य रोग आणि उपाय जाणून घ्या.",diseaseOpen:"रोग तपासा →",diseaseEyebrow:"पीक रोग तपासणी",diseaseUploadTitle:"पिकाचा फोटो निवडा",diseaseUploadSub:"बाधित पान, फळ किंवा खोडाचा स्पष्ट आणि चांगल्या प्रकाशातील फोटो वापरा.",diseaseAnalysis:"रोग विश्लेषण",diseaseCropLabel:"पीक",diseaseNameLabel:"संभाव्य रोग",diseaseSignsLabel:"दिसणारी लक्षणे",diseaseCauseLabel:"संभाव्य कारण",diseaseSolutionLabel:"सुचवलेला उपाय",diseaseScan:"रोग तपासा →",diseaseLoading:"पिकाचा फोटो तपासत आहे...",diseaseFailed:"रोगाचे विश्लेषण करता आले नाही.",diseasePhotoReady:"फोटो तयार आहे. तपासणी सुरू करा.",diseaseNote:"हा फोटोवर आधारित अंदाज आहे, निश्चित निदान नाही. उपचारापूर्वी स्थानिक कृषी तज्ज्ञांचा सल्ला घ्या.",
+weatherState:"राज्य",weatherDistrict:"जिल्हा",weatherUseProfile:"प्रोफाइलचा जिल्हा",weatherSelectState:"राज्य निवडा",weatherSelectDistrict:"जिल्हा निवडा",weatherSelectStateFirst:"आधी राज्य निवडा",weatherHourlyTitle:"आजचा तासानुसार हवामान अंदाज",weatherDailyTitle:"आज आणि पुढील 7 दिवस",weatherAlertsTitle:"हवामान सूचना",weatherLoading:"लाइव्ह हवामान लोड होत आहे...",weatherChooseLocation:"लाइव्ह हवामान पाहण्यासाठी राज्य आणि जिल्हा निवडा.",weatherKeyMissing:"सर्व्हरवर OpenWeather API key सेट केलेली नाही.",weatherKeyInvalid:"OpenWeather API key चुकीची आहे.",weatherSubscriptionRequired:"तासाभराचा आणि दैनिक अंदाज पाहण्यासाठी OpenWeather One Call सुरू करा.",weatherDistrictNotFound:"OpenWeather मध्ये हा जिल्हा सापडला नाही.",weatherRateLimited:"OpenWeather विनंती मर्यादा पूर्ण झाली. नंतर पुन्हा प्रयत्न करा.",weatherTimeout:"OpenWeather कडून प्रतिसाद मिळण्यास उशीर होत आहे. पुन्हा प्रयत्न करा.",weatherFailed:"लाइव्ह हवामान लोड करता आले नाही.",weatherCurrentTitle:"सध्याचे हवामान",weatherFeels:"जाणवणारे तापमान",weatherHumidity:"आर्द्रता",weatherWind:"वारा",weatherGust:"वाऱ्याचा झोत",weatherDirection:"दिशा",weatherPressure:"हवेचा दाब",weatherVisibility:"दृश्यमानता",weatherDewPoint:"दवबिंदू",weatherUv:"UV निर्देशांक",weatherClouds:"ढग",weatherSunrise:"सूर्योदय",weatherSunset:"सूर्यास्त",weatherRain:"पाऊस",weatherSnow:"बर्फ",weatherPrecipitation:"पर्जन्य",weatherProbability:"पावसाची शक्यता",weatherMin:"किमान",weatherMax:"कमाल",weatherMorning:"सकाळ",weatherDay:"दिवस",weatherEvening:"संध्याकाळ",weatherNight:"रात्र",weatherNoAlerts:"हवामानाची सक्रिय सूचना नाही.",weatherNoHours:"आजचा तासानुसार अंदाज उपलब्ध नाही.",weatherAlertUntil:"पर्यंत",
 howEyebrow:"कसे काम करते",howTitle:"माहितीपासून चांगल्या सौद्यापर्यंत.",step1:"प्रोफाइल तयार करा",step1p:"मोबाइल सत्यापित करा आणि राज्य/जिल्हा निवडा.",step2:"पिके तपासा किंवा लिस्ट करा",step2p:"मंडी भाव पहा, पीक खरेदी किंवा विक्री करा.",step3:"थेट संपर्क साधा",step3p:"शेतकऱ्याला कॉल करून बोलणी करा.",
 ctaTitle:"चांगली माहिती. चांगले निर्णय. चांगले उद्या.",ctaText:"कारण प्रत्येक शेतकऱ्याला त्यांच्या कष्टाची योग्य किंमत मिळण्याचा अधिकार आहे.",getStarted:"सुरू करा →",footerText:"भारतीय शेतकरी आणि बाजारपेठ यांच्यात स्मार्ट दुवा.",explore:"एक्सप्लोर",support:"सपोर्ट",help:"मदत केंद्र",contact:"संपर्क",privacy:"गोपनीयता",footerMade:"भारतीय कृषीसाठी बनवले.",
 loginTitle:"भावसेतुमध्ये स्वागत आहे",loginSub:"तुमचे शेतकरी प्रोफाइल तयार करण्यासाठी मोबाईल नंबर टाका.",phone:"मोबाइल नंबर",sendOtp:"OTP पाठवा →",demoOtp:"डेमो OTP: 123456",enterOtp:"६ अंकी OTP टाका",verify:"सत्यापित करा और पुढे जा →",where:"तुम्ही कुठून आहात?",whereSub:"राज्य आणि जिल्हा निवडा.",state:"राज्य / केंद्रशासित प्रदेश",district:"जिल्हा",continue:"पुढे जा →",preferences:"प्राधान्ये",language:"भाषा",languageSub:"संपूर्ण इंटरफेसची भाषा बदला.",appearance:"दिसणे",appearanceSub:"लाइट/डार्क मोड बदला.",profile:"प्रोफाइल",logout:"लॉग आउट",total:"एकूण",enquireCart:"कार्टबद्दल चौकशी करा →",
@@ -370,6 +391,7 @@ function toast(msg){let tEl=$("toast");if(!tEl)return;tEl.textContent=msg;tEl.cl
 
 function applyLang(){
   document.documentElement.lang=lang;
+    document.title=lang==="hi"?"भावसेतु | किसान डैशबोर्ड":lang==="mr"?"भावसेतु | शेतकरी डॅशबोर्ड":"BhavSetu | Farmer Dashboard";
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     let k=el.dataset.i18n;
     if(t[lang]&&t[lang][k]) el.textContent=t[lang][k];
@@ -400,6 +422,13 @@ function applyLang(){
     mSelect.options[6].text = t[lang].m6;
   }
 
+    const mandiStateSelect=$("mandiState");
+    const mandiDistrictSelect=$("mandiTempDistrict");
+    if(mandiStateSelect?.options.length)mandiStateSelect.options[0].text=`-- ${t[lang].mandiChooseState} --`;
+    if(mandiDistrictSelect?.options.length){
+        mandiDistrictSelect.options[0].text=mandiStateSelect?.value?`-- ${t[lang].mandiChooseDistrict} --`:`-- ${t[lang].mandiChooseStateFirst} --`;
+    }
+
   let langBtn=$("languageBtn");if(langBtn)langBtn.textContent=lang==="en"?"Eng":lang==="hi"?"हिन्दी":"मराठी";
   let setLang=$("settingLanguage");
   if(setLang){
@@ -407,7 +436,15 @@ function applyLang(){
     else if(lang==="hi") setLang.textContent="मराठी / English";
     else setLang.textContent="English / हिन्दी";
   }
-  if (typeof renderPrices === "function") {renderPrices()};;renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();updateProfileUI();
+    updateThemeButton();
+    if (typeof renderPrices === "function") {renderPrices()};;renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();updateProfileUI();
+}
+
+function updateThemeButton(){
+    const button=$("themeToggle");
+    if(!button)return;
+    const dark=document.body.classList.contains("dark");
+    button.textContent=t[lang][dark?"themeToLight":"themeToDark"];
 }
 
 
@@ -418,7 +455,7 @@ function applyLang(){
 // ==========================================================
 
 
-const MANDI_BACKEND = "https://bhavsetu-0758.onrender.com";
+const MANDI_BACKEND = BACKEND_API_URL;
 
 
 // ==========================================================
@@ -473,7 +510,7 @@ function mandiFormatDate(value) {
 
     return new Date(time)
         .toLocaleDateString(
-            "hi-IN",
+            lang === "en" ? "en-IN" : lang === "mr" ? "mr-IN" : "hi-IN",
             {
                 day: "2-digit",
                 month: "short",
@@ -787,7 +824,7 @@ function createMandiCard(
 
 
         <p>
-            Grade:
+            ${t[lang].mandiGrade}:
             <b>
                 ${mandiEscape(
                     item.Grade || "—"
@@ -810,9 +847,7 @@ function createMandiCard(
 
             <div>
 
-                <small>
-                    Modal Bhav
-                </small>
+                <small>${t[lang].mandiModalPrice}</small>
 
                 <strong>
                     ₹${mandiEscape(
@@ -820,9 +855,7 @@ function createMandiCard(
                     )}
                 </strong>
 
-                <small>
-                    / Quintal
-                </small>
+                <small>${t[lang].mandiPerQuintal}</small>
 
             </div>
 
@@ -830,13 +863,13 @@ function createMandiCard(
             <div class="mandi-range">
 
                 <span>
-                    Min ₹${mandiEscape(
+                    ${t[lang].mandiMin} ₹${mandiEscape(
                         item.Min_Price ?? "0"
                     )}
                 </span>
 
                 <span>
-                    Max ₹${mandiEscape(
+                    ${t[lang].mandiMax} ₹${mandiEscape(
                         item.Max_Price ?? "0"
                     )}
                 </span>
@@ -850,7 +883,7 @@ function createMandiCard(
             type="button"
             class="mandi-history-button"
         >
-            View History
+            ${t[lang].mandiHistory}
         </button>
 
 
@@ -895,8 +928,7 @@ function createMandiCard(
                         text-align:center;
                     "
                 >
-                    Please wait...<br>
-                    इतिहास लोड हो रहा है...
+                    ${t[lang].mandiHistoryLoading}
                 </div>
             `;
 
@@ -1022,7 +1054,7 @@ async function bhavSetuFetchLiveMandiPrices() {
     ) {
 
         grid.innerHTML =
-            "<p style='grid-column:1/-1;text-align:center'>कृपया प्रोफाइल में राज्य और जिला चुनें।</p>";
+            `<p class="empty-state">${t[lang].mandiNeedLocation}</p>`;
 
 
         return;
@@ -1072,11 +1104,7 @@ async function bhavSetuFetchLiveMandiPrices() {
             ></div>
 
             <p>
-                Please wait...
-            </p>
-
-            <p>
-                नवीनतम मंडी भाव लोड हो रहे हैं...
+                ${t[lang].mandiLoading}
             </p>
 
         </div>
@@ -1151,7 +1179,7 @@ async function bhavSetuFetchLiveMandiPrices() {
                         padding:25px;
                     "
                 >
-                    इन 3 दिनों में मंडी डेटा उपलब्ध नहीं मिला।
+                    ${t[lang].mandiNoRecords}
                 </p>
             `;
         }
@@ -1190,7 +1218,7 @@ async function bhavSetuFetchLiveMandiPrices() {
                     color:#333;
                 "
             >
-                मंडी सेवा फिलहाल उपलब्ध नहीं है।
+                ${t[lang].mandiUnavailableTitle}
             </p>
 
             <p
@@ -1201,8 +1229,7 @@ async function bhavSetuFetchLiveMandiPrices() {
                     color:#666;
                 "
             >
-                सरकारी मंडी सर्वर से डेटा प्राप्त नहीं हो पा रहा है।
-                कृपया कुछ समय बाद दोबारा प्रयास करें।
+                ${t[lang].mandiUnavailableMessage}
             </p>
 
             <button
@@ -1219,7 +1246,7 @@ async function bhavSetuFetchLiveMandiPrices() {
                     font-size:14px;
                 "
             >
-                दोबारा प्रयास करें
+                ${t[lang].mandiRetry}
             </button>
         </div>
     `;
@@ -1380,7 +1407,7 @@ async function loadMandiHistory(
 
                         `
                             <div class="history-finished">
-                                इतिहास उपलब्ध नहीं है।
+                                ${t[lang].mandiNoHistory}
                             </div>
                         `
                 }
@@ -1399,7 +1426,7 @@ async function loadMandiHistory(
 
         box.innerHTML = `
             <div class="history-finished">
-                इतिहास लोड नहीं हो पाया।
+                ${t[lang].mandiHistoryFailed}
             </div>
         `;
     }
@@ -1420,7 +1447,7 @@ async function loadMandiHistory(
 
 
     hide.textContent =
-        "Hide History";
+        t[lang].mandiHideHistory;
 
 
     hide.addEventListener(
@@ -1505,7 +1532,7 @@ document.addEventListener(
 
         // STATES
         stateSelect.innerHTML =
-            `<option value="">-- राज्य चुनें --</option>`;
+            `<option value="">-- ${t[lang].mandiChooseState} --</option>`;
 
 
         for (
@@ -1534,7 +1561,7 @@ document.addEventListener(
 
 
         districtSelect.innerHTML =
-            `<option value="">-- पहले राज्य चुनें --</option>`;
+            `<option value="">-- ${t[lang].mandiChooseStateFirst} --</option>`;
 
 
         districtSelect.disabled =
@@ -1566,7 +1593,7 @@ document.addEventListener(
                 ) {
 
                     districtSelect.innerHTML =
-                        `<option value="">-- पहले राज्य चुनें --</option>`;
+                        `<option value="">-- ${t[lang].mandiChooseStateFirst} --</option>`;
 
 
                     districtSelect.disabled =
@@ -1581,7 +1608,7 @@ document.addEventListener(
 
 
                 districtSelect.innerHTML =
-                    `<option value="">-- जिला चुनें --</option>`;
+                    `<option value="">-- ${t[lang].mandiChooseDistrict} --</option>`;
 
 
                 districtSelect.disabled =
@@ -1702,7 +1729,7 @@ function renderMarketplace(){
   mg.innerHTML=arr.map(x=>{
     let photoContent = x.image ? `<img src="${x.image}" alt="${x.crop}" onclick="zoomImage('${x.image}')" style="cursor:pointer;" title="Click to zoom">` : x.emoji;
     return `<article class="listing-card"><div class="listing-photo">${photoContent}</div><div class="listing-body"><h3>${lang==="hi"?x.hi:lang==="mr"?x.mr:x.crop}</h3><div class="seller">${x.seller} · ${x.location}</div><div class="tags"><span class="tag">${x.grade} Grade</span><span class="tag">${typeof x.moisture==='string'?x.moisture.split(' ')[0]:x.moisture+'%'} moisture</span><span class="tag">${x.qty} qtl</span></div><div class="listing-price"><strong>₹${x.price.toLocaleString("en-IN")}/qtl</strong><span>${x.variety||""}</span></div><div class="card-actions"><button class="outline-btn" onclick="openDetail(${x.id})">${lang==="hi"?"विवरण":lang==="mr"?"तपशील":"Details"}</button><button class="primary" onclick="addToCart(${x.id})">🛒 ${lang==="hi"?"कार्ट में जोड़ें":lang==="mr"?"कार्टमध्ये जोडा":"Add to Cart"}</button></div></div></article>`;
-  }).join("")||`<div class="form-card">No crops found.</div>`;
+    }).join("")||`<div class="empty-state">${t[lang].emptyMarketplace}</div>`;
 }
 
 function zoomImage(imgSrc){
@@ -1897,50 +1924,195 @@ function renderMyListings(){
 function renderWarehouses(){
   let grid=$("warehouseGrid");
   if(!grid)return;
-  grid.innerHTML=starterWarehouses.map(w=>`
-    <div class="warehouse-card">
-      <h3>${lang==="hi"?w.hi:lang==="mr"?w.mr:w.name}</h3>
-      <div class="warehouse-meta">📍 ${w.location}</div>
-      <div class="warehouse-details">
-        <div><b>${t[lang].whCapacity||"Capacity"}:</b> ${w.capacity}</div>
-        <div><b>${t[lang].whAvailable||"Available"}:</b> <span style="color:var(--g);font-weight:700">${w.available}</span></div>
-        <div><b>${t[lang].whAccepted||"Accepted Crops"}:</b> ${lang==="hi"?w.cropsHi:lang==="mr"?w.cropsMr:w.crops}</div>
-      </div>
-      <div class="warehouse-price">${w.rate}</div>
-    </div>
-  `).join("");
+    grid.innerHTML=starterWarehouses.map(w=>`
+        <div class="warehouse-card">
+            <h3>${lang==="hi"?w.hi:lang==="mr"?w.mr:w.name}</h3>
+            <div class="warehouse-meta">📍 ${w.location}</div>
+            <div class="warehouse-details">
+                <div><b>${t[lang].whCapacity||"Capacity"}:</b> ${w.capacity}</div>
+                <div><b>${t[lang].whAvailable||"Available"}:</b> <span style="color:var(--g);font-weight:700">${w.available}</span></div>
+                <div><b>${t[lang].whAccepted||"Accepted Crops"}:</b> ${lang==="hi"?w.cropsHi:lang==="mr"?w.cropsMr:w.crops}</div>
+            </div>
+            <div class="warehouse-price">${w.rate}</div>
+        </div>
+    `).join("");
+}
+
+let weatherRequestId=0;
+let weatherLoadedKey="";
+let weatherLoadingKey="";
+
+function weatherEscape(value){
+    return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[char]);
+}
+
+function weatherDateParts(timestamp,timezone,options={}){
+    return new Intl.DateTimeFormat(lang==="hi"?"hi-IN":lang==="mr"?"mr-IN":"en-IN",{timeZone:timezone,...options}).format(new Date(timestamp*1000));
+}
+
+function weatherLocalDate(timestamp,timezone){
+    return new Intl.DateTimeFormat("en-CA",{timeZone:timezone,year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(timestamp*1000));
+}
+
+function weatherDescription(condition){
+    if(!condition)return "—";
+    if(lang!=="mr")return condition.description||condition.main||"—";
+    const id=condition.id;
+    if(id>=200&&id<300)return "मेघगर्जनेसह पाऊस";
+    if(id>=300&&id<400)return "रिमझिम पाऊस";
+    if(id>=500&&id<600)return "पाऊस";
+    if(id>=600&&id<700)return "हिमवृष्टी";
+    if(id>=700&&id<800)return "धुके";
+    if(id===800)return "निरभ्र आकाश";
+    if(id===801)return "थोडे ढग";
+    if(id===802)return "विखुरलेले ढग";
+    if(id===803)return "तुटक ढग";
+    if(id===804)return "ढगाळ";
+    return condition.description||condition.main||"—";
+}
+
+function weatherIcon(condition){
+    return condition?.icon?`<img class="weather-icon" src="https://openweathermap.org/img/wn/${weatherEscape(condition.icon)}@2x.png" alt="${weatherEscape(weatherDescription(condition))}">`:"";
+}
+
+function weatherMetric(label,value){
+    return `<div class="weather-metric"><span>${weatherEscape(label)}</span><b>${weatherEscape(value??"—")}</b></div>`;
+}
+
+function populateWeatherDistricts(state,selectedDistrict=""){
+    const districtSelect=$("weatherDistrict");
+    if(!districtSelect)return;
+    const districts=indiaDistricts[state]||[];
+    districtSelect.innerHTML=`<option value="">${state?t[lang].weatherSelectDistrict:t[lang].weatherSelectStateFirst}</option>`+districts.map(name=>`<option value="${weatherEscape(name)}">${weatherEscape(name)}</option>`).join("");
+    if(selectedDistrict&&!districts.includes(selectedDistrict))districtSelect.insertAdjacentHTML("beforeend",`<option value="${weatherEscape(selectedDistrict)}">${weatherEscape(selectedDistrict)}</option>`);
+    districtSelect.disabled=!state;
+    districtSelect.value=selectedDistrict;
+}
+
+function renderWeatherData(payload){
+    const weather=payload.weather;
+    const location=payload.location;
+    const timezone=weather.timezone||"Asia/Kolkata";
+    const current=weather.current||{};
+    const condition=current.weather?.[0];
+    const currentCard=$("weatherToday");
+    const locationLabel=$("weatherLocationLabel");
+    if(locationLabel){
+        const provider=payload.provider==="Open-Meteo"?`<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>`:"OpenWeather";
+        locationLabel.innerHTML=`${weatherEscape(location.district)}, ${weatherEscape(location.state)} · ${provider}`;
+    }
+
+    if(currentCard){
+        currentCard.classList.remove("hidden");
+        currentCard.innerHTML=`<div class="weather-current-head"><div><span class="weather-current-kicker">${weatherEscape(t[lang].weatherCurrentTitle)} · ${weatherEscape(weatherDateParts(current.dt,timezone,{weekday:"long",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}))}</span><h3>${Math.round(current.temp??0)}°C</h3><p>${weatherEscape(weatherDescription(condition))}</p></div>${weatherIcon(condition)}</div><div class="weather-current-metrics">${weatherMetric(t[lang].weatherFeels,`${Math.round(current.feels_like??0)}°C`)}${weatherMetric(t[lang].weatherHumidity,`${current.humidity??"—"}%`)}${weatherMetric(t[lang].weatherWind,`${current.wind_speed??"—"} m/s · ${current.wind_deg??"—"}°`)}${weatherMetric(t[lang].weatherGust,`${current.wind_gust??"—"} m/s`)}${weatherMetric(t[lang].weatherPressure,`${current.pressure??"—"} hPa`)}${weatherMetric(t[lang].weatherVisibility,`${current.visibility==null?"—":(current.visibility/1000).toFixed(1)} km`)}${weatherMetric(t[lang].weatherDewPoint,`${current.dew_point==null?"—":Math.round(current.dew_point)}°C`)}${weatherMetric(t[lang].weatherUv,current.uvi??"—")}${weatherMetric(t[lang].weatherClouds,`${current.clouds??"—"}%`)}${weatherMetric(t[lang].weatherSunrise,current.sunrise?weatherDateParts(current.sunrise,timezone,{hour:"numeric",minute:"2-digit"}):"—")}${weatherMetric(t[lang].weatherSunset,current.sunset?weatherDateParts(current.sunset,timezone,{hour:"numeric",minute:"2-digit"}):"—")}${weatherMetric(t[lang].weatherRain,`${current.rain?.["1h"]??0} mm`)}${weatherMetric(t[lang].weatherSnow,`${current.snow?.["1h"]??0} mm`)}</div>`;
+    }
+
+    const hourlyGrid=$("weatherHourly");
+    $("weatherHourlyBlock")?.classList.remove("hidden");
+    if(hourlyGrid){
+        const today=weatherLocalDate(current.dt||Date.now()/1000,timezone);
+        const hours=(weather.hourly||[]).filter(hour=>weatherLocalDate(hour.dt,timezone)===today);
+        hourlyGrid.innerHTML=hours.length?hours.map(hour=>{
+            const hourCondition=hour.weather?.[0];
+            return `<article class="weather-hour-card"><h4>${weatherEscape(weatherDateParts(hour.dt,timezone,{weekday:"short",day:"numeric",month:"short",hour:"numeric"}))}</h4>${weatherIcon(hourCondition)}<strong>${Math.round(hour.temp??0)}°C</strong><p>${weatherEscape(weatherDescription(hourCondition))}</p><div class="weather-card-metrics">${weatherMetric(t[lang].weatherFeels,`${Math.round(hour.feels_like??0)}°C`)}${weatherMetric(t[lang].weatherProbability,`${Math.round((hour.pop||0)*100)}%`)}${weatherMetric(t[lang].weatherHumidity,`${hour.humidity??"—"}%`)}${weatherMetric(t[lang].weatherWind,`${hour.wind_speed??"—"} m/s`)}${weatherMetric(t[lang].weatherClouds,`${hour.clouds??"—"}%`)}${weatherMetric(t[lang].weatherUv,hour.uvi??"—")}${weatherMetric(t[lang].weatherRain,`${hour.rain?.["1h"]??hour.snow?.["1h"]??0} mm`)}</div></article>`;
+        }).join(""):`<p class="empty-state">${t[lang].weatherNoHours}</p>`;
+    }
+
+    const forecastGrid=$("forecastGrid");
+    $("weatherDailyBlock")?.classList.remove("hidden");
+    if(forecastGrid){
+        forecastGrid.innerHTML=(weather.daily||[]).slice(0,8).map((day,index)=>{
+            const dayCondition=day.weather?.[0];
+            return `<article class="forecast-card weather-day-card"><h4>${weatherEscape(weatherDateParts(day.dt,timezone,{weekday:"long",day:"numeric",month:"short"}))}</h4>${weatherIcon(dayCondition)}<p class="weather-day-description">${weatherEscape(weatherDescription(dayCondition))}</p><strong>${Math.round(day.temp?.max??0)}° / ${Math.round(day.temp?.min??0)}°C</strong><div class="weather-card-metrics">${weatherMetric(t[lang].weatherMorning,`${Math.round(day.temp?.morn??0)}°C`)}${weatherMetric(t[lang].weatherDay,`${Math.round(day.temp?.day??0)}°C`)}${weatherMetric(t[lang].weatherEvening,`${Math.round(day.temp?.eve??0)}°C`)}${weatherMetric(t[lang].weatherNight,`${Math.round(day.temp?.night??0)}°C`)}${weatherMetric(t[lang].weatherFeels,`${Math.round(day.feels_like?.day??0)}°C`)}${weatherMetric(t[lang].weatherHumidity,`${day.humidity??"—"}%`)}${weatherMetric(t[lang].weatherProbability,`${Math.round((day.pop||0)*100)}%`)}${weatherMetric(t[lang].weatherRain,`${day.rain??0} mm`)}${weatherMetric(t[lang].weatherWind,`${day.wind_speed??"—"} m/s`)}${weatherMetric(t[lang].weatherGust,`${day.wind_gust??"—"} m/s`)}${weatherMetric(t[lang].weatherPressure,`${day.pressure??"—"} hPa`)}${weatherMetric(t[lang].weatherUv,day.uvi??"—")}${weatherMetric(t[lang].weatherSunrise,day.sunrise?weatherDateParts(day.sunrise,timezone,{hour:"numeric",minute:"2-digit"}):"—")}${weatherMetric(t[lang].weatherSunset,day.sunset?weatherDateParts(day.sunset,timezone,{hour:"numeric",minute:"2-digit"}):"—")}</div></article>`;
+        }).join("");
+    }
+
+    const alerts=weather.alerts||[];
+    const alertsBlock=$("weatherAlertsBlock");
+    if(alertsBlock){
+        alertsBlock.classList.toggle("hidden",!alerts.length);
+        $("weatherAlerts").innerHTML=alerts.map(alert=>`<article class="weather-alert"><strong>${weatherEscape(alert.event||t[lang].weatherAlertsTitle)}</strong><span>${weatherEscape(alert.sender_name||"")} · ${weatherEscape(t[lang].weatherAlertUntil)} ${weatherEscape(weatherDateParts(alert.end,timezone,{weekday:"short",hour:"numeric",minute:"2-digit"}))}</span><p>${weatherEscape(alert.description||"")}</p></article>`).join("");
+    }
+}
+
+async function loadWeather(state,district){
+    const status=$("weatherStatus");
+    if(!state||!district){
+        weatherRequestId++;
+        weatherLoadingKey="";
+        weatherLoadedKey="";
+        if(status)status.textContent=t[lang].weatherChooseLocation;
+        $("weatherToday").classList.add("hidden");
+        $("weatherHourlyBlock").classList.add("hidden");
+        $("weatherDailyBlock").classList.add("hidden");
+        $("weatherToday").innerHTML="";
+        $("weatherHourly").innerHTML="";
+        $("forecastGrid").innerHTML="";
+        return;
+    }
+    const requestKey=`${state}|${district}|${lang}`;
+    if(requestKey===weatherLoadedKey){return}
+    if(requestKey===weatherLoadingKey)return;
+    weatherLoadingKey=requestKey;
+    const requestId=++weatherRequestId;
+    if(status)status.textContent=t[lang].weatherLoading;
+    try{
+        const params=new URLSearchParams({state,district,language:lang});
+        const url=`${BACKEND_API_URL}/api/weather?${params}`;
+        const response=await fetch(url,{cache:"no-store"});
+        const result=await response.json().catch(()=>({}));
+        if(!response.ok||!result.success){
+            const messageKey={WEATHER_KEY_MISSING:"weatherKeyMissing",WEATHER_KEY_INVALID:"weatherKeyInvalid",WEATHER_SUBSCRIPTION_REQUIRED:"weatherSubscriptionRequired",WEATHER_DISTRICT_NOT_FOUND:"weatherDistrictNotFound",WEATHER_RATE_LIMITED:"weatherRateLimited",WEATHER_TIMEOUT:"weatherTimeout"}[result.code]||"weatherFailed";
+            throw new Error(t[lang][messageKey]);
+        }
+        if(requestId!==weatherRequestId)return;
+        weatherLoadedKey=requestKey;
+        if(status)status.textContent="";
+        renderWeatherData(result);
+    }catch(error){
+        if(requestId!==weatherRequestId)return;
+        if(status)status.textContent=error.message||t[lang].weatherFailed;
+        $("weatherToday").classList.add("hidden");
+        $("weatherHourlyBlock").classList.add("hidden");
+        $("weatherDailyBlock").classList.add("hidden");
+    }finally{
+        if(weatherLoadingKey===requestKey)weatherLoadingKey="";
+    }
 }
 
 function renderWeather(){
-  let todayCard=$("weatherToday");
-  if(todayCard){
-    todayCard.innerHTML=`
-      <div>
-  <span style="font-size:12px;opacity:0.8;text-transform:uppercase;letter-spacing:1px">${lang==="hi"?"आज का मौसम · लाइव":lang==="mr"?"आजचे हवामान · लाइव्ह":"Today's Weather · Live"}</span>
-  <h3>27°C · ${lang==="hi"?"ज्यादातर बादल":lang==="mr"?"मुख्यत्वे ढगाळ":"Mostly Cloudy"}</h3>
-  <p style="font-size:13px;opacity:0.9">${lang==="hi"?"नमी: 48% · हवा: 12 किमी/घंटा · बारिश: 80%":lang==="mr"?"आर्द्रता: 48% · वाऱ्याचा वेग: 12 किमी/तास · पाऊस: 80%":"Humidity: 48% · Wind: 12 km/h · Precipitation: 80%"}</p>
-</div>
-<div style="font-size:60px">🌥</div>
-    `;
-  }
-  let forecastGrid=$("forecastGrid");
-  if(forecastGrid){
-    let days = lang==="hi" 
-      ? ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार","शुक्रवार", "शनिवार"]
-      : lang==="mr"
-      ? ["रविवार", "सोमवार", "मंगळवार", "बुधवार", "गुरुवार","शुक्रवार", "शनिवार"]
-      : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"];
-    let icons = ["☀️", "🌤", "⛅", "🌧", "☀️", "🌤", "☀️"];
-    let temps = ["33° / 22°", "31° / 21°", "29° / 20°", "28° / 19°", "32° / 21°", "34° / 22°", "35° / 23°"];
-    
-    forecastGrid.innerHTML = days.map((day, i)=>`
-      <div class="forecast-card">
-        <h4>${day}</h4>
-        <div class="w-icon">${icons[i]}</div>
-        <div class="w-temp">${temps[i]}</div>
-      </div>
-    `).join("");
-  }
+    const stateSelect=$("weatherState");
+    const districtSelect=$("weatherDistrict");
+    const profileButton=$("weatherUseProfile");
+    if(!stateSelect||!districtSelect)return;
+    const storedState=localStorage.getItem("bhavsetu-weather-state");
+    const storedDistrict=localStorage.getItem("bhavsetu-weather-district");
+    const selectedState=storedState||user?.state||"";
+    const selectedDistrict=storedDistrict||user?.district||"";
+    stateSelect.innerHTML=`<option value="">${t[lang].weatherSelectState}</option>`+Object.keys(indiaDistricts).sort().map(state=>`<option value="${weatherEscape(state)}">${weatherEscape(state)}</option>`).join("");
+    if(selectedState&&!indiaDistricts[selectedState])stateSelect.insertAdjacentHTML("beforeend",`<option value="${weatherEscape(selectedState)}">${weatherEscape(selectedState)}</option>`);
+    stateSelect.value=selectedState;
+    populateWeatherDistricts(selectedState,selectedDistrict);
+    if(profileButton)profileButton.disabled=!(user?.state&&user?.district);
+    if(!stateSelect.dataset.weatherBound){
+        stateSelect.dataset.weatherBound="true";
+        stateSelect.addEventListener("change",()=>{
+            localStorage.setItem("bhavsetu-weather-state",stateSelect.value);
+            localStorage.removeItem("bhavsetu-weather-district");
+            populateWeatherDistricts(stateSelect.value);
+            loadWeather(stateSelect.value,"");
+        });
+        districtSelect.addEventListener("change",()=>{
+            localStorage.setItem("bhavsetu-weather-district",districtSelect.value);
+            loadWeather(stateSelect.value,districtSelect.value);
+        });
+        profileButton?.addEventListener("click",()=>{
+            localStorage.removeItem("bhavsetu-weather-state");
+            localStorage.removeItem("bhavsetu-weather-district");
+            renderWeather();
+        });
+    }
+    loadWeather(selectedState,selectedDistrict);
 }
 
 function populateStates(){let s=$("state");if(s)s.innerHTML=`<option value="">${lang==="hi"?"राज्य चुनें":lang==="mr"?"राज्य निवडा":"Select State / UT"}</option>`+Object.keys(indiaDistricts).sort().map(x=>`<option>${x}</option>`).join("")}
@@ -2099,17 +2271,253 @@ if(sf) {
   };
 }
 
-let cp=$("choosePhoto"),dz=$("dropzone");
-if(cp)cp.onclick=()=>$("cropPhoto").click();
-if(dz)dz.onclick=e=>{if(!e.target.closest("button")){let cph=$("cropPhoto");if(cph)cph.click();}};
-let cph=$("cropPhoto");
-if(cph)cph.onchange=e=>{let f=e.target.files[0];if(!f)return;let pr=$("preview");if(pr){pr.src=URL.createObjectURL(f);pr.classList.remove("hidden");}let up=$("uploadPrompt");if(up)up.classList.add("hidden");let sn=$("scanNow");if(sn)sn.disabled=false};
 
-let sn=$("scanNow");
-if(sn)sn.onclick=()=>{let score=Math.floor(76+Math.random()*20),m=(9.5+Math.random()*4).toFixed(1),g=score>=90?"A+":score>=82?"A":"B",c=Math.floor(85+Math.random()*12);qualityResult={score,moisture:m,grade:g};let sc=$("score");if(sc)sc.textContent=score;let rg=$("resultGrade");if(rg)rg.textContent=g+" Visual Grade";let rm=$("resultMoisture");if(rm)rm.textContent=m+"%";let rv=$("resultVisual");if(rv)rv.textContent=g;let rc=$("resultConfidence");if(rc)rc.textContent=c+"%";let adv=$("advice");if(adv)adv.textContent=score>=85?(lang==="hi"?"दृश्य स्थिति अच्छी है। व्यावसायिक बिक्री से पहले कैलिब्रेटेड मीटर से नमी की पुष्टि करें।":lang==="mr"?"दृश्य स्थिती चांगली आहे. व्यावसायिक विक्रीपूर्वी ओलावा तपासा.":"Good condition."):(lang==="hi"?"दृश्य स्थिति स्वीकार्य है।":"Acceptable condition.");let ur=$("useResult");if(ur)ur.classList.remove("hidden");}
 
-let ur=$("useResult");
-if(ur)ur.onclick=()=>{if(!qualityResult)return;let gd=$("grade");if(gd)gd.value=qualityResult.grade;let ms=$("moisture");if(ms)ms.value=qualityResult.moisture;let sellSec=$("sell");if(sellSec)sellSec.scrollIntoView({behavior:"smooth"});toast(lang==="hi"?"गुणवत्ता परिणाम लिस्टिंग में जोड़ दिया गया।":lang==="mr"?"गुणवत्ता निकाल लिस्टिंगमध्ये जोडला गेला.":"Quality result added.");}
+
+let cropQualityData = null;
+
+const cp = document.getElementById("choosePhoto");
+const dz = document.getElementById("dropzone");
+const cph = document.getElementById("cropPhoto");
+const sn = document.getElementById("scanNow");
+const ur = document.getElementById("useResult");
+const pr = document.getElementById("preview");
+const up = document.getElementById("uploadPrompt");
+
+// 1. Choose Photo & Dropzone Event Binding
+if (cp) {
+    cp.onclick = (e) => {
+        e.stopPropagation();
+        if (cph) cph.click();
+    };
+}
+
+if (dz) {
+    dz.onclick = () => {
+        if (cph) cph.click();
+    };
+}
+
+// 2. Photo Selection & Preview Handler
+if (cph) {
+    cph.onchange = (e) => {
+        const f = e.target.files[0];
+        if (!f) return;
+
+        if (pr) {
+            pr.src = URL.createObjectURL(f);
+            pr.classList.remove("hidden");
+        }
+        if (up) up.classList.add("hidden");
+        if (sn) sn.disabled = false;
+
+        // Reset scorecard elements
+        document.getElementById("score").textContent = "—";
+        document.getElementById("resultGrade").textContent = "—";
+        document.getElementById("resultObservation").textContent = "—";
+        document.getElementById("advice").textContent = t[lang].qualityAdvice;
+        if (ur) ur.classList.add("hidden");
+    };
+}
+
+// 3. Scan Now Click Handler (Gemini Vision AI Integration)
+if (sn) {
+    sn.onclick = async () => {
+        if (!cph || !cph.files || cph.files.length === 0) {
+            alert("कृपया पहले फोटो चुनें!");
+            return;
+        }
+
+        document.getElementById("score").textContent = "...";
+        sn.disabled = true;
+        $("scanSpinner")?.classList.remove("hidden");
+        $("scanText").textContent = t[lang].qualityLoading;
+
+        try {
+            const file = cph.files[0];
+
+            // Convert image to Base64
+            const base64Data = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result).split(",")[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+
+            const payload = {
+                language: lang,
+                messages: [
+                    {
+                        role: "user",
+                        content: "Analyze only crop quality visible in the attached photo. Do not use sample/default values or infer moisture. Score the image from 0 to 100 and return concise observations and practical advice. Do not include grade or confidence; the app calculates grade from the score.",
+                        attachments: [
+                            {
+                                name: file.name,
+                                mimeType: file.type.toLowerCase(),
+                                data: base64Data
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            const analysisUrl = `${BACKEND_API_URL}/api/chat`;
+
+            const response = await fetch(analysisUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const responseText = await response.text();
+                let errorMessage = "";
+                try {
+                    errorMessage = JSON.parse(responseText).error || "";
+                } catch (e) {}
+                throw new Error(errorMessage || `Analysis server returned HTTP ${response.status} at ${analysisUrl}.`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullText = "";
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split("\n\n");
+
+                for (const line of lines) {
+                    if (line.startsWith("data: ")) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            if (data.type === "delta") {
+                                fullText += data.text;
+                            }
+                        } catch(e) {}
+                    }
+                }
+            }
+
+            const result = JSON.parse(fullText);
+            if (!Number.isInteger(result.score) || result.score < 0 || result.score > 100) {
+                throw new Error(t[lang].qualityInvalid);
+            }
+            const extractedScore = result.score;
+
+            // Determine Grade based on rules
+            let grade = "A";
+            if (extractedScore >= 90) grade = "A+";
+            else if (extractedScore >= 80) grade = "A";
+            else if (extractedScore >= 60) grade = "B";
+            else if (extractedScore >= 40) grade = "C";
+            else grade = "Reject";
+
+            // Update UI Scorecard
+            document.getElementById("score").textContent = extractedScore;
+            document.getElementById("resultGrade").textContent = grade;
+            document.getElementById("resultObservation").textContent = result.observations || t[lang].qualityNoObservation;
+            document.getElementById("advice").textContent = result.advice || t[lang].qualityNoAdvice;
+
+            cropQualityData = { score: extractedScore, grade, observations: result.observations, advice: result.advice, language: lang };
+            if (ur) ur.classList.remove("hidden");
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById("advice").textContent = `${t[lang].qualityScanFailed} ${err.message}`;
+            document.getElementById("score").textContent = "Error";
+        } finally {
+            sn.disabled = false;
+            $("scanSpinner")?.classList.add("hidden");
+            $("scanText").textContent = t[lang].scan;
+        }
+    };
+}
+
+// 4. Use Result Button Handler
+if (ur) {
+    ur.onclick = () => {
+        if (!cropQualityData) return;
+        const gd = document.getElementById("grade");
+        if (gd) gd.value = cropQualityData.grade;
+        const sellSec = document.getElementById("sell");
+        if (sellSec) sellSec.scrollIntoView({ behavior: "smooth" });
+        alert("क्वालिटी रिजल्ट लिस्टिंग में जोड़ दिया गया है!");
+    };
+}
+
+let diseaseAnalysisData = null;
+const diseasePhoto=$("diseasePhoto");
+const diseasePreview=$("diseasePreview");
+const diseaseDropzone=$("diseaseDropzone");
+const diseaseChoosePhoto=$("diseaseChoosePhoto");
+const diseaseScanButton=$("diseaseScanNow");
+
+if(diseaseChoosePhoto)diseaseChoosePhoto.onclick=(event)=>{event.stopPropagation();diseasePhoto?.click()};
+if(diseaseDropzone)diseaseDropzone.onclick=(event)=>{if(!event.target.closest("button"))diseasePhoto?.click()};
+
+if(diseasePhoto){
+    diseasePhoto.onchange=()=>{
+        const file=diseasePhoto.files?.[0];
+        if(!file)return;
+        diseasePreview.src=URL.createObjectURL(file);
+        diseasePreview.classList.remove("hidden");
+        $("diseaseUploadPrompt").classList.add("hidden");
+        diseaseScanButton.disabled=false;
+        diseaseAnalysisData=null;
+        ["diseaseCrop","diseaseName","diseaseSigns","diseaseCause","diseaseSolution"].forEach(id=>$(id).textContent="—");
+        $("diseaseScanText").textContent=t[lang].diseaseScan;
+    };
+}
+
+if(diseaseScanButton){
+    diseaseScanButton.onclick=async()=>{
+        const file=diseasePhoto?.files?.[0];
+        if(!file)return;
+        diseaseScanButton.disabled=true;
+        $("diseaseSpinner").classList.remove("hidden");
+        $("diseaseScanText").textContent=t[lang].diseaseLoading;
+
+        try{
+            const image=await new Promise((resolve,reject)=>{
+                const reader=new FileReader();
+                reader.onload=()=>resolve(String(reader.result).split(",")[1]);
+                reader.onerror=reject;
+                reader.readAsDataURL(file);
+            });
+            const analysisUrl=`${BACKEND_API_URL}/api/crop-disease`;
+            const response=await fetch(analysisUrl,{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({image,mimeType:file.type.toLowerCase(),language:lang})
+            });
+            const result=await response.json().catch(()=>({}));
+            if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);
+
+            $("diseaseCrop").textContent=result.crop||"—";
+            $("diseaseName").textContent=result.possibleDisease||"—";
+            $("diseaseSigns").textContent=result.visibleSigns||"—";
+            $("diseaseCause").textContent=result.likelyCause||"—";
+            $("diseaseSolution").textContent=result.solution||"—";
+            diseaseAnalysisData=result;
+        }catch(error){
+            console.error("Crop disease analysis:",error);
+            $("diseaseName").textContent=t[lang].diseaseFailed;
+            $("diseaseSigns").textContent=error.message;
+        }finally{
+            diseaseScanButton.disabled=false;
+            $("diseaseSpinner").classList.add("hidden");
+            $("diseaseScanText").textContent=t[lang].diseaseScan;
+        }
+    };
+}
+
+
+
+
+
 
 let sq=$("searchCrop"),gf=$("gradeFilter"),sp=$("sortPrice");
 if(sq)sq.oninput=renderMarketplace;
@@ -2178,6 +2586,15 @@ if(langBtn)langBtn.onclick=()=>{
   else lang="en";
   localStorage.setItem("bhavsetu-lang",lang);
   applyLang();populateStates();populateProfileStates();
+    const mandiGrid=$("priceGrid");
+    const mandiLocation=getBhavSetuMandiLocation();
+    if(mandiGrid&&(!mandiLocation.state||!mandiLocation.district)){
+        mandiGrid.innerHTML=`<p class="empty-state">${t[lang].mandiNeedLocation}</p>`;
+    }else if(mandiGrid){
+        bhavSetuFetchLiveMandiPrices();
+    }
+    if(cropQualityData && cph?.files?.length) sn?.click();
+    if(diseaseAnalysisData && diseasePhoto?.files?.length) diseaseScanButton?.click();
   if(user){
     let sl=$("sellerLocation");
     if(sl) sl.value = (user.village ? user.village + ", " : "") + user.district + ", " + user.state;
@@ -2186,7 +2603,7 @@ if(langBtn)langBtn.onclick=()=>{
 let setLang=$("settingLanguage");if(setLang)setLang.onclick=()=>{$("languageBtn").click()};
 
 let thToggle=$("themeToggle");
-if(thToggle)thToggle.onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("bhavsetu-theme",document.body.classList.contains("dark")?"dark":"light")};
+if(thToggle)thToggle.onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("bhavsetu-theme",document.body.classList.contains("dark")?"dark":"light");updateThemeButton()};
 
 let lgBtn = $("logout");
 if(lgBtn) {
@@ -2254,7 +2671,7 @@ if(tabBtn) {
 }
 
 // ==================== NEW EMAIL & PHONE OTP FLOW ====================
-const backendUrl = "https://bhavsetu-0758.onrender.com";
+const backendUrl = BACKEND_API_URL;
 let pendingEmail = "";
 
 // 1. Send OTP
@@ -2458,7 +2875,7 @@ if (finishBtn) {
 
     // Cloud Database par data save karne ke liye API call
     try {
-        await fetch('https://bhavsetu-0758.onrender.com/api/update-profile', {
+        await fetch(`${BACKEND_API_URL}/api/update-profile`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user)
@@ -2476,7 +2893,7 @@ if (finishBtn) {
 
 async function fetchUserFromCloud(email) {
     try {
-        let response = await fetch(`https://bhavsetu-0758.onrender.com/api/get-profile/${email}`);
+        let response = await fetch(`${BACKEND_API_URL}/api/get-profile/${encodeURIComponent(email)}`);
         let data = await response.json();
         if (data.success && data.user) {
             user = data.user;

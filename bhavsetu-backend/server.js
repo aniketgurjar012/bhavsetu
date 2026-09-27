@@ -7,7 +7,7 @@ const axios = require('axios');
 const User = require('./models/user'); // User model import
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 app.use(cors());
 
 // MongoDB Connection (Cloud Database connected)
@@ -1313,3 +1313,369 @@ app.get(
         }
     }
 );
+
+
+
+
+// ===============================
+// GEMINI CROP SCANNER API ROUTE
+// ===============================
+app.post("/api/chat", async (req, res) => {
+    try {
+        const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+        const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+
+        if (!apiKey) {
+            return res.status(500).json({ error: "GEMINI_API_KEY is missing in your .env file." });
+        }
+
+        const { messages } = req.body;
+        const language = ["en", "hi", "mr"].includes(req.body.language) ? req.body.language : "hi";
+        if (!Array.isArray(messages) || messages.length === 0) {
+            return res.status(400).json({ error: "No messages provided." });
+        }
+
+        const responseLanguage = { en: "English", hi: "Hindi in Devanagari script", mr: "Marathi in Devanagari script" }[language];
+        const systemInstruction = `You are an agricultural crop-quality visual inspector. Analyze only what is clearly visible in the attached crop photo. Do not infer moisture, hidden properties, or invent findings. Score using this rubric: 90-100 clean and uniform with negligible visible defects; 80-89 good with minor impurities; 60-79 noticeable impurities or defects; 40-59 heavy contamination or poor condition; 0-39 severe visible defects or no crop present.
+    Return only a JSON object with exactly these keys: score (integer 0-100), observations (specific visible crop defects or foreign matter), advice (short practical advice based on visible evidence). Write all string values in ${responseLanguage}. Do not return grade, confidence, moisture, markdown, or extra keys.`;
+
+        let userPrompt = "";
+        let inlineData = null;
+
+        for (const message of messages) {
+            if (message.content) userPrompt += message.content + "\n";
+            if (Array.isArray(message.attachments)) {
+                for (const att of message.attachments) {
+                    if (att.data && att.mimeType) {
+                        inlineData = { mime_type: att.mimeType, data: att.data };
+                    }
+                }
+            }
+        }
+
+        const parts = [{ text: systemInstruction + "\n\nUser Request: " + userPrompt }];
+        if (inlineData) parts.push({ inline_data: inlineData });
+
+        const requestBody = JSON.stringify({
+            contents: [{ parts: parts }],
+            generationConfig: { responseMimeType: "application/json" }
+        });
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+        let response = await fetch(geminiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: requestBody
+        });
+
+        if (response.status === 429 || response.status === 503) {
+            const fallbackModel = process.env.GEMINI_FALLBACK_MODEL || "gemini-3.5-flash-lite";
+            const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/${fallbackModel}:generateContent?key=${apiKey}`;
+            response = await fetch(fallbackUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: requestBody
+            });
+        }
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || "Gemini API request failed.");
+        }
+
+        const data = await response.json();
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No analysis generated.";
+
+        res.status(200);
+        res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.flushHeaders?.();
+
+        res.write(`data: ${JSON.stringify({ type: "delta", text: aiText })}\n\n`);
+        res.write(`data: ${JSON.stringify({ type: "done" })}\n\n`);
+        res.end();
+
+    } catch (error) {
+        console.error("GEMINI ERROR:", error.message);
+        if (!res.headersSent) {
+            return res.status(500).json({ error: error.message });
+        }
+        res.write(`data: ${JSON.stringify({ type: "error", error: error.message })}\n\n`);
+        res.end();
+    }
+});
+
+app.post("/api/crop-disease", async (req, res) => {
+    try {
+        const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+        const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+        const { image, mimeType, language } = req.body;
+
+        if (!apiKey) {
+            return res.status(500).json({ error: "GEMINI_API_KEY is missing in your .env file." });
+        }
+        if (!image || !["image/jpeg", "image/png", "image/webp"].includes(mimeType)) {
+            return res.status(400).json({ error: "Upload a JPG, PNG, or WebP crop photo." });
+        }
+
+        const responseLanguage = {
+            en: "English",
+            hi: "Hindi in Devanagari script",
+            mr: "Marathi in Devanagari script"
+        }[language] || "Hindi in Devanagari script";
+
+        const prompt = `You are a careful agricultural crop-disease assistant. Inspect the attached photo of any crop, fruit, or leaf. Identify only visual evidence. Return a possible disease or pest, not a certain diagnosis. If the image is unclear or no disease is visible, say so and do not invent one. Explain visible signs and the likely cause. Give practical, safe next steps; do not invent pesticide dosages and advise local agricultural expert confirmation before chemical treatment. Return only JSON with exactly these string keys: crop, possibleDisease, visibleSigns, likelyCause, solution. Write every value in ${responseLanguage}.`;
+        const requestBody = JSON.stringify({
+            contents: [{
+                parts: [
+                    { text: prompt },
+                    { inline_data: { mime_type: mimeType, data: image } }
+                ]
+            }],
+            generationConfig: { responseMimeType: "application/json" }
+        });
+
+        const sendRequest = selectedModel => fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: requestBody
+            }
+        );
+
+        let response = await sendRequest(model);
+        if (response.status === 429 || response.status === 503) {
+            response = await sendRequest(process.env.GEMINI_FALLBACK_MODEL || "gemini-3.5-flash-lite");
+        }
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || "Gemini disease analysis failed.");
+        }
+
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) {
+            throw new Error("Gemini returned no disease analysis.");
+        }
+
+        return res.json(JSON.parse(text));
+    } catch (error) {
+        console.error("Crop disease analysis:", error.message);
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+function openMeteoCondition(code, language, isDay) {
+    const groups = [
+        { codes: [0], id: 800, group: "clear" },
+        { codes: [1], id: 801, group: "mostlyClear" },
+        { codes: [2], id: 802, group: "partlyCloudy" },
+        { codes: [3], id: 804, group: "overcast" },
+        { codes: [45, 48], id: 741, group: "fog" },
+        { codes: [51, 53, 55], id: 301, group: "drizzle" },
+        { codes: [56, 57, 66, 67], id: 511, group: "freezingRain" },
+        { codes: [61, 63, 65], id: 501, group: "rain" },
+        { codes: [71, 73, 75], id: 601, group: "snow" },
+        { codes: [77], id: 611, group: "snow" },
+        { codes: [80, 81, 82], id: 521, group: "showers" },
+        { codes: [85, 86], id: 621, group: "snow" },
+        { codes: [95, 96, 99], id: 202, group: "storm" }
+    ];
+    const group = groups.find(item => item.codes.includes(Number(code))) || groups[3];
+    const descriptions = {
+        en: { clear: "Clear sky", mostlyClear: "Mostly clear", partlyCloudy: "Partly cloudy", overcast: "Overcast", fog: "Fog", drizzle: "Drizzle", freezingRain: "Freezing rain", rain: "Rain", snow: "Snow", showers: "Rain showers", storm: "Thunderstorm" },
+        hi: { clear: "साफ आसमान", mostlyClear: "मुख्यतः साफ", partlyCloudy: "आंशिक बादल", overcast: "घने बादल", fog: "कोहरा", drizzle: "बूंदाबांदी", freezingRain: "जमने वाली बारिश", rain: "बारिश", snow: "बर्फबारी", showers: "बारिश की बौछारें", storm: "आंधी-तूफान" },
+        mr: { clear: "निरभ्र आकाश", mostlyClear: "मुख्यतः निरभ्र", partlyCloudy: "अंशतः ढगाळ", overcast: "ढगाळ", fog: "धुके", drizzle: "रिमझिम पाऊस", freezingRain: "गोठणारा पाऊस", rain: "पाऊस", snow: "हिमवृष्टी", showers: "पावसाच्या सरी", storm: "वादळ" }
+    };
+    const iconFamily = group.id >= 200 && group.id < 300 ? "11" : group.id >= 300 && group.id < 400 ? "09"
+        : group.id >= 500 && group.id < 600 ? "10" : group.id >= 600 && group.id < 700 ? "13"
+        : group.id >= 700 && group.id < 800 ? "50" : group.id === 800 ? "01"
+        : group.id === 801 ? "02" : group.id === 802 ? "03" : "04";
+    return {
+        id: group.id,
+        main: group.group,
+        description: descriptions[language]?.[group.group] || descriptions.en[group.group],
+        icon: `${iconFamily}${isDay ? "d" : "n"}`
+    };
+}
+
+async function fetchOpenMeteoWeather(state, district, language) {
+    const geocodingUrl = new URL("https://geocoding-api.open-meteo.com/v1/search");
+    geocodingUrl.searchParams.set("name", district);
+    geocodingUrl.searchParams.set("count", "10");
+    geocodingUrl.searchParams.set("language", "en");
+    geocodingUrl.searchParams.set("format", "json");
+    geocodingUrl.searchParams.set("countryCode", "IN");
+
+    const geocodingResponse = await fetch(geocodingUrl, { signal: AbortSignal.timeout(10000) });
+    const geocodingData = await geocodingResponse.json();
+    const normalize = value => String(value || "").toLowerCase().replace(/[^a-z]/g, "").replace(/district/g, "");
+    const place = (geocodingData.results || []).find(item =>
+        item.country_code === "IN" && normalize(item.admin1) === normalize(state) &&
+        (normalize(item.admin2).includes(normalize(district)) || normalize(item.name) === normalize(district))
+    );
+    if (!place) {
+        const error = new Error("District not found by Open-Meteo");
+        error.code = "WEATHER_DISTRICT_NOT_FOUND";
+        throw error;
+    }
+
+    const parameters = new URLSearchParams({
+        latitude: String(place.latitude),
+        longitude: String(place.longitude),
+        current: "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,dew_point_2m,uv_index,visibility",
+        hourly: "temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index,is_day",
+        daily: "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,relative_humidity_2m_mean,pressure_msl_mean,cloud_cover_mean",
+        timezone: "auto",
+        forecast_days: "8",
+        temperature_unit: "celsius",
+        wind_speed_unit: "ms",
+        precipitation_unit: "mm"
+    });
+    const forecastResponse = await fetch(`https://api.open-meteo.com/v1/forecast?${parameters}`, { signal: AbortSignal.timeout(15000) });
+    const source = await forecastResponse.json();
+    if (!forecastResponse.ok || source.error) {
+        throw new Error("Open-Meteo forecast unavailable");
+    }
+
+    const offset = source.utc_offset_seconds || 0;
+    const timestamp = value => value ? Math.floor(Date.parse(`${value}Z`) / 1000 - offset) : undefined;
+    const at = (series, index) => series?.[index];
+    const code = (value, day) => openMeteoCondition(value, language, day === 1);
+    const currentData = source.current;
+    const weather = {
+        timezone: source.timezone || place.timezone || "Asia/Kolkata",
+        current: {
+            dt: timestamp(currentData.time), sunrise: timestamp(source.daily.sunrise[0]), sunset: timestamp(source.daily.sunset[0]),
+            temp: currentData.temperature_2m, feels_like: currentData.apparent_temperature, humidity: currentData.relative_humidity_2m,
+            wind_speed: currentData.wind_speed_10m, wind_deg: currentData.wind_direction_10m, wind_gust: currentData.wind_gusts_10m,
+            pressure: currentData.pressure_msl, visibility: currentData.visibility, dew_point: currentData.dew_point_2m,
+            uvi: currentData.uv_index, clouds: currentData.cloud_cover, rain: { "1h": currentData.precipitation },
+            snow: { "1h": (currentData.snowfall || 0) * 10 }, weather: [code(currentData.weather_code, currentData.is_day)]
+        },
+        hourly: source.hourly.time.map((time, index) => ({
+            dt: timestamp(time), temp: at(source.hourly.temperature_2m, index), feels_like: at(source.hourly.apparent_temperature, index),
+            humidity: at(source.hourly.relative_humidity_2m, index), dew_point: at(source.hourly.dew_point_2m, index),
+            wind_speed: at(source.hourly.wind_speed_10m, index), wind_deg: at(source.hourly.wind_direction_10m, index),
+            wind_gust: at(source.hourly.wind_gusts_10m, index), pressure: at(source.hourly.pressure_msl, index),
+            visibility: at(source.hourly.visibility, index), uvi: at(source.hourly.uv_index, index), clouds: at(source.hourly.cloud_cover, index),
+            pop: (at(source.hourly.precipitation_probability, index) || 0) / 100,
+            rain: { "1h": at(source.hourly.precipitation, index) }, snow: { "1h": (at(source.hourly.snowfall, index) || 0) * 10 },
+            weather: [code(at(source.hourly.weather_code, index), at(source.hourly.is_day, index))]
+        })),
+        daily: source.daily.time.map((date, index) => ({
+            dt: timestamp(`${date}T12:00`), sunrise: timestamp(source.daily.sunrise[index]), sunset: timestamp(source.daily.sunset[index]),
+            temp: { min: at(source.daily.temperature_2m_min,index), max: at(source.daily.temperature_2m_max,index), morn: undefined, day: at(source.daily.temperature_2m_max,index), eve: undefined, night: undefined },
+            feels_like: { day: at(source.daily.apparent_temperature_max,index) }, humidity: at(source.daily.relative_humidity_2m_mean,index),
+            pressure: at(source.daily.pressure_msl_mean,index), clouds: at(source.daily.cloud_cover_mean,index), uvi: at(source.daily.uv_index_max,index),
+            pop: (at(source.daily.precipitation_probability_max,index)||0)/100,
+            rain: at(source.daily.precipitation_sum,index), snow: (at(source.daily.snowfall_sum,index)||0)*10,
+            wind_speed: at(source.daily.wind_speed_10m_max,index), wind_gust: at(source.daily.wind_gusts_10m_max,index),
+            wind_deg: at(source.daily.wind_direction_10m_dominant,index), weather: [code(at(source.daily.weather_code,index),1)]
+        })),
+        alerts: []
+    };
+    return { provider: "Open-Meteo", location: { name: place.name, state: place.admin1 || state, district }, weather };
+}
+
+const openWeatherCache = new Map();
+
+app.get("/api/weather", async (req, res) => {
+    const state = String(req.query.state || "").trim();
+    const district = String(req.query.district || "").trim();
+    const language = ["en", "hi", "mr"].includes(req.query.language) ? req.query.language : "hi";
+    const apiKey = process.env.OPENWEATHER_API_KEY;
+
+    if (!state || !district || state.length > 100 || district.length > 100) {
+        return res.status(400).json({ success: false, code: "WEATHER_LOCATION_REQUIRED" });
+    }
+
+    const cacheKey = `${state}|${district}|${language}`.toLowerCase();
+    const cached = openWeatherCache.get(cacheKey);
+    if (cached && Date.now() - cached.savedAt < 10 * 60 * 1000) {
+        return res.json({ success: true, cached: true, ...cached.payload });
+    }
+
+    if (!apiKey) {
+        try {
+            const payload = await fetchOpenMeteoWeather(state, district, language);
+            openWeatherCache.set(cacheKey, { savedAt: Date.now(), payload });
+            return res.json({ success: true, cached: false, ...payload });
+        } catch (error) {
+            console.error("Open-Meteo fallback:", error.message);
+            return res.status(error.code === "WEATHER_DISTRICT_NOT_FOUND" ? 404 : 502).json({
+                success: false,
+                code: error.code || "WEATHER_UPSTREAM_FAILED"
+            });
+        }
+    }
+
+    try {
+        const geoUrl = new URL("https://api.openweathermap.org/geo/1.0/direct");
+        geoUrl.searchParams.set("q", `${district},${state},IN`);
+        geoUrl.searchParams.set("limit", "1");
+        geoUrl.searchParams.set("appid", apiKey);
+
+        const geoResponse = await fetch(geoUrl, { signal: AbortSignal.timeout(10000) });
+        const places = await geoResponse.json();
+        if (!geoResponse.ok) {
+            const status = geoResponse.status === 401 ? 503 : 502;
+            const code = geoResponse.status === 401 ? "WEATHER_KEY_INVALID" : "WEATHER_GEOCODING_FAILED";
+            return res.status(status).json({ success: false, code });
+        }
+
+        const place = Array.isArray(places)
+            ? places.find(item => item.country === "IN")
+            : null;
+        if (!place) {
+            return res.status(404).json({ success: false, code: "WEATHER_DISTRICT_NOT_FOUND" });
+        }
+
+        const weatherUrl = new URL("https://api.openweathermap.org/data/3.0/onecall");
+        weatherUrl.searchParams.set("lat", place.lat);
+        weatherUrl.searchParams.set("lon", place.lon);
+        weatherUrl.searchParams.set("units", "metric");
+        weatherUrl.searchParams.set("lang", language === "mr" ? "en" : language);
+        weatherUrl.searchParams.set("appid", apiKey);
+
+        const weatherResponse = await fetch(weatherUrl, { signal: AbortSignal.timeout(15000) });
+        const weather = await weatherResponse.json();
+        if (!weatherResponse.ok) {
+            const code = weatherResponse.status === 401 ? "WEATHER_SUBSCRIPTION_REQUIRED"
+                : weatherResponse.status === 429 ? "WEATHER_RATE_LIMITED"
+                : "WEATHER_UPSTREAM_FAILED";
+            return res.status(weatherResponse.status === 429 ? 429 : 502).json({ success: false, code });
+        }
+
+        const payload = {
+            provider: "OpenWeather",
+            location: { name: place.name, state: place.state || state, district },
+            weather
+        };
+        openWeatherCache.set(cacheKey, { savedAt: Date.now(), payload });
+        if (openWeatherCache.size > 250) {
+            const oldestKey = openWeatherCache.keys().next().value;
+            openWeatherCache.delete(oldestKey);
+        }
+        return res.json({ success: true, cached: false, ...payload });
+    } catch (error) {
+        console.error("OpenWeather request:", error.message);
+        const timedOut = error.name === "TimeoutError" || error.name === "AbortError";
+        return res.status(timedOut ? 504 : 502).json({
+            success: false,
+            code: timedOut ? "WEATHER_TIMEOUT" : "WEATHER_UPSTREAM_FAILED"
+        });
+    }
+});
+
+app.use((error, req, res, next) => {
+    if (error.type === "entity.too.large") {
+        return res.status(413).json({
+            error: "Image request is too large. Please choose a smaller photo (under 15 MB)."
+        });
+    }
+
+    next(error);
+});
