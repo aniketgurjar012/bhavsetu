@@ -6,7 +6,7 @@ body.dark{--g:#69c98a;--gd:#168348;--lime:#9adf6e;--gold:#e1ca79;--cream:#0d1711
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}
 .hidden{display:none!important}
 .navbar{height:70px;padding:0 5%;position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;background:rgba(11,109,58,.97);color:#fff;box-shadow:0 5px 25px rgba(0,0,0,.08)}
-.brand{display:flex;align-items:center;gap:13px}.brand-symbol{width:44px;height:44px;border:1px solid rgba(215,184,93,.7);border-radius:50%;display:grid;place-items:center;color:#e6d18c;font-family:"Playfair Display",serif;font-size:24px}.brand b{font-size:23px;letter-spacing:.8px;display:block}.brand small{display:block;font-size:11px;color:#dcefe1;letter-spacing:.2px}
+.brand{display:flex;align-items:center;gap:13px}.brand-symbol{width:44px;height:44px;border:1px solid #e6d18c;border-radius:50%;display:grid;place-items:center;color:#e6d18c;font-family:"Playfair Display",serif;font-size:24px}.brand b{font-size:23px;letter-spacing:.8px;display:block}.brand small{display:block;font-size:11px;color:#dcefe1;letter-spacing:.2px}
 .nav-right{display:flex;align-items:center;gap:10px}.lang,.settings,.profile-btn{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;padding:10px 15px;font-size:14px}
 .hero{position:relative;width:100%;background:#dff0df;overflow:hidden}.hero-img{display:block;width:100%;height:auto}.hero-actions{position:absolute;inset:0}.hero-hotspot{position:absolute;background:transparent;border:0;height:9%;bottom:4.5%}.hero-hotspot.start{left:4.3%;width:17.5%}.hero-hotspot.join{left:21.5%;width:14.5%}
 .hero{position:relative;width:100%;background:#dff0df;overflow:hidden}
@@ -115,6 +115,12 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 .warehouse-card:hover{border-color:var(--g);box-shadow:0 18px 50px rgba(11,109,58,0.24)}
 .warehouse-card h3{font-family:"Playfair Display",serif;color:var(--g);font-size:20px;margin-bottom:6px}.warehouse-meta{font-size:11px;color:var(--muted);margin-bottom:12px}.warehouse-details{font-size:12px;line-height:1.7;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:10px 0}.warehouse-price{font-size:18px;color:var(--g);font-weight:800;margin-top:10px}
 
+.weather-block h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 .weather-section{background:#edf6ef;max-width:none}body.dark .weather-section{background:#0d1711}
 .weather-section>*{max-width:1180px;margin-left:auto;margin-right:auto}.weather-today-card{background:linear-gradient(135deg,#0b6d3a,#14432a);color:#fff;border-radius:18px;padding:30px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}.weather-today-card h3{font-size:32px;font-family:"Playfair Display",serif;margin-bottom:5px}.forecast-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
 .forecast-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px;text-align:center;transition:all .3s ease}
@@ -1170,7 +1176,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     body{font-size:14px;line-height:1.55}
     .navbar{height:66px;padding:0 12px;gap:8px}
     .brand{gap:8px;min-width:0}
-    .brand-symbol{width:36px;height:36px;flex:0 0 36px;font-size:20px}
+    .brand-symbol {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  object-fit: cover; /* Photo ko kharab hone se bachayega */
+  border-radius: 50%; /* Agar logo ko gol karna hai toh, nahi toh hata dena */
+}
     .brand b{font-size:17px}
     .nav-right{gap:5px}
     .lang,.settings,.profile-btn{padding:7px 9px;font-size:12px}
