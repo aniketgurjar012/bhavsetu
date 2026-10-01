@@ -295,11 +295,15 @@ footer{background:#06291a;color:#fff;padding:65px 9% 25px}.footer-top{max-width:
 }
 
 .mandi-trend-up {
-    color: #16803c;
+    color: #08752f !important;
 }
 
 .mandi-trend-down {
-    color: #dc2626;
+    color: #d32f2f !important;
+}
+
+.mandi-trend-neutral {
+    color: #08752f !important;
 }
 
 @media (max-width: 700px) {

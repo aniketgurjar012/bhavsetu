@@ -473,6 +473,50 @@ async function fetchAgmarkMandi(
 // ==========================================================
 // CONVERT TO BHAVSETU FORMAT
 // ==========================================================
+function calculateMandiTrend(
+    currentPrice,
+    previousPrice,
+    oldPrice
+) {
+    const valid = value => {
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return false;
+        }
+
+        const n = Number(value);
+        return Number.isFinite(n) && n > 0;
+    };
+
+    const prices = [
+        currentPrice,
+        previousPrice,
+        oldPrice
+    ]
+        .filter(valid)
+        .map(Number);
+
+    // Only one reporting price = cannot compare
+    if (prices.length < 2) {
+        return "neutral";
+    }
+
+    // First = newest available
+    // Second = previous available
+    if (prices[0] > prices[1]) {
+        return "up";
+    }
+
+    if (prices[0] < prices[1]) {
+        return "down";
+    }
+
+    return "neutral";
+}
+
 
 function convertAgmarkMandi(
     json,
@@ -548,7 +592,11 @@ function convertAgmarkMandi(
                         oldDate,
 
                     Trend:
-                        x.trend
+    calculateMandiTrend(
+        x.as_on_price,
+        x.one_day_ago_price,
+        x.two_day_ago_price
+    )
                 })
             )
     }];

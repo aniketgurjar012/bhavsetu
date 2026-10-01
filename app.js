@@ -858,19 +858,51 @@ function createMandiCard(item) {
     // This normally won't happen because renderMandi filters such records.
     if (!display) return null;
 
-    const trend =
-        !display.isMSP && item.Trend === "up"
-            ? "▲"
-            : !display.isMSP && item.Trend === "down"
-                ? "▼"
-                : "";
+// ======================================================
+// CALCULATE TREND FROM ACTUAL AVAILABLE PRICES
+// ======================================================
 
-    const trendClass =
-        !display.isMSP && item.Trend === "up"
-            ? "mandi-trend-up"
-            : !display.isMSP && item.Trend === "down"
-                ? "mandi-trend-down"
-                : "";
+const actualPrices = [
+    item.Modal_Price,
+    item.Previous_Price,
+    item.Old_Price
+]
+.map(value => Number(value))
+.filter(value =>
+    Number.isFinite(value) &&
+    value > 0
+);
+
+let trend = "-";
+let trendClass = "mandi-trend-neutral";
+
+/*
+ * MSP = never compare with mandi prices.
+ */
+if (!display.isMSP && actualPrices.length >= 2) {
+
+    const currentPrice =
+        actualPrices[0];
+
+    const previousPrice =
+        actualPrices[1];
+
+    if (currentPrice > previousPrice) {
+
+        trend = "▲";
+        trendClass = "mandi-trend-up";
+
+    } else if (currentPrice < previousPrice) {
+
+        trend = "▼";
+        trendClass = "mandi-trend-down";
+
+    } else {
+
+        trend = "-";
+        trendClass = "mandi-trend-neutral";
+    }
+}
 
     const priceLabel = display.isMSP
         ? mandiText("mandiMSPPrice", "MSP मूल्य")
