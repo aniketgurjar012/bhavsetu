@@ -55,71 +55,77 @@
    <div class="mandi-location-card">
 
     <div class="mandi-location-header">
-        <div class="mandi-location-icon">
-            📍
-        </div>
+        <div class="mandi-location-icon">📍</div>
 
         <div class="mandi-location-title">
-            <h4 data-i18n="mandiTitle">मंडी का जिला बदलें</h4>
-              <p data-i18n="mandiDescription">
-                किसी अन्य जिले का मंडी भाव देखने के लिए स्थान चुनें
+            <h4 data-i18n="mandiSelectorTitle">Select Mandi</h4>
+            <p data-i18n="mandiSelectorDescription">
+                Select a state, district and market to view live mandi prices.
             </p>
         </div>
     </div>
 
-
     <div class="mandi-location-fields">
 
         <label class="mandi-location-field">
-            <span data-i18n="mandiState">राज्य</span>
+            <span data-i18n="mandiState">State</span>
 
-            <select
-                id="mandiState"
-                class="mandi-location-select"
-            >
-                <option value="">
-                    -- राज्य चुनें --
-                </option>
+            <select id="mandiState" class="mandi-location-select">
+                <option value="">-- Select State --</option>
             </select>
         </label>
 
-
         <label class="mandi-location-field">
-            <span data-i18n="mandiDistrict">जिला</span>
+            <span data-i18n="mandiDistrict">District</span>
 
             <select
                 id="mandiTempDistrict"
                 class="mandi-location-select"
                 disabled
             >
-                <option value="">
-                    -- पहले राज्य चुनें --
-                </option>
+                <option value="">-- Select State First --</option>
             </select>
         </label>
 
     </div>
 
+    <div class="mandi-market-row">
 
-    <div class="mandi-location-bottom">
+        <label class="mandi-location-field mandi-market-field">
+            <span data-i18n="mandiMarket">Mandi / Market</span>
 
-        <span class="mandi-location-note">
-            <span data-i18n="mandiDefaultNote">डिफ़ॉल्ट रूप से आपकी प्रोफाइल का जिला दिखेगा</span>
-        </span>
-
-        <button
-            type="button"
-            id="resetMandiDistrict"
-            class="mandi-location-reset"
-        >
-            <span data-i18n="mandiReset">↻ डिफ़ॉल्ट</span>
-        </button>
+            <select
+                id="mandiMarket"
+                class="mandi-location-select"
+                disabled
+            >
+                <option value="">-- Select District First --</option>
+            </select>
+        </label>
 
     </div>
 
 </div>
-  <div class="price-grid" id="priceGrid"></div>
-</section>
+
+<div
+    id="marketLocation"
+    class="mandi-selected-location"
+></div>
+
+<div
+    id="priceGrid"
+    class="bhavsetu-mandi-results"
+>
+    <div class="mandi-status-card">
+        <div class="mandi-status-icon">🌾</div>
+
+        <h3>Select a mandi to view prices</h3>
+
+        <p>
+            Select State → District → Mandi/Market above.
+        </p>
+    </div>
+</div>
 
     <section id="quality" class="quality-section section">
     <div class="section-head">

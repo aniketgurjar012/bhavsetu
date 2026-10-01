@@ -154,6 +154,210 @@ footer{background:#06291a;color:#fff;padding:65px 9% 25px}.footer-top{max-width:
   border-radius: 8px;
   outline: none;
 }
+/* =====================================================
+   MANDI MARKET ROW
+===================================================== */
+
+.mandi-market-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.mandi-market-field {
+    width: 60%;
+    max-width: 650px;
+}
+
+.mandi-selected-location {
+    text-align: center;
+    margin: 20px auto 10px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .mandi-market-row {
+        display: block;
+    }
+
+    .mandi-market-field {
+        width: 100%;
+        max-width: none;
+    }
+
+}
+
+
+
+/* =========================================================
+   BHAVSETU MANDI SELECTOR
+========================================================= */
+
+.mandi-location-card {
+    max-width: 1080px;
+    margin: 25px auto;
+}
+
+.mandi-location-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.mandi-market-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.mandi-market-field {
+    width: min(620px, 100%);
+}
+
+.mandi-location-select {
+    width: 100%;
+    min-height: 50px;
+}
+
+.mandi-selected-location {
+    text-align: center;
+    margin: 22px auto 12px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: .75;
+}
+
+.bhavsetu-mandi-results {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.mandi-status-card {
+    width: min(720px, calc(100% - 24px));
+    margin: 45px auto;
+    padding: 38px 25px;
+    text-align: center;
+    border: 1px solid rgba(46,125,50,.18);
+    border-radius: 16px;
+}
+
+.mandi-status-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(46,125,50,.1);
+    font-size: 27px;
+}
+
+.mandi-status-card h3 {
+    margin: 0 0 9px;
+    color: inherit;
+}
+
+.mandi-status-card p {
+    margin: auto;
+    max-width: 550px;
+    line-height: 1.6;
+    opacity: .72;
+}
+
+.mandi-status-card.error .mandi-status-icon {
+    background: rgba(220,38,38,.1);
+}
+
+.mandi-loader {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(46,125,50,.16);
+    border-top-color: #2e7d32;
+    border-radius: 50%;
+    animation: mandiSpin .8s linear infinite;
+}
+
+@keyframes mandiSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mandi-value-na {
+    opacity: .55;
+}
+
+.mandi-trend-up {
+    color: #16803c;
+}
+
+.mandi-trend-down {
+    color: #dc2626;
+}
+
+@media (max-width: 700px) {
+    .mandi-location-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .mandi-market-row {
+        display: block;
+    }
+
+    .mandi-market-field {
+        width: 100%;
+    }
+}
+
+.mandi-card-date {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mandi-price strong {
+    font-size: 27px;
+    line-height: 1.15;
+}
+
+.mandi-msp-fallback-note {
+    margin: 14px 0;
+    padding: 11px 13px;
+    border: 1px solid rgba(34, 139, 69, .25);
+    border-radius: 10px;
+    background: rgba(34, 139, 69, .07);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.mandi-msp-fallback-note strong {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--primary, #08752f);
+    font-size: 14px;
+}
+
+.mandi-status-card h3 {
+    font-size: 21px;
+    line-height: 1.3;
+}
+
+.mandi-status-card p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.mandi-status-card.no-data {
+    border: 1px solid rgba(34, 139, 69, .18);
+}
+
+
 
 /* Fixed Detail Modal & Header Spacing */
 .detail-card .detail-hero{background:#edf8ef;border-radius:14px;height:195px;display:grid;place-items:center;font-size:85px;margin-bottom:16px;overflow:hidden}

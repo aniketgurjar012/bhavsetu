@@ -42,45 +42,6 @@ const indiaDistricts={
 
 
 
-const mandidistricts = {
-"Andaman and Nicobar":["Nicobar","North and Middle Andaman","South Andaman"],
-"Andhra Pradesh":["Alluri Sitharama Raju","Anakapally","Ananthapuramu","Annamayya","Bapatla","Chittor","Dr.B.R.A.Konaseema","East Godavari","Eluru","Guntur","Kakinada","Krishna","Kurnool","Markapuram","Nandyal","NTR","Palnadu","Parvathipuram Manyam","Polavaram","Prakasam","SPSR Nellore","Sri Sathya Sai","Srikakulam","Tirupathi","Vijayanagaram","Visakhapatnam","West Godavari","YSR Kadapa"],
-"Arunachal Pradesh":["Changlang","East Kameng","East Siang","Kurung Kummey","Lohit","Lower Dibang Valley","Lower Subansiri","Papum Pore","Tawang","Tirap","Upper Siang","Upper Subansiri","West Kameng","West Siang"],
-"Assam":["Barpeta","Bongaigaon","Cachar","Darrang","Dhemaji","Dhubri","Dibrugarh","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup","Karbi Anglong","Karimganj","Kokrajhar","Lakhimpur","Mangaldoi","Morigaon","Nagaon","Nalbari","North Cachar Hills","Sibsagar","Sonitpur","Sribhumi","Tinsukia"],
-"Bihar":["Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Chhapra","Darbhanga","East Champaran/ Motihari","Gaya","Gopalgang","Jamui","Jehanabad","Kaimur/Bhabhua","Kaithar","Khagaria","Kishanganj","Luckeesarai","Madhepura","Madhubani","Munghair","Muzaffarpur","Nalanda","Nawada","Patna","Purnea","Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul","Vaishali","West Chambaran"],
-"Chandigarh":["Chandigarh"],
-"Chattisgarh":["Balod","Balodabazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur","Dantewada","Dhamtari","Durg","Gariyaband","Gourela Pendra Marwahi","Jagdalpur","Janjgeer-Champa","Jashpur","Kabirdham","Kanker","Kawardha","Khairagarh Chhuikhadan Gandai","Kondagaon","Korba","Koriya","Mahasamund","Manendragarh Chirmiri Bhartpur","Mohla Manpur Ambagarh Chouki","Mungeli","Narayanpur","North Bastar","Raigarh","Raipur","Rajnandgaon","Sakti","Sarangarh Bilaigarh","Sukma","Surajpur","Surguja"],
-"Dadra and Nagar Haveli":["Dadra & Nagar Haveli","Silvassa"],
-"Daman and Diu":["Daman","Diu"],
-"Goa":["North Goa","South Goa"],
-"Gujarat":["Ahmedabad","Amreli","Anand","Aravalli ","Banaskanth","Bharuch","Bhavnagar","Botad","Chhota Udaipur","Dahod","Dang","Devbhumi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagarh","Kachchh","Kheda","Mahisagar","Mehsana","Morbi","Narmada","Navsari","Panchmahals","Patan","Porbandar","Rajkot","Sabarkantha","Surat","Surendranagar","Tapi","The Dangs","Vadodara(Baroda)","Valsad"],
-"Haryana":["Ambala","Bhiwani","Faridabad","Fatehabad","Gurgaon","Hissar","Jhajar","Jind","Kaithal","Karnal","Kurukshetra","Mahendragarh-Narnaul","Mewat","Palwal","Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamuna Nagar"],
-"Himachal Pradesh":["Bilaspur","Chamba","Hamirpur","Kangra","Kangra (At Dharmashala)","Kinnaur (At Kalpa)","Kullu","Lahul & Spiti","Mandi","Shimla","Sirmore","Solan","Una"],
-"Jammu and Kashmir":["Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu","Kargil","Kathua","Kishtwar","Kulgam","Kupwara","Leh","Poonch","Pulwama","Rajouri","Ramban","Samba","Shopian","Srinagar","Udhampur"],
-"Jharkhand":["Bokaro","Chatra","Deogarh","Dhanbad","Dumka","East Singhbhum","Garhwa","Giridih","Godda","Gumla","Hazaribagh","Jamtara","Koderma","Latehar","Lohardaga","Pakur","Palamu","Ranchi","Sahebgang","Saraikela(Kharsanwa)","Simdega","West Singbhum"],
-"Karnataka":["Bagalkot","Belagavi","Bellary","Bengaluru","Bengaluru Rural","Bengaluru South","Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davangere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagar","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara","Vijayapura","Yadgir"],
-"Keralam":["Alappuzha","Alleppey","Calicut","Ernakulam","Idukki","Kannur","Kasargod","Kollam","Kottayam","Kozhikode(Calicut)","Malappuram","Palakad","Pathanamthitta","Thirssur","Thiruvananthapuram","Wayanad"],
-"Lakshadweep":["Kavaratti"],
-"Madhya Pradesh":["Agar Malwa","Alirajpur","Anupur","Ashoknagar","Badwani","Balaghat","Betul","Bhind","Bhopal","Burhanpur","Chhatarpur","Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori","Guna","Gwalior","Harda","Indore","Jabalpur","Jhabua","Katni","Khandwa","Khargone","Maihar","Mandla","Mandsaur","Mauganj","Morena","Narmadapuram","Narsinghpur","Neemuch","Niwadi","Pandhurna","Panna","Raisen","Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Seoni","Shajapur","Shehdol","Sheopur","Shivpuri","Sidhi","Singroli","Tikamgarh","Ujjain","Umariya","Vidisha"],
-"Maharashtra":["Ahilyanagar","Akola","Amarawati","Bandra(E)","Beed","Bhandara","Buldhana","Chandrapur","Chattrapati Sambhajinagar","Dharashiv","Dhule","Gadchiroli","Gondiya","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai","Murum","Nagpur","Nanded","Nandurbar","Nashik","Osmanabad","Palghar","Parbhani","Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal"],
-"Manipur":["Bishnupur","Chandel","Churachandpur","Imphal East","Imphal West","Kakching","Senapati","Tamenglong","Tengnoupal","Thoubal","Ukhrul"],
-"Meghalaya":["East Garo Hills","East Jaintia Hills","East Khasi Hills","Nongpoh (R-Bhoi)","North Garo Hills","South Garo Hills","South West Garo Hills","South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills"],
-"Mizoram":["Aizawl","Kolasib","Lungli","Mamit","Saiha"],
-"Nagaland":["Dimapur","Kiphire","Kohima","Longleng","Mokokchung","Mon","Peren","Phek","Tsemenyu","Tuensang","Wokha","Zunheboto"],
-"NCT of Delhi":["Delhi"],
-"Odisha":["Angul","Balasore","Bargarh","Berhampur","Bhadrak","Bhubaneswar","Bolangir","Boudh","Cuttack","Deogarh","Dhenkanal","Gajapati","Ganjam","Jagatsinghpur","Jajpur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara","Keonjhar","Khurda","Koraput","Malkangiri","Mayurbhanja","Nayagarh","Nowarangpur","Nuapada","Puri","Rayagada","Rourkela","Sambalpur","Sonepur","Sundergarh"],
-"Pondicherry":["Karaikal","Mahe","Pondicherry","Yanam"],
-"Punjab":["Amritsar","Barnala","Bhatinda","Faridkot","Fatehgarh","Fazilka","Ferozpur","Gurdaspur","Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Mansa","Moga","Mohali","Muktsar","Nawanshahr","Pathankot","Patiala","Ropar (Rupnagar)","Sangrur","Tarntaran"],
-"Rajasthan":["Ajmer","Alwar","Anupgarh","Balotra","Banswara","Baran","Barmer","Beawar","Bharatpur","Bhilwara","Bikaner","Bundi","Chittorgarh","Churu","Dausa","Deedwana Kuchaman","Deeg","Dholpur","Dudu","Dungarpur","Ganganagar","Gangapur City","Hanumangarh","Jaipur","Jaipur Rural","Jaisalmer","Jalore","Jhafarapatan","Jhalawar","Jhunjhunu","Jodhpur","Jodhpur Rural","Karauli","Kekri","Khairthal Tijara","Kota","Kotputli- Behror","Nagaur","Neem Ka Thana","Pali","Phalodi","Pratapgarh","Rajsamand","Sanchore","Shahpura","Sikar","Sirohi","Swai Madhopur","Tonk","Udaipur"],
-"Sikkim":["East","North Sikkim (Mangan)","South Sikkim (Namchi)","West Sikkim (Gyalsing)"],
-"Tamil Nadu":["Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode","Kallakuruchi","Kancheepuram","Karur","Krishnagiri","Madurai","Mayiladuthurai","Nagapattinam","Nagercoil (Kannyiakumari)","Namakkal","Perambalur","Pudukkottai","Ramanathapuram","Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","The Nilgiris","Theni","Thiruchirappalli","Thirunelveli","Thirupathur","Thirupur","Thiruvannamalai","Thiruvarur","Thiruvellore","Tuticorin","Vellore","Villupuram","Virudhunagar"],
-"Telangana":["Adilabad","Asifabad","Bhadradri Kothagudem","Bhupalapally","Hanumakonda","Hyderabad","Jagtial","Jangaon","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Mahabubabad","Mahbubnagar","Mancherial","Medak","Medchal Malkajgiri","Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli","Rajanna Siricilla","Ranga Reddy","Sangareddy","Siddipet","Suryapet","Vikarabad","Wanaparthy","Warangal","Yadadri Bhuvanagiri"],
-"Tripura":["Dhalai","Gomati","Khowai","North Tripura","Sepahijala","South Tripura","Unokoti","West District"],
-"Uttar Pradesh":["Agra","Aligarh","Ambedkarnagar","Amethi","Amroha","Auraiya","Ayodhya","Azamgarh","Badaun","Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti","Bhadohi(Sant Ravi Nagar)","Bijnor","Bulandshahar","Chandauli","Chitrakut","Deoria","Etah","Etawah","Farukhabad","Fatehpur","Firozabad","Gautam Budh Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hardoi","Hathras","Jalaun (Orai)","Jaunpur","Jhansi","Kannuj","Kanpur","Kanpur Dehat","Kasganj","Kaushambi","Khiri (Lakhimpur)","Kushinagar","Lakhimpur","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau(Maunathbhanjan)","Meerut","Mirzapur","Muzaffarnagar","Oraya","Pillibhit","Pratapgarh","Prayagraj","Raebarelli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharth Nagar","Sitapur","Sonbhadra","Unnao","Varanasi"],
-"Uttarakhand":["Almora","Bageshwar","Chamoli (Gopeshwar)","Champawat","Dehradoon","Garhwal (Pauri)","Haldwani","Haridwar","Nanital","Pithoragarh","Rudraprayag","Tehri Garhwal","Udhamsinghnagar","Uttarkashi"],
-"West Bengal":["Alipurduar","Bankura","Birbhum","Burdwan","Coochbehar","Dakshin Dinajpur","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda","Medinipur(E)","Medinipur(W)","Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Purba Bardhaman","Puruliya","Sounth 24 Parganas","Uttar Dinajpur"]
-};
-
 
 
 let marketPrices = [];
@@ -230,7 +191,36 @@ emailLabel: "Email ID",
 village: "Village / Town",
 profileState: "State / UT",
 profileDistrict: "District",
-profilePhone: "Mobile Number"
+profilePhone: "Mobile Number",
+mandiSelectMarketTitle: "Select a mandi to view prices",
+mandiSelectMarketMessage: "Select a state, district and mandi above to view the latest available prices.",
+mandiLoading: "Loading mandi prices...",
+mandiLoadingMessage: "Fetching the latest available information from AGMARKNET.",
+mandiNoDataTitle: "Price data not found for this market",
+mandiNoDataMessage: "No price data was found for this mandi/market in the latest three reporting days. Please select another mandi/market to check prices.",
+mandiUnavailableTitle: "Mandi service is temporarily unavailable",
+mandiUnavailableMessage: "Live mandi information could not be retrieved. Please try again after some time.",
+mandiModalPrice: "Modal price",
+mandiPerQuintal: "Per Quintal",
+mandiArrival: "Arrival",
+mandiMSPPrice: "MSP Price",
+mandiMSPFallbackBadge: "MSP Price",
+mandiMSPFallbackNote: "Market price is unavailable for the latest three reporting days. Showing MSP.",
+mandiHistory: "Price history",
+mandiHistoryLoading: "Loading...",
+mandiNoHistory: "Previous price is not available",
+mandiHistoryFailed: "Price history could not be loaded",
+mandiHideHistory: "Hide history",
+mandiMarket: "Mandi / Market",
+mandiLatest: "Latest",
+mandiChooseState: "Select State",
+mandiChooseStateFirst: "Select State First",
+mandiChooseDistrict: "Select District",
+mandiChooseDistrictFirst: "Select District First",
+mandiChooseMarket: "Select Mandi / Market",
+mandiNoMarketOption: "No mandi available",
+mandiNoMarketTitle: "No mandi is available in this district",
+mandiNoMarketMessage: "Please select another district."
 },
 hi:{
 tagline:"जानकारी से जुड़ाव, किसानों को समृद्धि से जोड़ना",home:"होम",market:"मंडी भाव",buy:"फसल खरीदें",sell:"फसल बेचें",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"मेरी प्रोफाइल",profileTitle:"अपनी प्रोफाइल बनाएं",profileSub:"अपनी जानकारी जोड़ें ताकि भावसेतु आपके अनुभव को बेहतर बना सके।",fullName:"पूरा नाम",role:"मैं हूँ",village:"गाँव / शहर",profileState:"राज्य / केंद्र शासित प्रदेश",profileDistrict:"जिला",profilePhone:"मोबाइल नंबर",saveProfile:"प्रोफाइल सेव करें →",profileSaved:"प्रोफाइल सफलतापूर्वक सेव हो गई।",profileNeedLogin:"कृपया पहले मोबाइल नंबर से लॉगिन करें।",
@@ -305,7 +295,36 @@ emailLabel: "ईमेल आईडी",
 village: "गाँव / शहर",
 profileState: "राज्य / केंद्र शासित प्रदेश",
 profileDistrict: "जिला",
-profilePhone: "मोबाइल नंबर"
+profilePhone: "मोबाइल नंबर",
+mandiSelectMarketTitle: "मंडी भाव देखने के लिए मंडी चुनें",
+mandiSelectMarketMessage: "ऊपर राज्य, जिला और मंडी चुनें। नवीनतम उपलब्ध भाव यहाँ दिखाई देंगे।",
+mandiLoading: "मंडी भाव लोड हो रहे हैं...",
+mandiLoadingMessage: "AGMARKNET से नवीनतम उपलब्ध जानकारी प्राप्त की जा रही है।",
+mandiNoDataTitle: "इस मंडी का भाव नहीं मिला",
+mandiNoDataMessage: "इस मंडी / मार्केट के लिए पिछले तीन रिपोर्टिंग दिनों का भाव उपलब्ध नहीं मिला। कृपया भाव देखने के लिए दूसरी मंडी / मार्केट चुनें।",
+mandiUnavailableTitle: "मंडी सेवा अभी उपलब्ध नहीं है",
+mandiUnavailableMessage: "लाइव मंडी सेवा से जानकारी प्राप्त नहीं हो सकी। कृपया कुछ समय बाद दोबारा प्रयास करें।",
+mandiModalPrice: "मंडी भाव",
+mandiPerQuintal: "प्रति क्विंटल",
+mandiArrival: "आवक",
+mandiMSPPrice: "MSP मूल्य",
+mandiMSPFallbackBadge: "MSP मूल्य",
+mandiMSPFallbackNote: "पिछले तीन रिपोर्टिंग दिनों का मंडी भाव उपलब्ध नहीं है। इसलिए MSP दिखाया जा रहा है।",
+mandiHistory: "पिछले भाव",
+mandiHistoryLoading: "लोड हो रहा है...",
+mandiNoHistory: "पुराना भाव उपलब्ध नहीं है",
+mandiHistoryFailed: "भाव इतिहास लोड नहीं हो सका",
+mandiHideHistory: "इतिहास छिपाएँ",
+mandiMarket: "मंडी / मार्केट",
+mandiLatest: "नवीनतम",
+mandiChooseState: "राज्य चुनें",
+mandiChooseStateFirst: "पहले राज्य चुनें",
+mandiChooseDistrict: "जिला चुनें",
+mandiChooseDistrictFirst: "पहले जिला चुनें",
+mandiChooseMarket: "मंडी / मार्केट चुनें",
+mandiNoMarketOption: "कोई मंडी उपलब्ध नहीं",
+mandiNoMarketTitle: "इस जिले में मंडी उपलब्ध नहीं है",
+mandiNoMarketMessage: "कृपया दूसरा जिला चुनें।"
 },
 mr:{
 tagline:"माहितीचा दुवा, शेतकऱ्यांना समृद्धीकडे नेणारा",home:"होम",market:"मंडी भाव",buy:"पीक खरेदी करा",sell:"पीक विक्री करा",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"माझी प्रोफाइल",profileTitle:"तुमची प्रोफाइल तयार करा",profileSub:"भावसेतु तुमचा शेतकरी अनुभव अधिक चांगला करण्यासाठी तपशील जोडा.",fullName:"पूर्ण नाव",role:"मी आहे",village:"गाव / शहर",profileState:"राज्य / केंद्रशासित प्रदेश",profileDistrict:"जिल्हा",profilePhone:"मोबाईल नंबर",saveProfile:"प्रोफाइल सेव्ह करा →",profileSaved:"प्रोफाइल यशस्वीरित्या सेव्ह झाली.",profileNeedLogin:"कृपया प्रथम मोबाईल नंबरने लॉगिन करा.",
@@ -381,7 +400,36 @@ emailLabel: "ईमेल आयडी",
 village: "गाव / शहर",
 profileState: "राज्य / केंद्रशासित प्रदेश",
 profileDistrict: "जिल्हा",
-profilePhone: "मोबाईल नंबर"
+profilePhone: "मोबाईल नंबर",
+mandiSelectMarketTitle: "मंडी भाव पाहण्यासाठी मंडी निवडा",
+mandiSelectMarketMessage: "वर राज्य, जिल्हा आणि मंडी निवडा. नवीन उपलब्ध भाव येथे दिसतील.",
+mandiLoading: "मंडी भाव लोड होत आहेत...",
+mandiLoadingMessage: "AGMARKNET कडून नवीन उपलब्ध माहिती घेतली जात आहे.",
+mandiNoDataTitle: "या मंडीचा भाव सापडला नाही",
+mandiNoDataMessage: "या मंडी / मार्केटसाठी मागील तीन रिपोर्टिंग दिवसांचा भाव उपलब्ध नाही. कृपया भाव पाहण्यासाठी दुसरी मंडी / मार्केट निवडा.",
+mandiUnavailableTitle: "मंडी सेवा सध्या उपलब्ध नाही",
+mandiUnavailableMessage: "लाइव्ह मंडी माहिती मिळू शकली नाही. कृपया काही वेळाने पुन्हा प्रयत्न करा.",
+mandiModalPrice: "मंडी भाव",
+mandiPerQuintal: "प्रति क्विंटल",
+mandiArrival: "आवक",
+mandiMSPPrice: "MSP किंमत",
+mandiMSPFallbackBadge: "MSP किंमत",
+mandiMSPFallbackNote: "मागील तीन रिपोर्टिंग दिवसांचा मंडी भाव उपलब्ध नाही. त्यामुळे MSP दाखवला आहे.",
+mandiHistory: "मागील भाव",
+mandiHistoryLoading: "लोड होत आहे...",
+mandiNoHistory: "मागील भाव उपलब्ध नाही",
+mandiHistoryFailed: "भाव इतिहास लोड करता आला नाही",
+mandiHideHistory: "इतिहास लपवा",
+mandiMarket: "मंडी / मार्केट",
+mandiLatest: "नवीनतम",
+mandiChooseState: "राज्य निवडा",
+mandiChooseStateFirst: "आधी राज्य निवडा",
+mandiChooseDistrict: "जिल्हा निवडा",
+mandiChooseDistrictFirst: "आधी जिल्हा निवडा",
+mandiChooseMarket: "मंडी / मार्केट निवडा",
+mandiNoMarketOption: "कोणतीही मंडी उपलब्ध नाही",
+mandiNoMarketTitle: "या जिल्ह्यात मंडी उपलब्ध नाही",
+mandiNoMarketMessage: "कृपया दुसरा जिल्हा निवडा."
 }
 };
 
@@ -451,22 +499,16 @@ function updateThemeButton(){
 
 
 // ==========================================================
-// BHAVSETU MANDI UI - FAST LAZY VERSION
+// BHAVSETU MANDI FRONTEND - AGMARKNET 2.0
 // ==========================================================
-
 
 const MANDI_BACKEND = BACKEND_API_URL;
 
+let mandiMaster = { states: [], districts: [], markets: [] };
+let mandiSelection = null;
 
-// ==========================================================
-// BHAVSETU MANDI FRONTEND
-// Requires:
-// const mandidistricts = { ... };
-// MANDI_BACKEND
-// ==========================================================
-
-function mandiEscape(value) {
-    return String(value ?? "")
+function mandiEscape(v) {
+    return String(v ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -474,1249 +516,753 @@ function mandiEscape(value) {
         .replace(/'/g, "&#039;");
 }
 
-
-function mandiTime(value) {
-    if (!value) return 0;
-
-    const p =
-        String(value)
-            .trim()
-            .split(/[\/-]/);
-
-    if (p.length !== 3) {
-        return 0;
-    }
-
-    const d =
-        new Date(
-            Number(p[2]),
-            Number(p[1]) - 1,
-            Number(p[0])
-        );
-
-    return isNaN(d.getTime())
-        ? 0
-        : d.getTime();
-}
-
-
-function mandiFormatDate(value) {
-    const time =
-        mandiTime(value);
-
-    if (!time) {
-        return value || "—";
-    }
-
-    return new Date(time)
-        .toLocaleDateString(
-            lang === "en" ? "en-IN" : lang === "mr" ? "mr-IN" : "hi-IN",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            }
-        );
-}
-
-
-// ==========================================================
-// LOCATION
-// ==========================================================
-
-function getBhavSetuMandiLocation() {
-
+function mandiText(k, f) {
     try {
-
-        const tempState =
-            localStorage.getItem(
-                "bhavsetu-mandi-temp-state"
-            );
-
-        const tempDistrict =
-            localStorage.getItem(
-                "bhavsetu-mandi-temp-district"
-            );
-
-
-        // Manual selection
-        if (
-            tempState &&
-            tempDistrict
-        ) {
-            return {
-                state:
-                    String(tempState).trim(),
-
-                district:
-                    String(tempDistrict).trim()
-            };
-        }
-
-
-        let state = "";
-        let district = "";
-
-
-        // Current JS user object
-        if (
-            typeof user !== "undefined" &&
-            user
-        ) {
-            state =
-                user.state || "";
-
-            district =
-                user.district || "";
-        }
-
-
-        // Saved profile
-        for (
-            const key
-            of ["currentUser", "user"]
-        ) {
-
-            if (
-                state &&
-                district
-            ) {
-                break;
-            }
-
-
-            const raw =
-                localStorage.getItem(key);
-
-
-            if (!raw) {
-                continue;
-            }
-
-
-            try {
-
-                const saved =
-                    JSON.parse(raw);
-
-
-                state =
-                    state ||
-                    saved.state ||
-                    "";
-
-
-                district =
-                    district ||
-                    saved.district ||
-                    "";
-
-            } catch (error) {
-                console.warn(
-                    "Mandi profile parse:",
-                    error
-                );
-            }
-        }
-
-
-        state =
-            state ||
-            localStorage.getItem(
-                "userState"
-            ) ||
-            "";
-
-
-        district =
-            district ||
-            localStorage.getItem(
-                "userDistrict"
-            ) ||
-            "";
-
-
-        return {
-            state:
-                String(state).trim(),
-
-            district:
-                String(district).trim()
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "Mandi location:",
-            error
-        );
-
-
-        return {
-            state: "",
-            district: ""
-        };
+        const v = t?.[lang]?.[k];
+        return typeof v === "string" && v.trim() && v !== "undefined" ? v : f;
+    } catch (_) {
+        return f;
     }
 }
 
-
-// ==========================================================
-// STATE
-// ==========================================================
-
-let bhavSetuMandiState = {
-    location: null,
-    markets: new Map()
-};
-
-
-// ==========================================================
-// MARKET
-// ==========================================================
-
-function getOrCreateMandiMarket(
-    marketData,
-    grid
-) {
-
-    const marketName =
-        String(
-            marketData.market ||
-            "Unknown Market"
-        );
-
-
-    if (
-        bhavSetuMandiState
-            .markets
-            .has(marketName)
-    ) {
-        return bhavSetuMandiState
-            .markets
-            .get(marketName);
-    }
-
-
-    const section =
-        document.createElement(
-            "section"
-        );
-
-
-    section.className =
-        "bhavsetu-mandi-group";
-
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-
-    header.className =
-        "bhavsetu-mandi-head";
-
-
-    header.innerHTML = `
-        <div>
-            <small>मंडी</small>
-            <h3>${mandiEscape(marketName)}</h3>
-        </div>
-
-        <span class="mandi-latest-date">
-            नवीनतम:
-            ${mandiEscape(
-                mandiFormatDate(
-                    marketData.latestDate
-                )
-            )}
-        </span>
-    `;
-
-
-    const cards =
-        document.createElement(
-            "div"
-        );
-
-
-    cards.className =
-        "bhavsetu-mandi-grid";
-
-
-    section.appendChild(
-        header
-    );
-
-
-    section.appendChild(
-        cards
-    );
-
-
-    grid.appendChild(
-        section
-    );
-
-
-    const marketState = {
-        element:
-            section,
-
-        cards,
-
-        seen:
-            new Set(),
-
-        latestDate:
-            marketData.latestDate
-    };
-
-
-    bhavSetuMandiState
-        .markets
-        .set(
-            marketName,
-            marketState
-        );
-
-
-    return marketState;
+function mandiNumber(v) {
+    if (v === null || v === undefined || v === "") return "—";
+    const n = Number(v);
+    return Number.isFinite(n)
+        ? n.toLocaleString("en-IN", { maximumFractionDigits: 2 })
+        : String(v);
 }
 
+// 0 / empty / null prices from AGMARKNET are treated as unavailable.
+function mandiHasValue(v) {
+    if (v === null || v === undefined || v === "") return false;
 
-// ==========================================================
-// CARD
-// ==========================================================
+    const n = Number(v);
+    if (Number.isFinite(n)) return n > 0;
 
-function createMandiCard(
-    marketName,
-    item
-) {
+    return String(v).trim() !== "" && String(v).trim() !== "—";
+}
 
-    const card =
-        document.createElement(
-            "article"
-        );
+function mandiGrid() {
+    return document.getElementById("priceGrid");
+}
 
+function mandiMessage(icon, title, message, type = "") {
+    const g = mandiGrid();
+    if (!g) return;
 
-    card.className =
-        "bhavsetu-rate-card";
+    g.innerHTML = `
+        <div class="mandi-status-card ${type}">
+            <div class="mandi-status-icon">${icon}</div>
+            <h3>${mandiEscape(title)}</h3>
+            <p>${mandiEscape(message)}</p>
+        </div>`;
+}
 
+function mandiWelcome() {
+    mandiMessage(
+        "🌾",
+        mandiText(
+            "mandiSelectMarketTitle",
+            "मंडी भाव देखने के लिए मंडी चुनें"
+        ),
+        mandiText(
+            "mandiSelectMarketMessage",
+            "ऊपर राज्य, जिला और मंडी चुनें। नवीनतम उपलब्ध भाव यहाँ दिखाई देंगे।"
+        )
+    );
+}
 
-    card.innerHTML = `
-        <div class="mandi-card-top">
+function mandiLoading() {
+    const g = mandiGrid();
+    if (!g) return;
 
-            <h4>
-                🌾 ${mandiEscape(
-                    item.Commodity || "N/A"
-                )}
-            </h4>
+    g.innerHTML = `
+        <div class="mandi-status-card loading">
+            <div class="mandi-status-icon">
+                <div class="mandi-loader"></div>
+            </div>
 
-            <span>
+            <h3>
                 ${mandiEscape(
-                    item.Variety || "Standard"
+                    mandiText("mandiLoading", "मंडी भाव लोड हो रहे हैं...")
                 )}
-            </span>
+            </h3>
 
-        </div>
-
-
-        <p>
-            ${t[lang].mandiGrade}:
-            <b>
+            <p>
                 ${mandiEscape(
-                    item.Grade || "—"
+                    mandiText(
+                        "mandiLoadingMessage",
+                        "AGMARKNET से नवीनतम उपलब्ध जानकारी प्राप्त की जा रही है।"
+                    )
                 )}
-            </b>
-        </p>
+            </p>
+        </div>`;
+}
 
+// Valid API response, but no usable market-price data.
+function mandiNoData() {
+    mandiMessage(
+        "🌾",
+        mandiText(
+            "mandiNoDataTitle",
+            "इस मंडी का भाव नहीं मिला"
+        ),
+        mandiText(
+            "mandiNoDataMessage",
+            "इस मंडी / मार्केट के लिए पिछले तीन रिपोर्टिंग दिनों का भाव उपलब्ध नहीं मिला। कृपया भाव देखने के लिए दूसरी मंडी / मार्केट चुनें।"
+        ),
+        "no-data"
+    );
+}
 
-        <p>
-            📅
-            ${mandiEscape(
-                mandiFormatDate(
-                    item.Arrival_Date
-                )
-            )}
-        </p>
+// Actual API / backend / network failure only.
+function mandiError() {
+    mandiMessage(
+        "⚠️",
+        mandiText(
+            "mandiUnavailableTitle",
+            "मंडी सेवा अभी उपलब्ध नहीं है"
+        ),
+        mandiText(
+            "mandiUnavailableMessage",
+            "लाइव मंडी सेवा से जानकारी प्राप्त नहीं हो सकी। कृपया कुछ समय बाद दोबारा प्रयास करें।"
+        ),
+        "error"
+    );
+}
 
+function updateMandiLocation() {
+    const e = document.getElementById("marketLocation");
 
-        <div class="mandi-price">
+    if (e) {
+        e.textContent = mandiSelection
+            ? `${mandiSelection.stateName} / ${mandiSelection.districtName} / ${mandiSelection.marketName}`
+            : "";
+    }
+}
 
-            <div>
+/*
+    TOP CARD PRICE PRIORITY
 
-                <small>${t[lang].mandiModalPrice}</small>
+    1. Latest reporting date modal price
+    2. Previous reporting date modal price
+    3. Third reporting date modal price
+    4. MSP fallback
 
+    Important:
+    Price + Date + Arrival always come from the SAME reporting day.
+*/
+function getMandiDisplayPrice(item) {
+    const days = [
+        {
+            price: item.Modal_Price,
+            date: item.Arrival_Date,
+            arrival: item.Arrival,
+            type: "market"
+        },
+        {
+            price: item.Previous_Price,
+            date: item.Previous_Date,
+            arrival: item.Previous_Arrival,
+            type: "market"
+        },
+        {
+            price: item.Old_Price,
+            date: item.Old_Date,
+            arrival: item.Old_Arrival,
+            type: "market"
+        }
+    ];
+
+    const available = days.find(x => mandiHasValue(x.price));
+
+    if (available) {
+        return {
+            ...available,
+            isMSP: false
+        };
+    }
+
+    if (mandiHasValue(item.MSP)) {
+        return {
+            price: item.MSP,
+            date: "",
+            arrival: null,
+            type: "msp",
+            isMSP: true
+        };
+    }
+
+    return null;
+}
+
+function createMandiCard(item) {
+    const card = document.createElement("article");
+    card.className = "bhavsetu-rate-card";
+
+    const display = getMandiDisplayPrice(item);
+
+    // This normally won't happen because renderMandi filters such records.
+    if (!display) return null;
+
+    const trend =
+        !display.isMSP && item.Trend === "up"
+            ? "▲"
+            : !display.isMSP && item.Trend === "down"
+                ? "▼"
+                : "";
+
+    const trendClass =
+        !display.isMSP && item.Trend === "up"
+            ? "mandi-trend-up"
+            : !display.isMSP && item.Trend === "down"
+                ? "mandi-trend-down"
+                : "";
+
+    const priceLabel = display.isMSP
+        ? mandiText("mandiMSPPrice", "MSP मूल्य")
+        : mandiText("mandiModalPrice", "मंडी भाव");
+
+    const arrivalHTML = display.isMSP
+        ? ""
+        : `
+            <div class="mandi-range">
+                <span>
+                    ${mandiEscape(mandiText("mandiArrival", "आवक"))}:
+                    ${mandiEscape(mandiNumber(display.arrival))} MT
+                </span>
+            </div>
+        `;
+
+    const dateHTML = display.isMSP
+        ? ""
+        : `
+            <p class="mandi-card-date">
+                📅 ${mandiEscape(display.date || "—")}
+            </p>
+        `;
+
+    const mspNoteHTML = display.isMSP
+        ? `
+            <div class="mandi-msp-fallback-note">
                 <strong>
-                    ₹${mandiEscape(
-                        item.Modal_Price ?? "0"
+                    ${mandiEscape(
+                        mandiText("mandiMSPFallbackBadge", "MSP मूल्य")
                     )}
                 </strong>
 
-                <small>${t[lang].mandiPerQuintal}</small>
-
-            </div>
-
-
-            <div class="mandi-range">
-
                 <span>
-                    ${t[lang].mandiMin} ₹${mandiEscape(
-                        item.Min_Price ?? "0"
+                    ${mandiEscape(
+                        mandiText(
+                            "mandiMSPFallbackNote",
+                            "पिछले तीन रिपोर्टिंग दिनों का मंडी भाव उपलब्ध नहीं है। इसलिए MSP दिखाया जा रहा है।"
+                        )
                     )}
                 </span>
-
-                <span>
-                    ${t[lang].mandiMax} ₹${mandiEscape(
-                        item.Max_Price ?? "0"
-                    )}
-                </span>
-
             </div>
+        `
+        : "";
 
+    card.innerHTML = `
+        <div class="mandi-card-top">
+            <h4>
+                🌾 ${mandiEscape(item.Commodity || "N/A")}
+            </h4>
+
+            <span>
+                ${mandiEscape(item.Commodity_Group || "")}
+            </span>
         </div>
 
+        <p class="mandi-msp-line">
+            MSP:
+            <b>₹${mandiEscape(mandiNumber(item.MSP))}</b>
+            / Quintal
+        </p>
 
-        <button
-            type="button"
-            class="mandi-history-button"
-        >
-            ${t[lang].mandiHistory}
+        ${dateHTML}
+
+        <div class="mandi-price">
+            <div>
+                <small>${mandiEscape(priceLabel)}</small>
+
+                <strong class="${trendClass}">
+                    ₹${mandiEscape(mandiNumber(display.price))}
+                    ${trend}
+                </strong>
+
+                <small>
+                    ${mandiEscape(
+                        mandiText("mandiPerQuintal", "प्रति क्विंटल")
+                    )}
+                </small>
+            </div>
+
+            ${arrivalHTML}
+        </div>
+
+        ${mspNoteHTML}
+
+        <button type="button" class="mandi-history-button">
+            ${mandiEscape(
+                mandiText("mandiHistory", "पिछले भाव")
+            )}
         </button>
 
-
-        <div
-            class="mandi-history hidden"
-        ></div>
+        <div class="mandi-history hidden"></div>
     `;
 
+    const btn = card.querySelector(".mandi-history-button");
+    const box = card.querySelector(".mandi-history");
 
-    const button =
-        card.querySelector(
-            ".mandi-history-button"
-        );
+    btn.onclick = () => {
+        btn.style.display = "none";
+        box.classList.remove("hidden");
 
+        box.innerHTML = `
+            <div class="history-finished">
+                ${mandiEscape(
+                    mandiText("mandiHistoryLoading", "लोड हो रहा है...")
+                )}
+            </div>
+        `;
 
-    const historyBox =
-        card.querySelector(
-            ".mandi-history"
-        );
-
-
-    button.addEventListener(
-        "click",
-        function () {
-
-            button.style.display =
-                "none";
-
-
-            historyBox
-                .classList
-                .remove(
-                    "hidden"
-                );
-
-
-            historyBox.innerHTML = `
-                <div
-                    class="history-finished"
-                    style="
-                        padding:20px;
-                        text-align:center;
-                    "
-                >
-                    ${t[lang].mandiHistoryLoading}
-                </div>
-            `;
-
-
-            loadMandiHistory(
-                marketName,
-                item,
-                historyBox,
-                button
-            );
-        }
-    );
-
+        loadMandiHistory(item, box, btn);
+    };
 
     return card;
 }
 
+function renderMandi(markets) {
+    const g = mandiGrid();
+    if (!g) return;
 
-// ==========================================================
-// APPEND DATA
-// ==========================================================
+    /*
+       A record is usable when:
+       - at least one of the 3 market prices exists, OR
+       - MSP exists as fallback.
+    */
+    const groups = (markets || [])
+        .map(m => ({
+            ...m,
+            records: (m.records || []).filter(
+                item => getMandiDisplayPrice(item) !== null
+            )
+        }))
+        .filter(m => m.records.length);
 
-function appendMandiData(
-    markets,
-    grid
-) {
-
-    markets.forEach(
-        marketData => {
-
-            const market =
-                getOrCreateMandiMarket(
-                    marketData,
-                    grid
-                );
-
-
-            const records =
-                Array.isArray(
-                    marketData.records
-                )
-                    ? marketData.records
-                    : [];
-
-
-            records.sort(
-                (a, b) =>
-                    mandiTime(
-                        b.Arrival_Date
-                    ) -
-                    mandiTime(
-                        a.Arrival_Date
-                    )
-            );
-
-
-            records.forEach(
-                item => {
-
-                    const key =
-                        `${String(
-                            item.Commodity || ""
-                        )
-                            .trim()
-                            .toLowerCase()}|` +
-
-                        `${String(
-                            item.Variety || ""
-                        )
-                            .trim()
-                            .toLowerCase()}`;
-
-
-                    if (
-                        market.seen.has(key)
-                    ) {
-                        return;
-                    }
-
-
-                    market.seen.add(key);
-
-
-                    market.cards
-                        .appendChild(
-                            createMandiCard(
-                                marketData.market,
-                                item
-                            )
-                        );
-                }
-            );
-        }
-    );
-}
-
-
-// ==========================================================
-// LIVE PRICES
-// EXACTLY 3 DAYS
-// ==========================================================
-
-async function bhavSetuFetchLiveMandiPrices() {
-
-    const grid =
-        document.getElementById(
-            "priceGrid"
-        );
-
-
-    if (!grid) {
+    if (!groups.length) {
+        mandiNoData();
         return;
     }
 
+    g.innerHTML = "";
 
-    const location =
-        getBhavSetuMandiLocation();
+    groups.forEach(m => {
+        const s = document.createElement("section");
+        s.className = "bhavsetu-mandi-group";
 
+        s.innerHTML = `
+            <div class="bhavsetu-mandi-head">
+                <div>
+                    <small>
+                        ${mandiEscape(
+                            mandiText("mandiMarket", "मंडी / मार्केट")
+                        )}
+                    </small>
 
-    if (
-        !location.state ||
-        !location.district
-    ) {
+                    <h3>${mandiEscape(m.market)}</h3>
+                </div>
 
-        grid.innerHTML =
-            `<p class="empty-state">${t[lang].mandiNeedLocation}</p>`;
-
-
-        return;
-    }
-
-
-    const locationText =
-        document.getElementById(
-            "marketLocation"
-        );
-
-
-    if (locationText) {
-
-        locationText.textContent =
-            `${location.district}, ${location.state}`;
-    }
-
-
-    bhavSetuMandiState = {
-        location,
-
-        markets:
-            new Map()
-    };
-
-
-    grid.innerHTML = `
-        <div
-            style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:25px;
-            "
-        >
-
-            <div
-                style="
-                    width:32px;
-                    height:32px;
-                    margin:auto;
-                    border:3px solid #eee;
-                    border-top-color:#2e7d32;
-                    border-radius:50%;
-                    animation:spin 1s linear infinite;
-                "
-            ></div>
-
-            <p>
-                ${t[lang].mandiLoading}
-            </p>
-
-        </div>
-
-        <style>
-            @keyframes spin {
-                to {
-                    transform:
-                        rotate(360deg);
-                }
-            }
-        </style>
-    `;
-
-
-    try {
-
-        const url =
-    `${MANDI_BACKEND}/api/mandi-prices` +
-    `?state=${encodeURIComponent(location.state)}` +
-    `&district=${encodeURIComponent(location.district)}` +
-    `&days=3`;
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            !data.success
-        ) {
-
-            throw new Error(
-                data.message ||
-                `HTTP ${response.status}`
-            );
-        }
-
-
-        grid.innerHTML =
-            "";
-
-
-        appendMandiData(
-            data.markets || [],
-            grid
-        );
-
-
-        if (
-            !bhavSetuMandiState
-                .markets
-                .size
-        ) {
-
-            grid.innerHTML = `
-                <p
-                    style="
-                        grid-column:1/-1;
-                        text-align:center;
-                        padding:25px;
-                    "
-                >
-                    ${t[lang].mandiNoRecords}
-                </p>
-            `;
-        }
-
-
-    } catch (error) {
-
-    console.error(
-        "Mandi initial:",
-        error
-    );
-
-    grid.innerHTML = `
-        <div
-            style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:30px 20px;
-                color:#555;
-            "
-        >
-            <div
-                style="
-                    font-size:32px;
-                    margin-bottom:10px;
-                "
-            >
-                ⚠️
+                <span class="mandi-latest-date">
+                    ${mandiEscape(
+                        mandiText("mandiLatest", "नवीनतम")
+                    )}:
+                    ${mandiEscape(m.latestDate || "—")}
+                </span>
             </div>
 
-            <p
-                style="
-                    margin:0 0 8px;
-                    font-size:16px;
-                    font-weight:600;
-                    color:#333;
-                "
-            >
-                ${t[lang].mandiUnavailableTitle}
-            </p>
+            <div class="bhavsetu-mandi-grid"></div>
+        `;
 
-            <p
-                style="
-                    margin:0;
-                    font-size:13px;
-                    line-height:1.6;
-                    color:#666;
-                "
-            >
-                ${t[lang].mandiUnavailableMessage}
-            </p>
+        const cards = s.querySelector(".bhavsetu-mandi-grid");
 
-            <button
-                type="button"
-                id="retryMandiPrices"
-                style="
-                    margin-top:16px;
-                    padding:9px 18px;
-                    border:0;
-                    border-radius:8px;
-                    background:#2e7d32;
-                    color:white;
-                    cursor:pointer;
-                    font-size:14px;
-                "
-            >
-                ${t[lang].mandiRetry}
-            </button>
-        </div>
-    `;
+        m.records.forEach(item => {
+            const card = createMandiCard(item);
+            if (card) cards.appendChild(card);
+        });
 
-    const retryBtn =
-        document.getElementById(
-            "retryMandiPrices"
-        );
+        g.appendChild(s);
+    });
+}
 
-    if (retryBtn) {
-        retryBtn.addEventListener(
-            "click",
-            function () {
-
-                bhavSetuFetchLiveMandiPrices();
-
-            }
-        );
+async function bhavSetuFetchLiveMandiPrices() {
+    if (!mandiSelection) {
+        mandiWelcome();
+        return;
     }
-}}
 
-
-// ==========================================================
-// HISTORY
-// MAXIMUM 5
-// ==========================================================
-
-async function loadMandiHistory(
-    market,
-    item,
-    box,
-    originalButton
-) {
+    updateMandiLocation();
+    mandiLoading();
 
     try {
-
-        const location =
-            bhavSetuMandiState.location;
-
-
-        if (!location) {
-
-            throw new Error(
-                "Location missing"
-            );
-        }
-
+        const s = mandiSelection;
 
         const url =
-            `${MANDI_BACKEND}/api/mandi-history` +
+            `${MANDI_BACKEND}/api/mandi-prices?stateId=${s.stateId}` +
+            `&districtId=${s.districtId}` +
+            `&marketId=${s.marketId}` +
+            `&district=${encodeURIComponent(s.districtName)}`;
 
-            `?state=${encodeURIComponent(
-                location.state
-            )}` +
+        const r = await fetch(url, { cache: "no-store" });
 
-            `&district=${encodeURIComponent(
-                location.district
-            )}` +
+        let j;
 
-            `&market=${encodeURIComponent(
-                market
-            )}` +
-
-            `&commodity=${encodeURIComponent(
-                item.Commodity || ""
-            )}` +
-
-            `&variety=${encodeURIComponent(
-                item.Variety || ""
-            )}` +
-
-            `&_=${Date.now()}`;
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            !data.success
-        ) {
-
-            throw new Error(
-                data.message ||
-                `HTTP ${response.status}`
-            );
+        try {
+            j = await r.json();
+        } catch (_) {
+            throw new Error(`HTTP ${r.status}`);
         }
 
+        if (!r.ok || !j.success) {
+            throw new Error(j.message || `HTTP ${r.status}`);
+        }
 
-        const history =
-            Array.isArray(
-                data.history
-            )
-                ? data.history.slice(
-                    0,
-                    5
-                )
-                : [];
+        // Successful response with no market/data = NO DATA, not service failure.
+        if (!Array.isArray(j.markets) || !j.markets.length) {
+            mandiNoData();
+            return;
+        }
 
+        renderMandi(j.markets);
+
+    } catch (e) {
+        console.error("Mandi:", e);
+        mandiError();
+    }
+}
+
+async function loadMandiHistory(item, box, button) {
+    try {
+        const s = mandiSelection;
+
+        const url =
+            `${MANDI_BACKEND}/api/mandi-history?stateId=${s.stateId}` +
+            `&districtId=${s.districtId}` +
+            `&marketId=${s.marketId}` +
+            `&commodity=${encodeURIComponent(item.Commodity || "")}`;
+
+        const r = await fetch(url, { cache: "no-store" });
+        const j = await r.json();
+
+        if (!r.ok || !j.success) {
+            throw new Error(j.message || "History failed");
+        }
+
+        const history = (j.history || []).filter(
+            x => mandiHasValue(x.price)
+        );
 
         box.innerHTML = `
             <div class="history-title">
-
-                ${mandiEscape(
-                    item.Commodity || ""
-                )}
-
-                ·
-
-                ${mandiEscape(
-                    item.Variety ||
-                    "Standard"
-                )}
-
+                ${mandiEscape(item.Commodity || "")}
             </div>
 
-
             <div class="history-list">
-
                 ${
                     history.length
-                        ?
-
-                        history.map(
-                            entry => `
-                                <div>
-
-                                    <span>
-                                        ${mandiEscape(
-                                            mandiFormatDate(
-                                                entry.date
-                                            )
-                                        )}
-                                    </span>
-
-                                    <strong>
-                                        ₹${mandiEscape(
-                                            entry.price ?? "—"
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-                        ).join("")
-
-                        :
-
-                        `
+                        ? history
+                            .map(
+                                x => `
+                                    <div>
+                                        <span>${mandiEscape(x.date)}</span>
+                                        <strong>
+                                            ₹${mandiEscape(mandiNumber(x.price))}
+                                        </strong>
+                                    </div>
+                                `
+                            )
+                            .join("")
+                        : `
                             <div class="history-finished">
-                                ${t[lang].mandiNoHistory}
+                                ${mandiEscape(
+                                    mandiText(
+                                        "mandiNoHistory",
+                                        "पुराना भाव उपलब्ध नहीं है"
+                                    )
+                                )}
                             </div>
                         `
                 }
-
             </div>
         `;
 
-
-    } catch (error) {
-
-        console.error(
-            "Mandi history:",
-            error
-        );
-
+    } catch (e) {
+        console.error("Mandi history:", e);
 
         box.innerHTML = `
             <div class="history-finished">
-                ${t[lang].mandiHistoryFailed}
+                ${mandiEscape(
+                    mandiText(
+                        "mandiHistoryFailed",
+                        "भाव इतिहास लोड नहीं हो सका"
+                    )
+                )}
             </div>
         `;
     }
 
+    const hide = document.createElement("button");
+    hide.type = "button";
+    hide.className = "mandi-history-button";
 
-    const hide =
-        document.createElement(
-            "button"
-        );
-
-
-    hide.type =
-        "button";
-
-
-    hide.className =
-        "mandi-history-button";
-
-
-    hide.textContent =
-        t[lang].mandiHideHistory;
-
-
-    hide.addEventListener(
-        "click",
-        function () {
-
-            box.classList.add(
-                "hidden"
-            );
-
-
-            box.innerHTML =
-                "";
-
-
-            originalButton.style.display =
-                "";
-        }
+    hide.textContent = mandiText(
+        "mandiHideHistory",
+        "इतिहास छिपाएँ"
     );
 
+    hide.onclick = () => {
+        box.classList.add("hidden");
+        box.innerHTML = "";
+        button.style.display = "";
+    };
 
-    box.appendChild(
-        hide
-    );
+    box.appendChild(hide);
 }
 
+document.addEventListener("DOMContentLoaded", async () => {
+    const S = document.getElementById("mandiState");
+    const D = document.getElementById("mandiTempDistrict");
+    const M = document.getElementById("mandiMarket");
 
-// ==========================================================
-// SELECTORS
-// ==========================================================
+    if (!S || !D || !M) return;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+    const option = (v, n) => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = n;
+        return o;
+    };
 
-        const stateSelect =
-            document.getElementById(
-                "mandiState"
-            );
+    S.innerHTML = `
+        <option value="">
+            -- ${mandiText("mandiChooseState", "राज्य चुनें")} --
+        </option>
+    `;
 
+    D.innerHTML = `
+        <option value="">
+            -- ${mandiText("mandiChooseStateFirst", "पहले राज्य चुनें")} --
+        </option>
+    `;
 
-        const districtSelect =
-            document.getElementById(
-                "mandiTempDistrict"
-            );
+    M.innerHTML = `
+        <option value="">
+            -- ${mandiText("mandiChooseDistrictFirst", "पहले जिला चुनें")} --
+        </option>
+    `;
 
+    D.disabled = true;
+    M.disabled = true;
 
-        const resetBtn =
-            document.getElementById(
-                "resetMandiDistrict"
-            );
+    mandiWelcome();
 
-
-        // Always start from profile/default.
-        // Old manual selection cannot hijack initial load.
-        localStorage.removeItem(
-            "bhavsetu-mandi-temp-state"
+    try {
+        const r = await fetch(
+            `${MANDI_BACKEND}/api/mandi-locations`,
+            { cache: "no-store" }
         );
 
+        const j = await r.json();
 
-        localStorage.removeItem(
-            "bhavsetu-mandi-temp-district"
-        );
-
-
-        if (
-            typeof bhavSetuFetchLiveMandiPrices ===
-            "function"
-        ) {
-
-            bhavSetuFetchLiveMandiPrices();
+        if (!r.ok || !j.success) {
+            throw new Error(j.message || "Locations failed");
         }
 
+        mandiMaster = {
+            states: j.states || [],
+            districts: j.districts || [],
+            markets: j.markets || []
+        };
+
+        mandiMaster.states.forEach(x => {
+            S.appendChild(option(x.id, x.name));
+        });
+
+    } catch (e) {
+        console.error("Mandi locations:", e);
+        mandiError();
+        return;
+    }
+
+    S.onchange = () => {
+        D.innerHTML = `
+            <option value="">
+                -- ${mandiText("mandiChooseDistrict", "जिला चुनें")} --
+            </option>
+        `;
+
+        M.innerHTML = `
+            <option value="">
+                -- ${mandiText("mandiChooseDistrictFirst", "पहले जिला चुनें")} --
+            </option>
+        `;
+
+        M.disabled = true;
+        mandiSelection = null;
+
+        updateMandiLocation();
+        mandiWelcome();
+
+        const id = +S.value;
+
+        if (!id) {
+            D.disabled = true;
+            return;
+        }
+
+        mandiMaster.districts
+            .filter(x => +x.stateId === id)
+            .forEach(x => {
+                D.appendChild(option(x.id, x.name));
+            });
+
+        D.disabled = false;
+    };
+
+    D.onchange = () => {
+        M.innerHTML = `
+            <option value="">
+                -- ${mandiText("mandiChooseMarket", "मंडी / मार्केट चुनें")} --
+            </option>
+        `;
+
+        mandiSelection = null;
+
+        updateMandiLocation();
+        mandiWelcome();
+
+        const sid = +S.value;
+        const did = +D.value;
+
+        if (!did) {
+            M.disabled = true;
+            return;
+        }
+
+        const list = mandiMaster.markets.filter(
+            x => +x.stateId === sid && +x.districtId === did
+        );
+
+        if (!list.length) {
+            M.innerHTML = `
+                <option value="">
+                    -- ${mandiText("mandiNoMarketOption", "कोई मंडी उपलब्ध नहीं")} --
+                </option>
+            `;
+
+            M.disabled = true;
+
+            mandiMessage(
+                "🏪",
+                mandiText(
+                    "mandiNoMarketTitle",
+                    "इस जिले में मंडी उपलब्ध नहीं है"
+                ),
+                mandiText(
+                    "mandiNoMarketMessage",
+                    "कृपया दूसरा जिला चुनें।"
+                )
+            );
+
+            return;
+        }
+
+        list.forEach(x => {
+            M.appendChild(option(x.id, x.name));
+        });
+
+        M.disabled = false;
+    };
+
+    M.onchange = () => {
+        if (!M.value) {
+            mandiSelection = null;
+            updateMandiLocation();
+            mandiWelcome();
+            return;
+        }
+
+        mandiSelection = {
+            stateId: +S.value,
+            districtId: +D.value,
+            marketId: +M.value,
+
+            stateName:
+                S.options[S.selectedIndex].text,
+
+            districtName:
+                D.options[D.selectedIndex].text,
+
+            marketName:
+                M.options[M.selectedIndex].text
+        };
+
+        localStorage.setItem(
+            "bhavsetu-mandi-selection",
+            JSON.stringify(mandiSelection)
+        );
+
+        bhavSetuFetchLiveMandiPrices();
+    };
+
+    // Restore only the user's own last manual selection.
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem("bhavsetu-mandi-selection")
+        );
 
         if (
-            !stateSelect ||
-            !districtSelect
+            !saved?.stateId ||
+            !saved?.districtId ||
+            !saved?.marketId
         ) {
             return;
         }
 
+        S.value = String(saved.stateId);
+        S.onchange();
 
-        // STATES
-        stateSelect.innerHTML =
-            `<option value="">-- ${t[lang].mandiChooseState} --</option>`;
+        D.value = String(saved.districtId);
 
+        if (!D.value) return;
 
-        for (
-            const state
-            in mandidistricts
-        ) {
+        D.onchange();
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+        M.value = String(saved.marketId);
 
+        if (M.value) {
+            mandiSelection = {
+                stateId: +S.value,
+                districtId: +D.value,
+                marketId: +M.value,
 
-            option.value =
-                state;
+                stateName:
+                    S.options[S.selectedIndex].text,
 
+                districtName:
+                    D.options[D.selectedIndex].text,
 
-            option.textContent =
-                state;
+                marketName:
+                    M.options[M.selectedIndex].text
+            };
 
-
-            stateSelect.appendChild(
-                option
-            );
+            bhavSetuFetchLiveMandiPrices();
         }
 
-
-        districtSelect.innerHTML =
-            `<option value="">-- ${t[lang].mandiChooseStateFirst} --</option>`;
-
-
-        districtSelect.disabled =
-            true;
-
-
-        // STATE CHANGE
-        stateSelect.addEventListener(
-            "change",
-            function () {
-
-                const state =
-                    stateSelect.value;
-
-
-                localStorage.removeItem(
-                    "bhavsetu-mandi-temp-state"
-                );
-
-
-                localStorage.removeItem(
-                    "bhavsetu-mandi-temp-district"
-                );
-
-
-                if (
-                    !state ||
-                    !mandidistricts[state]
-                ) {
-
-                    districtSelect.innerHTML =
-                        `<option value="">-- ${t[lang].mandiChooseStateFirst} --</option>`;
-
-
-                    districtSelect.disabled =
-                        true;
-
-
-                    bhavSetuFetchLiveMandiPrices();
-
-
-                    return;
-                }
-
-
-                districtSelect.innerHTML =
-                    `<option value="">-- ${t[lang].mandiChooseDistrict} --</option>`;
-
-
-                districtSelect.disabled =
-                    false;
-
-
-                mandidistricts[
-                    state
-                ].forEach(
-                    district => {
-
-                        const option =
-                            document.createElement(
-                                "option"
-                            );
-
-
-                        option.value =
-                            district;
-
-
-                        option.textContent =
-                            district;
-
-
-                        districtSelect.appendChild(
-                            option
-                        );
-                    }
-                );
-            }
-        );
-
-
-        // DISTRICT CHANGE
-        districtSelect.addEventListener(
-            "change",
-            function () {
-
-                const state =
-                    stateSelect.value;
-
-
-                const district =
-                    districtSelect.value;
-
-
-                if (
-                    !state ||
-                    !district
-                ) {
-
-                    return;
-                }
-
-
-                localStorage.setItem(
-                    "bhavsetu-mandi-temp-state",
-                    state
-                );
-
-
-                localStorage.setItem(
-                    "bhavsetu-mandi-temp-district",
-                    district
-                );
-
-
-                bhavSetuFetchLiveMandiPrices();
-            }
-        );
-
-
-        // RESET
-        if (resetBtn) {
-
-            resetBtn.addEventListener(
-                "click",
-                function () {
-
-                    localStorage.removeItem(
-                        "bhavsetu-mandi-temp-state"
-                    );
-
-
-                    localStorage.removeItem(
-                        "bhavsetu-mandi-temp-district"
-                    );
-
-
-                    stateSelect.value =
-                        "";
-
-
-                    districtSelect.innerHTML =
-                        `<option value="">-- पहले राज्य चुनें --</option>`;
-
-
-                    districtSelect.disabled =
-                        true;
-
-
-                    bhavSetuFetchLiveMandiPrices();
-                }
-            );
-        }
-    }
-);
+    } catch (_) {}
+});
 
 
 function renderMarketplace(){
