@@ -1475,3 +1475,812 @@ body.dark .weather-current-metrics .weather-metric b{color:var(--text)}
     .weather-hour-card,.weather-day-card{padding:9px}
     .weather-location-card{padding:11px}
 }
+
+/* =========================================================
+   BHAVSETU WDRA - FLUID RESPONSIVE FINAL
+========================================================= */
+
+/* FULL AVAILABLE PAGE WIDTH */
+#warehouse.warehouse-section.section {
+    width: calc(100vw - 40px) !important;
+    max-width: none !important;
+    margin-left: calc(50% - 50vw + 20px) !important;
+    margin-right: 20px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box;
+}
+
+#warehouse * {
+    box-sizing: border-box;
+}
+
+.warehouse-main-head {
+    margin-bottom: 18px;
+}
+
+/* SELECTOR */
+#warehouse .warehouse-location-card {
+    width: min(100%, 1000px);
+    max-width: none;
+    margin: 0 auto 24px;
+    padding: 20px;
+    border: 1px solid rgba(20,120,65,.16);
+    border-radius: 16px;
+    background: var(--card-bg,#fff);
+    box-shadow: 0 6px 20px rgba(0,0,0,.045);
+}
+
+.warehouse-location-head {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.warehouse-location-head h3 {
+    margin: 0 0 5px;
+    color: var(--text-color,#17231b);
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.warehouse-location-head p {
+    margin: 0;
+    color: var(--muted,#69736c);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.warehouse-selector-row {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 18px;
+}
+
+.warehouse-field {
+    min-width: 0;
+}
+
+.warehouse-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--text-color,#243128);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.warehouse-select {
+    width: 100%;
+    height: 46px;
+    padding: 0 13px;
+    border: 1px solid rgba(20,120,65,.22);
+    border-radius: 10px;
+    outline: none;
+    background: var(--card-bg,#fff);
+    color: var(--text-color,#17231b);
+    font: inherit;
+    font-size: 14px;
+}
+
+.warehouse-select:focus {
+    border-color: #16813d;
+    box-shadow: 0 0 0 3px rgba(22,129,61,.09);
+}
+
+.warehouse-select:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* RESULT HEADER */
+#warehouse .warehouse-result-head {
+    width: 100%;
+    max-width: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 8px 0 17px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(20,120,65,.13);
+}
+
+.warehouse-result-head small {
+    color: #16813d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.warehouse-result-head h3 {
+    margin: 3px 0 0;
+    color: var(--text-color,#17231b);
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.warehouse-date-badge {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    border: 1px solid rgba(20,120,65,.17);
+    border-radius: 999px;
+    background: rgba(25,135,65,.055);
+    color: #087532;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   GRID
+   DESKTOP = 4 EQUAL FLUID CARDS
+========================================================= */
+
+#warehouse .warehouse-grid {
+    width: 100% !important;
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(4,minmax(0,1fr)) !important;
+    gap: 16px;
+    align-items: stretch;
+}
+
+/*
+ * Grid item itself fills row height.
+ * If one card expands, all cards in that row have equal
+ * outer height.
+ */
+#warehouse .wdra-warehouse-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid rgba(20,105,55,.15);
+    border-radius: 14px;
+    background: var(--card-bg,#fff);
+    box-shadow: 0 4px 15px rgba(0,0,0,.045);
+    transform: none !important;
+    transition: border-color .2s ease,box-shadow .2s ease;
+}
+
+#warehouse .wdra-warehouse-card:hover {
+    transform: none !important;
+    border-color: #27964c;
+    box-shadow:
+        0 0 0 2px rgba(39,150,76,.06),
+        0 7px 20px rgba(22,129,61,.12);
+}
+
+#warehouse .wdra-card-body {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+/* STATUS */
+.wdra-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 11px;
+}
+
+.wdra-card-icon {
+    font-size: 19px;
+}
+
+.wdra-status {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 5px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.wdra-status.active {
+    border: 1px solid rgba(24,137,64,.16);
+    background: rgba(24,137,64,.09);
+    color: #087532;
+}
+
+.wdra-status.inactive {
+    border: 1px solid rgba(198,48,48,.16);
+    background: rgba(210,48,48,.08);
+    color: #bc3030;
+}
+
+/* CLOSED CARD */
+.wdra-card-label {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted,#69736c);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.wdra-warehouse-name {
+    margin: 0;
+    color: var(--text-color,#17231b);
+    font-size: clamp(16px,1.15vw,19px);
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+/* FULL WDRA ADDRESS */
+.wdra-location {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 9px;
+    margin-bottom: 4px;
+    color: var(--muted,#657269);
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.wdra-location-icon {
+    flex-shrink: 0;
+}
+
+/*
+ * Push button to bottom.
+ * Closed cards in the same row therefore look aligned.
+ */
+#warehouse .wdra-card-body > .wdra-details-button {
+    margin-top: auto;
+}
+
+/* BUTTON */
+.wdra-details-button {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #16813d;
+    border-radius: 9px;
+    background: transparent;
+    color: #087532;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .18s ease,color .18s ease;
+}
+
+.wdra-details-button:hover {
+    background: #16813d;
+    color: #fff;
+}
+
+/* DETAILS */
+.wdra-details {
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(20,105,55,.12);
+}
+
+.wdra-detail-block {
+    margin-bottom: 10px;
+}
+
+.wdra-detail-value {
+    color: var(--text-color,#26322b);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+/* Full address is already visible above, but retained
+   if your app.js still has detail address box */
+.wdra-address-box {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 9px;
+    background: rgba(15,110,52,.045);
+}
+
+.wdra-address-box p {
+    margin: 0;
+    color: var(--text-color,#344039);
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* CAPACITY + CONTACT */
+.wdra-info-row {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.wdra-info-box {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid rgba(15,95,49,.10);
+    border-radius: 9px;
+    background: rgba(0,0,0,.017);
+}
+
+.wdra-info-box strong {
+    display: block;
+    color: var(--text-color,#17231b);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* PHONE NEVER BREAKS */
+.wdra-contact-link {
+    display: block;
+    width: 100%;
+    color: #087532 !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    text-decoration: none;
+    font-size: clamp(11px,.9vw,14px);
+    font-weight: 800;
+}
+
+/* REGISTRATION */
+.wdra-registration {
+    padding: 11px;
+    border: 1px solid rgba(15,115,52,.13);
+    border-radius: 9px;
+    background: rgba(25,135,65,.045);
+}
+
+.wdra-registration-title {
+    margin-bottom: 7px;
+    color: #087532;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.wdra-registration-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.wdra-registration-row span {
+    color: var(--muted,#68716b);
+}
+
+.wdra-registration-row strong {
+    color: var(--text-color,#17231b);
+    text-align: right;
+    white-space: nowrap;
+}
+
+.wdra-remark {
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(200,50,50,.06);
+    color: #aa3030;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.wdra-hide-details {
+    margin-top: 10px;
+}
+
+/* STATUS / EMPTY */
+.warehouse-status-card {
+    grid-column: 1/-1;
+    width: min(100%,720px);
+    margin: 16px auto;
+    padding: 30px 20px;
+    border: 1px solid rgba(20,120,65,.14);
+    border-radius: 15px;
+    background: var(--card-bg,#fff);
+    text-align: center;
+}
+
+.warehouse-status-icon {
+    margin-bottom: 11px;
+    font-size: 32px;
+}
+
+.warehouse-status-card h3 {
+    margin: 0 0 7px;
+    color: var(--text-color,#17231b);
+    font-size: 20px;
+}
+
+.warehouse-status-card p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--muted,#69736c);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.warehouse-loader {
+    width: 29px;
+    height: 29px;
+    margin: auto;
+    border: 3px solid rgba(22,129,61,.14);
+    border-top-color: #16813d;
+    border-radius: 50%;
+    animation: warehouseSpin .8s linear infinite;
+}
+
+@keyframes warehouseSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* LOAD MORE */
+.warehouse-load-more-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+}
+
+.warehouse-load-more {
+    min-width: 220px;
+    padding: 11px 22px;
+    border: 1px solid #16813d;
+    border-radius: 10px;
+    background: transparent;
+    color: #087532;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.warehouse-load-more:hover {
+    background: #16813d;
+    color: #fff;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* DARK */
+body.dark .warehouse-location-card,
+body.dark .wdra-warehouse-card,
+body.dark .warehouse-status-card,
+body.dark-theme .warehouse-location-card,
+body.dark-theme .wdra-warehouse-card,
+body.dark-theme .warehouse-status-card {
+    background: var(--card-bg,#171c19);
+    border-color: rgba(110,205,140,.17);
+}
+
+body.dark .warehouse-select,
+body.dark-theme .warehouse-select {
+    background: #171c19;
+    color: #f0f4f1;
+    border-color: rgba(110,205,140,.22);
+}
+
+body.dark .wdra-address-box,
+body.dark .wdra-info-box,
+body.dark .wdra-registration,
+body.dark-theme .wdra-address-box,
+body.dark-theme .wdra-info-box,
+body.dark-theme .wdra-registration {
+    background: rgba(70,180,105,.065);
+}
+
+body.dark .warehouse-date-badge,
+body.dark-theme .warehouse-date-badge {
+    color: #78d895;
+}
+
+body.dark .warehouse-load-more,
+body.dark .wdra-details-button,
+body.dark-theme .warehouse-load-more,
+body.dark-theme .wdra-details-button {
+    color: #75d792;
+    border-color: #55b873;
+}
+
+body.dark #warehouse .wdra-warehouse-card:hover,
+body.dark-theme #warehouse .wdra-warehouse-card:hover {
+    transform: none !important;
+    border-color: #59bd78;
+    box-shadow:
+        0 0 0 2px rgba(89,189,120,.07),
+        0 7px 20px rgba(55,175,90,.11);
+}
+
+/* TABLET = 3 */
+@media (max-width:1100px) and (min-width:701px) {
+    #warehouse .warehouse-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+        gap: 13px;
+    }
+}
+
+/* MOBILE = 2, ALMOST FULL SCREEN */
+@media (max-width:700px) {
+    #warehouse.warehouse-section.section {
+        width: calc(100vw - 12px) !important;
+        margin-left: calc(50% - 50vw + 6px) !important;
+        margin-right: 6px !important;
+    }
+
+    #warehouse .warehouse-location-card {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 18px;
+    }
+
+    .warehouse-selector-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    #warehouse .warehouse-result-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .warehouse-result-head h3 {
+        font-size: 20px;
+    }
+
+    #warehouse .warehouse-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+        gap: 7px;
+    }
+
+    #warehouse .wdra-card-body {
+        padding: 9px;
+    }
+
+    .wdra-card-top {
+        margin-bottom: 8px;
+    }
+
+    .wdra-card-icon {
+        font-size: 16px;
+    }
+
+    .wdra-status {
+        padding: 4px 6px;
+        font-size: 8px;
+    }
+
+    .wdra-card-label {
+        font-size: 9px;
+    }
+
+    .wdra-warehouse-name {
+        font-size: clamp(12px,3.6vw,15px);
+    }
+
+    .wdra-location {
+        margin-top: 7px;
+        font-size: clamp(9px,2.7vw,11px);
+        line-height: 1.4;
+    }
+
+    .wdra-details-button {
+        padding: 8px 4px;
+        font-size: 10px;
+    }
+
+    /*
+     * Within a narrow half-screen card, contact gets its
+     * own full-width row so the number stays in one line.
+     */
+    .wdra-info-row {
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+
+    .wdra-info-box {
+        padding: 8px;
+    }
+
+    .wdra-info-box strong,
+    .wdra-detail-value {
+        font-size: 11px;
+    }
+
+    .wdra-contact-link {
+        font-size: 12px;
+        white-space: nowrap !important;
+    }
+
+    .wdra-address-box p {
+        font-size: 10px;
+    }
+
+    .wdra-registration-row {
+        flex-direction: column;
+        gap: 1px;
+        font-size: 9px;
+    }
+
+    .wdra-registration-row strong {
+        text-align: left;
+    }
+
+    .warehouse-status-card {
+        padding: 25px 14px;
+    }
+}
+
+/* VERY NARROW PHONE — STILL 2 COLUMNS */
+@media (max-width:380px) {
+    #warehouse.warehouse-section.section {
+        width: calc(100vw - 8px) !important;
+        margin-left: calc(50% - 50vw + 4px) !important;
+        margin-right: 4px !important;
+    }
+
+    #warehouse .warehouse-grid {
+        gap: 5px;
+    }
+
+    #warehouse .wdra-card-body {
+        padding: 8px;
+    }
+
+    .wdra-contact-link {
+        font-size: 11px;
+    }
+
+    .warehouse-load-more {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   WDRA FINAL LAYOUT CORRECTIONS
+========================================================= */
+
+/* 1. Restore normal BhavSetu section layout.
+   Heading, selector, result heading and date are no longer
+   stretched to viewport edges. */
+#warehouse.warehouse-section.section {
+    width: auto !important;
+    max-width: var(--section-max-width, 1320px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Selector stays exactly like the earlier centered design */
+#warehouse .warehouse-location-card {
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Result heading also follows normal section width */
+#warehouse .warehouse-result-head {
+    width: 100% !important;
+}
+
+/* 2. Only cards use extra horizontal room.
+   Slight left/right breathing space remains. */
+#warehouse .warehouse-grid {
+    width: calc(100vw - 80px) !important;
+    max-width: 1540px !important;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 16px;
+    align-items: stretch;
+}
+
+/* Every card fills the height of its grid row */
+#warehouse .wdra-warehouse-card {
+    height: 100%;
+    display: flex;
+}
+
+#warehouse .wdra-card-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3. Details area participates in flex layout */
+#warehouse .wdra-details:not(.hidden) {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Closed-card View Details always at bottom */
+#warehouse .wdra-card-body > .wdra-details-button {
+    margin-top: auto !important;
+}
+
+/* Open-card Hide Details always at absolute bottom */
+#warehouse .wdra-details .wdra-hide-details {
+    margin-top: auto !important;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+/* Gives registration → bottom button a clean gap */
+#warehouse .wdra-registration {
+    margin-bottom: 10px;
+}
+
+/* Tablet */
+@media (max-width: 1100px) and (min-width: 701px) {
+    #warehouse .warehouse-grid {
+        width: calc(100vw - 54px) !important;
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr)) !important;
+        gap: 13px;
+    }
+}
+
+/* Mobile:
+   keep normal heading/selector layout,
+   only cards use almost-full width with visible side margin */
+@media (max-width: 700px) {
+    #warehouse.warehouse-section.section {
+        width: auto !important;
+        max-width: none !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    #warehouse .warehouse-grid {
+        width: calc(100vw - 28px) !important;
+        max-width: none !important;
+
+        left: 50%;
+        transform: translateX(-50%);
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 9px;
+    }
+
+    #warehouse .warehouse-location-card {
+        width: 100% !important;
+        max-width: 900px !important;
+    }
+}
+
+/* Small phone: still 2 cards, but don't stick to screen edges */
+@media (max-width: 390px) {
+    #warehouse.warehouse-section.section {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    #warehouse .warehouse-grid {
+        width: calc(100vw - 20px) !important;
+        gap: 7px;
+    }
+}

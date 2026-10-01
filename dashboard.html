@@ -249,12 +249,139 @@
   </section>
 
 
-  <section id="warehouse" class="warehouse-section section">
-    <div class="section-head">
-      <div><span class="eyebrow" data-i18n="whEyebrow">भंडारण और गोदाम</span><h2 data-i18n="whMainTitle">फसल भंडारण गोदाम</h2><p data-i18n="whMainSub">अपने क्षेत्र के पास सत्यापित कोल्ड स्टोरेज और गोदामों की उपलब्धता और किराया देखें।</p></div>
+<!-- =====================================================
+     BHAVSETU - WDRA REGISTERED WAREHOUSES
+===================================================== -->
+
+<section id="warehouse" class="warehouse-section section">
+
+  <div class="section-head warehouse-main-head">
+    <div>
+      <span
+        class="eyebrow"
+        data-i18n="whEyebrow"
+      >
+        भंडारण और गोदाम
+      </span>
+
+      <h2 data-i18n="whMainTitle">
+        WDRA पंजीकृत गोदाम
+      </h2>
+
+      <p data-i18n="whMainSub">
+        अपने राज्य और जिले के WDRA पंजीकृत गोदाम देखें।
+      </p>
     </div>
-    <div class="warehouse-grid" id="warehouseGrid"></div>
-  </section>
+  </div>
+
+
+  <!-- SELECT LOCATION -->
+
+  <div class="warehouse-location-card">
+
+    <div class="warehouse-location-head">
+      <h3 data-i18n="whSelectTitle">
+        क्षेत्र चुनें
+      </h3>
+
+      <p data-i18n="whSelectSub">
+        पंजीकृत गोदाम देखने के लिए राज्य और जिला चुनें।
+      </p>
+    </div>
+
+
+    <div class="warehouse-selector-row">
+
+      <div class="warehouse-field">
+
+        <label
+          for="warehouseState"
+          data-i18n="whState"
+        >
+          राज्य
+        </label>
+
+        <select
+          id="warehouseState"
+          class="warehouse-select"
+        ></select>
+
+      </div>
+
+
+      <div class="warehouse-field">
+
+        <label
+          for="warehouseDistrict"
+          data-i18n="whDistrict"
+        >
+          जिला
+        </label>
+
+        <select
+          id="warehouseDistrict"
+          class="warehouse-select"
+          disabled
+        ></select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- RESULT HEADING -->
+
+  <div
+    id="warehouseResultHead"
+    class="warehouse-result-head hidden"
+  >
+
+    <div>
+      <small data-i18n="whRegisteredLabel">
+        WDRA पंजीकृत गोदाम
+      </small>
+
+      <h3 id="warehouseLocationTitle"></h3>
+    </div>
+
+
+    <span
+      id="warehouseUpdatedDate"
+      class="warehouse-date-badge"
+    ></span>
+
+  </div>
+
+
+  <!-- WAREHOUSE CARDS -->
+
+  <div
+    id="warehouseGrid"
+    class="warehouse-grid"
+  ></div>
+
+
+  <!-- LOAD MORE -->
+
+  <div
+    id="warehouseLoadMoreWrap"
+    class="warehouse-load-more-wrap hidden"
+  >
+
+    <button
+      id="warehouseLoadMore"
+      type="button"
+      class="warehouse-load-more"
+      data-i18n="whLoadMore"
+    >
+      और गोदाम दिखाएँ
+    </button>
+
+  </div>
+
+</section>
 
   <section id="weather" class="weather-section section">
     <div class="section-head">

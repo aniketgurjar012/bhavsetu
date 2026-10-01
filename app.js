@@ -99,15 +99,6 @@ const starterListings=[
 {id:6,crop:"Onion",hi:"प्याज़",mr:"कांदा",emoji:"🧅",seller:"Kailash Verma",location:"Indore, Madhya Pradesh",qty:50,price:1840,grade:"A",moisture:"12% (Normal / सामान्य / साधारण)",variety:"Red Onion",phone:"9876543215",notes:"Good storage quality."}
 ];
 
-const starterWarehouses=[
-{id:1,name:"Kisan Agro Cold Storage",hi:"किसान एग्रो कोल्ड स्टोरेज",mr:"किसान अग्रो कोल्ड स्टोरेज",location:"Indore Bypass, MP",capacity:"5,000 क्विंटल",available:"1,200 क्विंटल खाली",rate:"₹4 per quintal / day",crops:"Wheat, Soybean, Chana, Onion",cropsHi:"गेहूं, सोयाबीन, चना, प्याज़",cropsMr:"गहू, सोयाबीन, हरभरा, कांदा"},
-{id:2,name:"Malwa Modern Warehouse",hi:"मालवा मॉडर्न वेयरहाउस",mr:"मालवा मॉडर्न वेअरहाउस",location:"Dewas Road, Ujjain",capacity:"8,000 क्विंटल",available:"2,500 क्विंटल खाली",rate:"₹3.5 per quintal / day",crops:"Soybean, Maize, Wheat",cropsHi:"सोयाबीन, मक्का, गेहूं",cropsMr:"सोयाबीन, मका, गहू"},
-{id:3,name:"Shiv Shakti Silos & Godown",hi:"शिव शक्ति साइलो एंड गोदाम",mr:"शिव शक्ती सायलो आणि गोडाऊन",location:"Mandsaur Mandi Parisar",capacity:"3,500 क्विंटल",available:"800 क्विंटल खाली",rate:"₹4.5 per quintal / day",crops:"Chana, Wheat, Cotton",cropsHi:"चना, गेहूं, कपास",cropsMr:"हरभरा, गहू, कापूस"},
-{id:4,name:"Greenfield Storage Hub",hi:"ग्रीनफील्ड स्टोरेज हब",mr:"ग्रीनफिल्ड स्टोरेज हब",location:"Khandwa Road, Khargone",capacity:"6,000 क्विंटल",available:"3,000 क्विंटल खाली",rate:"₹3 per quintal / day",crops:"Cotton, Maize, Soybean",cropsHi:"कपास, मक्का, सोयाबीन",cropsMr:"कापूस, मका, सोयाबीन"},
-{id:5,name:"Annapurna Krishi Godown",hi:"अन्नपूर्णा कृषि गोदाम",mr:"अन्नपूर्णा कृषी गोडाऊन",location:"Bhopal Bypass Road",capacity:"10,000 क्विंटल",available:"4,200 क्विंटल खाली",rate:"₹3.8 per quintal / day",crops:"Wheat, Paddy, Maize",cropsHi:"गेहूं, धान, मक्का",cropsMr:"गहू, भात, मका"},
-{id:6,name:"Narmada Valley Warehouse",hi:"नर्मदा वैली वेयरहाउस",mr:"नर्मदा व्हॅली वेअरहाउस",location:"Hoshangabad Road",capacity:"4,500 क्विंटल",available:"1,500 क्विंटल खाली",rate:"₹3.2 per quintal / day",crops:"Soybean, Chana, Wheat",cropsHi:"सोयाबीन, चना, गेहूं",cropsMr:"सोयाबीन, हरभरा, गहू"}
-];
-
 const savedListings=JSON.parse(localStorage.getItem("bhavsetu-listings")||"[]");
 const starterPhones=new Set(starterListings.map(listing=>listing.phone));
 let listings=[...starterListings,...savedListings.filter(listing=>!starterPhones.has(listing.phone))];
@@ -220,7 +211,59 @@ mandiChooseDistrictFirst: "Select District First",
 mandiChooseMarket: "Select Mandi / Market",
 mandiNoMarketOption: "No mandi available",
 mandiNoMarketTitle: "No mandi is available in this district",
-mandiNoMarketMessage: "Please select another district."
+mandiNoMarketMessage: "Please select another district",
+whEyebrow: "Storage & Warehouses",
+whMainTitle: "WDRA Registered Warehouses",
+whMainSub: "Find WDRA registered warehouses in your state and district.",
+
+whSelectTitle: "Select Location",
+whSelectSub: "Select a state and district to view registered warehouses.",
+
+whState: "State",
+whDistrict: "District",
+whChooseState: "Select State",
+whChooseStateFirst: "Select State First",
+whChooseDistrict: "Select District",
+
+whRegisteredLabel: "WDRA Registered Warehouses",
+whCheckedOn: "Checked on",
+
+whWelcomeTitle: "Find Registered Warehouses",
+whWelcomeMessage: "Select your state and district above to view WDRA registered warehouses.",
+
+whLoading: "Finding registered warehouses...",
+whLoadingMessage: "Fetching registered warehouse information for the selected district from WDRA.",
+
+whNoDataTitle: "No registered warehouse found in this district",
+whNoDataMessage: "No WDRA-authorized registered government/private warehouse was found in your selected district. Please select another district.",
+
+whErrorTitle: "Warehouse information could not be retrieved",
+whErrorMessage: "There was a problem retrieving information from WDRA. Please try again after some time.",
+
+whWarehouseName: "Warehouse Name",
+whWarehouseman: "Warehouseman Name",
+whWarehouseId: "Warehouse ID",
+whAddress: "Full Address",
+whCapacity: "Capacity",
+whContact: "Contact Number",
+whMT: "MT",
+
+whRegistrationDetails: "Registration Details",
+whRegistrationDate: "Registration Date",
+whValidUpto: "Registration Valid Upto",
+whRemarks: "Remarks",
+
+whActive: "Active",
+whInactive: "Inactive",
+whNotAvailable: "Not available",
+
+whViewDetails: "View Details",
+whHideDetails: "Hide Details",
+whLoadMore: "Load More Warehouses",
+whLoadingDistricts: "Loading districts...",
+whLoadingDistrictsMessage: "Finding available districts from WDRA registered warehouse records.",
+whStatesFailed: "States could not be loaded",
+whDistrictsFailed: "Districts could not be loaded",
 },
 hi:{
 tagline:"जानकारी से जुड़ाव, किसानों को समृद्धि से जोड़ना",home:"होम",market:"मंडी भाव",buy:"फसल खरीदें",sell:"फसल बेचें",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"मेरी प्रोफाइल",profileTitle:"अपनी प्रोफाइल बनाएं",profileSub:"अपनी जानकारी जोड़ें ताकि भावसेतु आपके अनुभव को बेहतर बना सके।",fullName:"पूरा नाम",role:"मैं हूँ",village:"गाँव / शहर",profileState:"राज्य / केंद्र शासित प्रदेश",profileDistrict:"जिला",profilePhone:"मोबाइल नंबर",saveProfile:"प्रोफाइल सेव करें →",profileSaved:"प्रोफाइल सफलतापूर्वक सेव हो गई।",profileNeedLogin:"कृपया पहले मोबाइल नंबर से लॉगिन करें।",
@@ -324,7 +367,59 @@ mandiChooseDistrictFirst: "पहले जिला चुनें",
 mandiChooseMarket: "मंडी / मार्केट चुनें",
 mandiNoMarketOption: "कोई मंडी उपलब्ध नहीं",
 mandiNoMarketTitle: "इस जिले में मंडी उपलब्ध नहीं है",
-mandiNoMarketMessage: "कृपया दूसरा जिला चुनें।"
+mandiNoMarketMessage: "कृपया दूसरा जिला चुनें",
+whEyebrow: "भंडारण और गोदाम",
+whMainTitle: "WDRA पंजीकृत गोदाम",
+whMainSub: "अपने राज्य और जिले के WDRA पंजीकृत गोदाम देखें।",
+
+whSelectTitle: "क्षेत्र चुनें",
+whSelectSub: "पंजीकृत गोदाम देखने के लिए राज्य और जिला चुनें।",
+
+whState: "राज्य",
+whDistrict: "जिला",
+whChooseState: "राज्य चुनें",
+whChooseStateFirst: "पहले राज्य चुनें",
+whChooseDistrict: "जिला चुनें",
+
+whRegisteredLabel: "WDRA पंजीकृत गोदाम",
+whCheckedOn: "जाँच दिनांक",
+
+whWelcomeTitle: "पंजीकृत गोदाम देखें",
+whWelcomeMessage: "अपने जिले के WDRA पंजीकृत गोदाम देखने के लिए ऊपर राज्य और जिला चुनें।",
+
+whLoading: "पंजीकृत गोदाम खोजे जा रहे हैं...",
+whLoadingMessage: "WDRA से चयनित जिले के पंजीकृत गोदामों की जानकारी प्राप्त की जा रही है।",
+
+whNoDataTitle: "इस जिले में पंजीकृत गोदाम नहीं मिला",
+whNoDataMessage: "आपके चयनित जिले में कोई WDRA अधिकृत पंजीकृत सरकारी / निजी गोदाम उपलब्ध नहीं मिला। कृपया दूसरा जिला चुनें।",
+
+whErrorTitle: "गोदाम जानकारी प्राप्त नहीं हो सकी",
+whErrorMessage: "WDRA से जानकारी प्राप्त करने में समस्या हुई। कृपया कुछ समय बाद दोबारा प्रयास करें।",
+
+whWarehouseName: "गोदाम का नाम",
+whWarehouseman: "वेयरहाउस संचालक का नाम",
+whWarehouseId: "वेयरहाउस ID",
+whAddress: "पूरा पता",
+whCapacity: "क्षमता",
+whContact: "संपर्क नंबर",
+whMT: "मीट्रिक टन",
+
+whRegistrationDetails: "पंजीकरण विवरण",
+whRegistrationDate: "पंजीकरण दिनांक",
+whValidUpto: "पंजीकरण वैधता",
+whRemarks: "टिप्पणी",
+
+whActive: "सक्रिय",
+whInactive: "निष्क्रिय",
+whNotAvailable: "उपलब्ध नहीं",
+
+whViewDetails: "विवरण देखें",
+whHideDetails: "विवरण छिपाएँ",
+whLoadMore: "और गोदाम दिखाएँ",
+whLoadingDistricts: "जिले लोड हो रहे हैं...",
+whLoadingDistrictsMessage: "WDRA के पंजीकृत गोदाम रिकॉर्ड से उपलब्ध जिले प्राप्त किए जा रहे हैं।",
+whStatesFailed: "राज्य लोड नहीं हो सके",
+whDistrictsFailed: "जिले लोड नहीं हो सके",
 },
 mr:{
 tagline:"माहितीचा दुवा, शेतकऱ्यांना समृद्धीकडे नेणारा",home:"होम",market:"मंडी भाव",buy:"पीक खरेदी करा",sell:"पीक विक्री करा",quality:"गुणवत्ता मीटर",settings:"सेटिंग्स",profileBtn:"प्रोफाइल",profileEyebrow:"माझी प्रोफाइल",profileTitle:"तुमची प्रोफाइल तयार करा",profileSub:"भावसेतु तुमचा शेतकरी अनुभव अधिक चांगला करण्यासाठी तपशील जोडा.",fullName:"पूर्ण नाव",role:"मी आहे",village:"गाव / शहर",profileState:"राज्य / केंद्रशासित प्रदेश",profileDistrict:"जिल्हा",profilePhone:"मोबाईल नंबर",saveProfile:"प्रोफाइल सेव्ह करा →",profileSaved:"प्रोफाइल यशस्वीरित्या सेव्ह झाली.",profileNeedLogin:"कृपया प्रथम मोबाईल नंबरने लॉगिन करा.",
@@ -429,7 +524,59 @@ mandiChooseDistrictFirst: "आधी जिल्हा निवडा",
 mandiChooseMarket: "मंडी / मार्केट निवडा",
 mandiNoMarketOption: "कोणतीही मंडी उपलब्ध नाही",
 mandiNoMarketTitle: "या जिल्ह्यात मंडी उपलब्ध नाही",
-mandiNoMarketMessage: "कृपया दुसरा जिल्हा निवडा."
+mandiNoMarketMessage: "कृपया दुसरा जिल्हा निवडा",
+whEyebrow: "साठवण आणि गोदामे",
+whMainTitle: "WDRA नोंदणीकृत गोदामे",
+whMainSub: "तुमच्या राज्य आणि जिल्ह्यातील WDRA नोंदणीकृत गोदामे पहा.",
+
+whSelectTitle: "ठिकाण निवडा",
+whSelectSub: "नोंदणीकृत गोदामे पाहण्यासाठी राज्य आणि जिल्हा निवडा.",
+
+whState: "राज्य",
+whDistrict: "जिल्हा",
+whChooseState: "राज्य निवडा",
+whChooseStateFirst: "आधी राज्य निवडा",
+whChooseDistrict: "जिल्हा निवडा",
+
+whRegisteredLabel: "WDRA नोंदणीकृत गोदामे",
+whCheckedOn: "तपासणी दिनांक",
+
+whWelcomeTitle: "नोंदणीकृत गोदामे पहा",
+whWelcomeMessage: "तुमच्या जिल्ह्यातील WDRA नोंदणीकृत गोदामे पाहण्यासाठी वर राज्य आणि जिल्हा निवडा.",
+
+whLoading: "नोंदणीकृत गोदामे शोधली जात आहेत...",
+whLoadingMessage: "WDRA कडून निवडलेल्या जिल्ह्यातील नोंदणीकृत गोदामांची माहिती घेतली जात आहे.",
+
+whNoDataTitle: "या जिल्ह्यात नोंदणीकृत गोदाम सापडले नाही",
+whNoDataMessage: "तुम्ही निवडलेल्या जिल्ह्यात कोणतेही WDRA अधिकृत नोंदणीकृत सरकारी / खाजगी गोदाम उपलब्ध नाही. कृपया दुसरा जिल्हा निवडा.",
+
+whErrorTitle: "गोदामाची माहिती मिळू शकली नाही",
+whErrorMessage: "WDRA कडून माहिती मिळवताना समस्या आली. कृपया काही वेळाने पुन्हा प्रयत्न करा.",
+
+whWarehouseName: "गोदामाचे नाव",
+whWarehouseman: "वेअरहाउस संचालकाचे नाव",
+whWarehouseId: "वेअरहाउस ID",
+whAddress: "संपूर्ण पत्ता",
+whCapacity: "क्षमता",
+whContact: "संपर्क क्रमांक",
+whMT: "मेट्रिक टन",
+
+whRegistrationDetails: "नोंदणी तपशील",
+whRegistrationDate: "नोंदणी दिनांक",
+whValidUpto: "नोंदणी वैधता",
+whRemarks: "टिप्पणी",
+
+whActive: "सक्रिय",
+whInactive: "निष्क्रिय",
+whNotAvailable: "उपलब्ध नाही",
+
+whViewDetails: "तपशील पहा",
+whHideDetails: "तपशील लपवा",
+whLoadMore: "आणखी गोदामे दाखवा",
+whLoadingDistricts: "जिल्हे लोड होत आहेत...",
+whLoadingDistrictsMessage: "WDRA च्या नोंदणीकृत गोदाम नोंदींमधून उपलब्ध जिल्हे घेतले जात आहेत.",
+whStatesFailed: "राज्ये लोड होऊ शकली नाहीत",
+whDistrictsFailed: "जिल्हे लोड होऊ शकले नाहीत",
 }
 };
 
@@ -484,9 +631,14 @@ function applyLang(){
     else if(lang==="hi") setLang.textContent="मराठी / English";
     else setLang.textContent="English / हिन्दी";
   }
-    updateThemeButton();
-    if (typeof renderPrices === "function") {renderPrices()};;renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();updateProfileUI();
+  if (typeof rerenderWDRAWarehouses === "function") {
+    rerenderWDRAWarehouses();
 }
+    updateThemeButton();
+    if (typeof renderPrices === "function") {renderPrices()};;renderMarketplace();renderMyListings();renderWeather();updateCart();updateProfileUI();
+}
+
+
 
 function updateThemeButton(){
     const button=$("themeToggle");
@@ -1265,6 +1417,1610 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+
+
+
+// ==========================================================
+// BHAVSETU WDRA WAREHOUSE FRONTEND
+// ==========================================================
+
+const WDRA_BACKEND =
+    BACKEND_API_URL;
+
+const WDRA_PAGE_SIZE =
+    12;
+
+let wdraWarehouses =
+    [];
+
+let wdraVisibleCount =
+    0;
+
+let wdraRequestController =
+    null;
+
+let wdraDistrictController =
+    null;
+
+
+// ==========================================================
+// TEXT
+// ==========================================================
+
+function whText(
+    key,
+    fallback
+) {
+
+    try {
+
+        const value =
+            t?.[lang]?.[key];
+
+
+        if (
+            typeof value === "string" &&
+            value.trim() &&
+            value !== "undefined"
+        ) {
+
+            return value;
+        }
+
+    } catch (_) {}
+
+
+    return fallback;
+}
+
+
+// ==========================================================
+// ESCAPE
+// ==========================================================
+
+function whEscape(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// ==========================================================
+// DATE
+// ==========================================================
+
+function whToday() {
+
+    const locale =
+        lang === "hi"
+            ? "hi-IN"
+            : lang === "mr"
+                ? "mr-IN"
+                : "en-IN";
+
+
+    try {
+
+        return new Intl.DateTimeFormat(
+            locale,
+            {
+                timeZone:
+                    "Asia/Kolkata",
+
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric"
+            }
+        ).format(
+            new Date()
+        );
+
+    } catch (_) {
+
+        return new Date()
+            .toLocaleDateString(
+                "en-IN"
+            );
+    }
+}
+
+
+// ==========================================================
+// ELEMENTS
+// ==========================================================
+
+function whGrid() {
+
+    return document.getElementById(
+        "warehouseGrid"
+    );
+}
+
+
+function whLoadWrap() {
+
+    return document.getElementById(
+        "warehouseLoadMoreWrap"
+    );
+}
+
+
+// ==========================================================
+// MESSAGES
+// ==========================================================
+
+function whMessage(
+    icon,
+    title,
+    message
+) {
+
+    const grid =
+        whGrid();
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    grid.innerHTML = `
+        <div class="warehouse-status-card">
+            <div class="warehouse-status-icon">
+                ${icon}
+            </div>
+
+            <h3>
+                ${whEscape(title)}
+            </h3>
+
+            <p>
+                ${whEscape(message)}
+            </p>
+        </div>
+    `;
+
+
+    whLoadWrap()
+        ?.classList
+        .add("hidden");
+}
+
+
+function whWelcome() {
+
+    whMessage(
+        "🏬",
+
+        whText(
+            "whWelcomeTitle",
+            "पंजीकृत गोदाम देखें"
+        ),
+
+        whText(
+            "whWelcomeMessage",
+            "अपने जिले के WDRA पंजीकृत गोदाम देखने के लिए ऊपर राज्य और जिला चुनें।"
+        )
+    );
+}
+
+
+function whLoading(
+    districtLoading = false
+) {
+
+    const grid =
+        whGrid();
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    const title =
+        districtLoading
+            ? whText(
+                "whLoadingDistricts",
+                "जिले लोड हो रहे हैं..."
+            )
+            : whText(
+                "whLoading",
+                "पंजीकृत गोदाम खोजे जा रहे हैं..."
+            );
+
+
+    const message =
+        districtLoading
+            ? whText(
+                "whLoadingDistrictsMessage",
+                "WDRA के पंजीकृत गोदाम रिकॉर्ड से उपलब्ध जिले प्राप्त किए जा रहे हैं।"
+            )
+            : whText(
+                "whLoadingMessage",
+                "WDRA से चयनित जिले के पंजीकृत गोदाम प्राप्त किए जा रहे हैं।"
+            );
+
+
+    grid.innerHTML = `
+        <div class="warehouse-status-card">
+
+            <div class="warehouse-status-icon">
+                <div class="warehouse-loader"></div>
+            </div>
+
+            <h3>
+                ${whEscape(title)}
+            </h3>
+
+            <p>
+                ${whEscape(message)}
+            </p>
+
+        </div>
+    `;
+
+
+    whLoadWrap()
+        ?.classList
+        .add("hidden");
+}
+
+
+function whNoData() {
+
+    whMessage(
+        "🏬",
+
+        whText(
+            "whNoDataTitle",
+            "इस जिले में पंजीकृत गोदाम नहीं मिला"
+        ),
+
+        whText(
+            "whNoDataMessage",
+            "आपके चयनित जिले में कोई WDRA अधिकृत पंजीकृत सरकारी / निजी गोदाम उपलब्ध नहीं मिला। कृपया दूसरा जिला चुनें।"
+        )
+    );
+}
+
+
+function whError() {
+
+    whMessage(
+        "⚠️",
+
+        whText(
+            "whErrorTitle",
+            "गोदाम जानकारी प्राप्त नहीं हो सकी"
+        ),
+
+        whText(
+            "whErrorMessage",
+            "WDRA से जानकारी प्राप्त करने में समस्या हुई। कृपया कुछ समय बाद दोबारा प्रयास करें।"
+        )
+    );
+}
+
+
+// ==========================================================
+// CARD
+// ==========================================================
+
+function createWDRAWarehouseCard(
+    warehouse
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "wdra-warehouse-card";
+
+
+    const active =
+        String(
+            warehouse.status ||
+            ""
+        )
+            .trim()
+            .toLowerCase() ===
+        "active";
+
+
+    const statusText =
+        active
+            ? whText(
+                "whActive",
+                "सक्रिय"
+            )
+            : whText(
+                "whInactive",
+                "निष्क्रिय"
+            );
+
+
+    /*
+     * FULL WDRA ADDRESS ON CLOSED CARD.
+     *
+     * District/state only becomes a fallback
+     * when WDRA has no address.
+     */
+    const location =
+        String(
+            warehouse.address ||
+            ""
+        ).trim() ||
+        [
+            warehouse.district,
+            warehouse.state
+        ]
+            .filter(Boolean)
+            .join(", ");
+
+
+    const contact =
+        String(
+            warehouse.contactNo ||
+            ""
+        ).trim();
+
+
+    const phone =
+        contact.replace(
+            /[^\d+]/g,
+            ""
+        );
+
+
+    const contactHTML =
+        contact
+            ? `
+                <a
+                    class="wdra-contact-link"
+                    href="tel:${whEscape(phone)}"
+                >
+                    ${whEscape(contact)}
+                </a>
+            `
+            : whEscape(
+                whText(
+                    "whNotAvailable",
+                    "उपलब्ध नहीं"
+                )
+            );
+
+
+    const remarks =
+        String(
+            warehouse.remarks ||
+            ""
+        ).trim();
+
+
+    card.innerHTML = `
+
+        <div class="wdra-card-body">
+
+            <div class="wdra-card-top">
+
+                <span class="wdra-card-icon">
+                    🏬
+                </span>
+
+                <span
+                    class="wdra-status ${
+                        active
+                            ? "active"
+                            : "inactive"
+                    }"
+                >
+                    ${whEscape(
+                        statusText
+                    )}
+                </span>
+
+            </div>
+
+
+            <span class="wdra-card-label">
+
+                ${whEscape(
+                    whText(
+                        "whWarehouseName",
+                        "गोदाम का नाम"
+                    )
+                )}
+
+            </span>
+
+
+            <h3 class="wdra-warehouse-name">
+
+                ${whEscape(
+                    warehouse.warehouseName ||
+                    whText(
+                        "whNotAvailable",
+                        "उपलब्ध नहीं"
+                    )
+                )}
+
+            </h3>
+
+
+            <div class="wdra-location">
+
+                <span class="wdra-location-icon">
+                    📍
+                </span>
+
+                <span>
+                    ${whEscape(
+                        location
+                    )}
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="wdra-details-button wdra-open-details"
+            >
+
+                ${whEscape(
+                    whText(
+                        "whViewDetails",
+                        "विवरण देखें"
+                    )
+                )}
+
+            </button>
+
+
+            <div class="wdra-details hidden">
+
+
+                <div class="wdra-detail-block">
+
+                    <span class="wdra-card-label">
+
+                        ${whEscape(
+                            whText(
+                                "whWarehouseman",
+                                "वेयरहाउस संचालक का नाम"
+                            )
+                        )}
+
+                    </span>
+
+                    <div class="wdra-detail-value">
+
+                        ${whEscape(
+                            warehouse.whmName ||
+                            whText(
+                                "whNotAvailable",
+                                "उपलब्ध नहीं"
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="wdra-detail-block">
+
+                    <span class="wdra-card-label">
+
+                        ${whEscape(
+                            whText(
+                                "whWarehouseId",
+                                "वेयरहाउस ID"
+                            )
+                        )}
+
+                    </span>
+
+                    <div class="wdra-detail-value">
+
+                        ${whEscape(
+                            warehouse.warehouseId ||
+                            "—"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="wdra-info-row">
+
+
+                    <div class="wdra-info-box">
+
+                        <span class="wdra-card-label">
+
+                            ${whEscape(
+                                whText(
+                                    "whCapacity",
+                                    "क्षमता"
+                                )
+                            )}
+
+                        </span>
+
+                        <strong>
+
+                            ${whEscape(
+                                warehouse.capacityMT ||
+                                "—"
+                            )}
+
+                            ${whEscape(
+                                whText(
+                                    "whMT",
+                                    "मीट्रिक टन"
+                                )
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="wdra-info-box">
+
+                        <span class="wdra-card-label">
+
+                            ${whEscape(
+                                whText(
+                                    "whContact",
+                                    "संपर्क नंबर"
+                                )
+                            )}
+
+                        </span>
+
+                        <strong>
+                            ${contactHTML}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="wdra-registration">
+
+                    <div class="wdra-registration-title">
+
+                        ${whEscape(
+                            whText(
+                                "whRegistrationDetails",
+                                "पंजीकरण विवरण"
+                            )
+                        )}
+
+                    </div>
+
+
+                    <div class="wdra-registration-row">
+
+                        <span>
+
+                            ${whEscape(
+                                whText(
+                                    "whRegistrationDate",
+                                    "पंजीकरण दिनांक"
+                                )
+                            )}
+
+                        </span>
+
+                        <strong>
+
+                            ${whEscape(
+                                warehouse.registrationDate ||
+                                "—"
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="wdra-registration-row">
+
+                        <span>
+
+                            ${whEscape(
+                                whText(
+                                    "whValidUpto",
+                                    "पंजीकरण वैधता"
+                                )
+                            )}
+
+                        </span>
+
+                        <strong>
+
+                            ${whEscape(
+                                warehouse.validUpto ||
+                                "—"
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    ${
+                        remarks
+                            ? `
+                                <div class="wdra-remark">
+
+                                    <strong>
+
+                                        ${whEscape(
+                                            whText(
+                                                "whRemarks",
+                                                "टिप्पणी"
+                                            )
+                                        )}:
+
+                                    </strong>
+
+                                    ${whEscape(
+                                        remarks
+                                    )}
+
+                                </div>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="wdra-details-button wdra-hide-details"
+                >
+
+                    ${whEscape(
+                        whText(
+                            "whHideDetails",
+                            "विवरण छिपाएँ"
+                        )
+                    )}
+
+                </button>
+
+
+            </div>
+
+        </div>
+    `;
+
+
+    const open =
+        card.querySelector(
+            ".wdra-open-details"
+        );
+
+
+    const details =
+        card.querySelector(
+            ".wdra-details"
+        );
+
+
+    const hide =
+        card.querySelector(
+            ".wdra-hide-details"
+        );
+
+
+    open.onclick =
+        () => {
+
+            open.style.display =
+                "none";
+
+
+            details.classList.remove(
+                "hidden"
+            );
+        };
+
+
+    hide.onclick =
+        () => {
+
+            details.classList.add(
+                "hidden"
+            );
+
+
+            open.style.display =
+                "";
+        };
+
+
+    return card;
+}
+
+
+// ==========================================================
+// NEXT 12
+// ==========================================================
+
+function renderNextWarehouses() {
+
+    const grid =
+        whGrid();
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    const start =
+        wdraVisibleCount;
+
+
+    const end =
+        Math.min(
+            start +
+            WDRA_PAGE_SIZE,
+
+            wdraWarehouses.length
+        );
+
+
+    const batch =
+        wdraWarehouses.slice(
+            start,
+            end
+        );
+
+
+    batch.forEach(
+        warehouse => {
+
+            grid.appendChild(
+                createWDRAWarehouseCard(
+                    warehouse
+                )
+            );
+        }
+    );
+
+
+    wdraVisibleCount =
+        end;
+
+
+    whLoadWrap()
+        ?.classList
+        .toggle(
+            "hidden",
+
+            wdraVisibleCount >=
+            wdraWarehouses.length
+        );
+}
+
+
+// ==========================================================
+// LANGUAGE RE-RENDER
+// ==========================================================
+
+function rerenderWDRAWarehouses() {
+
+    const grid =
+        whGrid();
+
+
+    if (
+        !grid ||
+        !Array.isArray(
+            wdraWarehouses
+        ) ||
+        !wdraWarehouses.length
+    ) {
+        return;
+    }
+
+
+    const visible =
+        Math.min(
+            wdraVisibleCount,
+            wdraWarehouses.length
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    for (
+        let i = 0;
+        i < visible;
+        i++
+    ) {
+
+        grid.appendChild(
+            createWDRAWarehouseCard(
+                wdraWarehouses[i]
+            )
+        );
+    }
+
+
+    const loadButton =
+        document.getElementById(
+            "warehouseLoadMore"
+        );
+
+
+    if (loadButton) {
+
+        loadButton.textContent =
+            whText(
+                "whLoadMore",
+                "और गोदाम दिखाएँ"
+            );
+    }
+
+
+    whLoadWrap()
+        ?.classList
+        .toggle(
+            "hidden",
+
+            visible >=
+            wdraWarehouses.length
+        );
+
+
+    const date =
+        document.getElementById(
+            "warehouseUpdatedDate"
+        );
+
+
+    if (date) {
+
+        date.textContent =
+            `${whText(
+                "whCheckedOn",
+                "जाँच दिनांक"
+            )}: ${whToday()}`;
+    }
+}
+
+
+// ==========================================================
+// FETCH WAREHOUSES
+// ==========================================================
+
+async function loadWDRAWarehouses(
+    state,
+    district
+) {
+
+    if (
+        wdraRequestController
+    ) {
+
+        wdraRequestController
+            .abort();
+    }
+
+
+    wdraRequestController =
+        new AbortController();
+
+
+    whLoading();
+
+
+    document
+        .getElementById(
+            "warehouseResultHead"
+        )
+        ?.classList
+        .add("hidden");
+
+
+    try {
+
+        const url =
+            `${WDRA_BACKEND}/api/wdra-warehouses` +
+            `?state=${encodeURIComponent(state)}` +
+            `&district=${encodeURIComponent(district)}`;
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache:
+                        "no-store",
+
+                    signal:
+                        wdraRequestController.signal
+                }
+            );
+
+
+        const json =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            json?.success !== true
+        ) {
+
+            throw new Error(
+                json?.message ||
+                "WDRA failed"
+            );
+        }
+
+
+        wdraWarehouses =
+            Array.isArray(
+                json.warehouses
+            )
+                ? json.warehouses
+                : [];
+
+
+        wdraVisibleCount =
+            0;
+
+
+        if (
+            !wdraWarehouses.length
+        ) {
+
+            whNoData();
+            return;
+        }
+
+
+        /*
+         * Extra frontend safety:
+         * active records remain first.
+         */
+        wdraWarehouses.sort(
+            (a, b) => {
+
+                const aActive =
+                    String(
+                        a.status || ""
+                    )
+                        .trim()
+                        .toLowerCase() ===
+                    "active";
+
+
+                const bActive =
+                    String(
+                        b.status || ""
+                    )
+                        .trim()
+                        .toLowerCase() ===
+                    "active";
+
+
+                if (
+                    aActive &&
+                    !bActive
+                ) {
+                    return -1;
+                }
+
+
+                if (
+                    !aActive &&
+                    bActive
+                ) {
+                    return 1;
+                }
+
+
+                return String(
+                    a.warehouseName ||
+                    ""
+                ).localeCompare(
+                    String(
+                        b.warehouseName ||
+                        ""
+                    ),
+                    "en",
+                    {
+                        sensitivity:
+                            "base"
+                    }
+                );
+            }
+        );
+
+
+        const grid =
+            whGrid();
+
+
+        if (grid) {
+            grid.innerHTML =
+                "";
+        }
+
+
+        const title =
+            document.getElementById(
+                "warehouseLocationTitle"
+            );
+
+
+        if (title) {
+
+            title.textContent =
+                `${district}, ${json.state || state}`;
+        }
+
+
+        const date =
+            document.getElementById(
+                "warehouseUpdatedDate"
+            );
+
+
+        if (date) {
+
+            date.textContent =
+                `${whText(
+                    "whCheckedOn",
+                    "जाँच दिनांक"
+                )}: ${whToday()}`;
+        }
+
+
+        document
+            .getElementById(
+                "warehouseResultHead"
+            )
+            ?.classList
+            .remove("hidden");
+
+
+        renderNextWarehouses();
+
+
+    } catch (error) {
+
+        if (
+            error?.name ===
+            "AbortError"
+        ) {
+            return;
+        }
+
+
+        console.error(
+            "WDRA warehouses:",
+            error
+        );
+
+
+        wdraWarehouses =
+            [];
+
+        wdraVisibleCount =
+            0;
+
+
+        whError();
+    }
+}
+
+
+// ==========================================================
+// INITIALIZE WDRA
+// ==========================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+
+    async () => {
+
+        const stateSelect =
+            document.getElementById(
+                "warehouseState"
+            );
+
+
+        const districtSelect =
+            document.getElementById(
+                "warehouseDistrict"
+            );
+
+
+        const loadMore =
+            document.getElementById(
+                "warehouseLoadMore"
+            );
+
+
+        if (
+            !stateSelect ||
+            !districtSelect
+        ) {
+            return;
+        }
+
+
+        const createOption =
+            (
+                value,
+                label
+            ) => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    value;
+
+
+                option.textContent =
+                    label;
+
+
+                return option;
+            };
+
+
+        // ==================================================
+        // INITIAL SELECTS
+        // ==================================================
+
+        stateSelect.innerHTML =
+            "";
+
+
+        stateSelect.appendChild(
+            createOption(
+                "",
+                `-- ${whText(
+                    "whChooseState",
+                    "राज्य चुनें"
+                )} --`
+            )
+        );
+
+
+        stateSelect.disabled =
+            true;
+
+
+        districtSelect.innerHTML =
+            "";
+
+
+        districtSelect.appendChild(
+            createOption(
+                "",
+                `-- ${whText(
+                    "whChooseStateFirst",
+                    "पहले राज्य चुनें"
+                )} --`
+            )
+        );
+
+
+        districtSelect.disabled =
+            true;
+
+
+        whWelcome();
+
+
+        // ==================================================
+        // LOAD STATES DIRECTLY FROM WDRA
+        // ==================================================
+
+        try {
+
+            const response =
+                await fetch(
+                    `${WDRA_BACKEND}/api/wdra-states`,
+                    {
+                        cache:
+                            "no-store"
+                    }
+                );
+
+
+            const json =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                json?.success !== true
+            ) {
+
+                throw new Error(
+                    json?.message ||
+                    "WDRA states failed"
+                );
+            }
+
+
+            const states =
+                Array.isArray(
+                    json.states
+                )
+                    ? json.states
+                    : [];
+
+
+            states.forEach(
+                state => {
+
+                    stateSelect
+                        .appendChild(
+                            createOption(
+                                state.name,
+                                state.name
+                            )
+                        );
+                }
+            );
+
+
+            stateSelect.disabled =
+                false;
+
+
+        } catch (error) {
+
+            console.error(
+                "WDRA states:",
+                error
+            );
+
+
+            stateSelect.innerHTML =
+                "";
+
+
+            stateSelect.appendChild(
+                createOption(
+                    "",
+                    `-- ${whText(
+                        "whStatesFailed",
+                        "राज्य लोड नहीं हो सके"
+                    )} --`
+                )
+            );
+
+
+            whError();
+
+            return;
+        }
+
+
+        // ==================================================
+        // STATE CHANGE → LOAD ACTUAL WDRA DISTRICTS
+        // ==================================================
+
+        stateSelect.addEventListener(
+            "change",
+
+            async () => {
+
+                const state =
+                    stateSelect.value;
+
+
+                if (
+                    wdraDistrictController
+                ) {
+
+                    wdraDistrictController
+                        .abort();
+                }
+
+
+                wdraWarehouses =
+                    [];
+
+                wdraVisibleCount =
+                    0;
+
+
+                whLoadWrap()
+                    ?.classList
+                    .add("hidden");
+
+
+                document
+                    .getElementById(
+                        "warehouseResultHead"
+                    )
+                    ?.classList
+                    .add("hidden");
+
+
+                districtSelect.innerHTML =
+                    "";
+
+
+                if (!state) {
+
+                    districtSelect
+                        .appendChild(
+                            createOption(
+                                "",
+                                `-- ${whText(
+                                    "whChooseStateFirst",
+                                    "पहले राज्य चुनें"
+                                )} --`
+                            )
+                        );
+
+
+                    districtSelect.disabled =
+                        true;
+
+
+                    whWelcome();
+
+                    return;
+                }
+
+
+                districtSelect
+                    .appendChild(
+                        createOption(
+                            "",
+                            `-- ${whText(
+                                "whLoadingDistricts",
+                                "जिले लोड हो रहे हैं..."
+                            )} --`
+                        )
+                    );
+
+
+                districtSelect.disabled =
+                    true;
+
+
+                whLoading(
+                    true
+                );
+
+
+                wdraDistrictController =
+                    new AbortController();
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${WDRA_BACKEND}/api/wdra-districts` +
+                            `?state=${encodeURIComponent(state)}`,
+                            {
+                                cache:
+                                    "no-store",
+
+                                signal:
+                                    wdraDistrictController.signal
+                            }
+                        );
+
+
+                    const json =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        json?.success !== true
+                    ) {
+
+                        throw new Error(
+                            json?.message ||
+                            "WDRA districts failed"
+                        );
+                    }
+
+
+                    const districts =
+                        Array.isArray(
+                            json.districts
+                        )
+                            ? json.districts
+                            : [];
+
+
+                    districtSelect.innerHTML =
+                        "";
+
+
+                    districtSelect
+                        .appendChild(
+                            createOption(
+                                "",
+                                `-- ${whText(
+                                    "whChooseDistrict",
+                                    "जिला चुनें"
+                                )} --`
+                            )
+                        );
+
+
+                    districts.forEach(
+                        district => {
+
+                            districtSelect
+                                .appendChild(
+                                    createOption(
+                                        district,
+                                        district
+                                    )
+                                );
+                        }
+                    );
+
+
+                    /*
+                     * Backend normally already supplies
+                     * State/UT fallback.
+                     */
+                    if (
+                        !districts.length
+                    ) {
+
+                        districtSelect
+                            .appendChild(
+                                createOption(
+                                    state,
+                                    state
+                                )
+                            );
+                    }
+
+
+                    districtSelect.disabled =
+                        false;
+
+
+                    whWelcome();
+
+
+                } catch (error) {
+
+                    if (
+                        error?.name ===
+                        "AbortError"
+                    ) {
+                        return;
+                    }
+
+
+                    console.error(
+                        "WDRA districts:",
+                        error
+                    );
+
+
+                    districtSelect.innerHTML =
+                        "";
+
+
+                    districtSelect
+                        .appendChild(
+                            createOption(
+                                "",
+                                `-- ${whText(
+                                    "whDistrictsFailed",
+                                    "जिले लोड नहीं हो सके"
+                                )} --`
+                            )
+                        );
+
+
+                    districtSelect.disabled =
+                        true;
+
+
+                    whError();
+                }
+            }
+        );
+
+
+        // ==================================================
+        // DISTRICT CHANGE
+        // ==================================================
+
+        districtSelect.addEventListener(
+            "change",
+
+            () => {
+
+                const state =
+                    stateSelect.value;
+
+
+                const district =
+                    districtSelect.value;
+
+
+                if (
+                    !state ||
+                    !district
+                ) {
+
+                    whWelcome();
+                    return;
+                }
+
+
+                loadWDRAWarehouses(
+                    state,
+                    district
+                );
+            }
+        );
+
+
+        // ==================================================
+        // LOAD MORE = NEXT 12
+        // ==================================================
+
+        loadMore?.addEventListener(
+            "click",
+
+            () => {
+
+                renderNextWarehouses();
+            }
+        );
+    }
+);
+
+
+
 function renderMarketplace(){
   let sq=$("searchCrop"),gf=$("gradeFilter"),sp=$("sortPrice"),mg=$("marketplaceGrid");
   if(!mg)return;
@@ -1467,22 +3223,6 @@ function renderMyListings(){
   }).join(""):`<div class="form-card">${lang==="hi"?"अभी आपकी कोई लिस्टिंग नहीं है।":lang==="mr"?"सध्या तुमची कोणतीही लिस्टिंग नाही.":"You have no active listings yet."}</div>`;
 }
 
-function renderWarehouses(){
-  let grid=$("warehouseGrid");
-  if(!grid)return;
-    grid.innerHTML=starterWarehouses.map(w=>`
-        <div class="warehouse-card">
-            <h3>${lang==="hi"?w.hi:lang==="mr"?w.mr:w.name}</h3>
-            <div class="warehouse-meta">📍 ${w.location}</div>
-            <div class="warehouse-details">
-                <div><b>${t[lang].whCapacity||"Capacity"}:</b> ${w.capacity}</div>
-                <div><b>${t[lang].whAvailable||"Available"}:</b> <span style="color:var(--g);font-weight:700">${w.available}</span></div>
-                <div><b>${t[lang].whAccepted||"Accepted Crops"}:</b> ${lang==="hi"?w.cropsHi:lang==="mr"?w.cropsMr:w.crops}</div>
-            </div>
-            <div class="warehouse-price">${w.rate}</div>
-        </div>
-    `).join("");
-}
 
 let weatherRequestId=0;
 let weatherLoadedKey="";
@@ -2125,27 +3865,69 @@ let ps=$("profileState");if(ps)ps.onchange=e=>populateProfileDistricts(e.target.
 
 let setBtn=$("settingsBtn");if(setBtn)setBtn.onclick=()=>openModal("settingsModal");
 
-let langBtn=$("languageBtn");
-if(langBtn)langBtn.onclick=()=>{
-  if(lang==="en") lang="hi";
-  else if(lang==="hi") lang="mr";
-  else lang="en";
-  localStorage.setItem("bhavsetu-lang",lang);
-  applyLang();populateStates();populateProfileStates();
-    const mandiGrid=$("priceGrid");
-    const mandiLocation=getBhavSetuMandiLocation();
-    if(mandiGrid&&(!mandiLocation.state||!mandiLocation.district)){
-        mandiGrid.innerHTML=`<p class="empty-state">${t[lang].mandiNeedLocation}</p>`;
-    }else if(mandiGrid){
-        bhavSetuFetchLiveMandiPrices();
+let langBtn = $("languageBtn");
+
+if (langBtn) {
+  langBtn.onclick = () => {
+
+    // Change language
+    if (lang === "en") lang = "hi";
+    else if (lang === "hi") lang = "mr";
+    else lang = "en";
+
+    localStorage.setItem("bhavsetu-lang", lang);
+
+    // Apply normal BhavSetu translations
+    applyLang();
+
+    // Existing location/profile dropdowns
+    populateStates();
+    populateProfileStates();
+
+    // Re-render current Mandi data in selected language
+    if (
+      typeof mandiSelection !== "undefined" &&
+      mandiSelection &&
+      typeof bhavSetuFetchLiveMandiPrices === "function"
+    ) {
+      bhavSetuFetchLiveMandiPrices();
     }
-    if(cropQualityData && cph?.files?.length) sn?.click();
-    if(diseaseAnalysisData && diseasePhoto?.files?.length) diseaseScanButton?.click();
-  if(user){
-    let sl=$("sellerLocation");
-    if(sl) sl.value = (user.village ? user.village + ", " : "") + user.district + ", " + user.state;
-  }
-};
+
+    // Re-render WDRA warehouse cards in selected language
+    if (typeof rerenderWDRAWarehouses === "function") {
+      rerenderWDRAWarehouses();
+    }
+
+    // Existing crop quality feature
+    if (
+      cropQualityData &&
+      cph?.files?.length
+    ) {
+      sn?.click();
+    }
+
+    // Existing disease feature
+    if (
+      diseaseAnalysisData &&
+      diseasePhoto?.files?.length
+    ) {
+      diseaseScanButton?.click();
+    }
+
+    // Existing seller location
+    if (user) {
+      let sl = $("sellerLocation");
+
+      if (sl) {
+        sl.value =
+          (user.village ? user.village + ", " : "") +
+          user.district +
+          ", " +
+          user.state;
+      }
+    }
+  };
+}
 let setLang=$("settingLanguage");if(setLang)setLang.onclick=()=>{$("languageBtn").click()};
 
 let thToggle=$("themeToggle");
@@ -2705,4 +4487,4 @@ function simulateCashfreeProcessing(id, orderId){
 }
 
 if(localStorage.getItem("bhavsetu-theme")==="dark")document.body.classList.add("dark");
-populateStates();populateProfileStates();applyLang();updateProfileUI();if (typeof renderPrices === "function") {renderPrices();};renderMarketplace();renderMyListings();renderWarehouses();renderWeather();updateCart();
+populateStates();populateProfileStates();applyLang();updateProfileUI();if (typeof renderPrices === "function") {renderPrices();};renderMarketplace();renderMyListings();renderWeather();updateCart();
