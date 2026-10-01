@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const axios = require('axios');
+const cheerio = require('cheerio');
 const path = require('path');
 const User = require('./models/user');
 
@@ -108,15 +109,6 @@ app.get('/api/get-profile/:email', async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
-
-// Server Listen on Port 5000
-app.listen(5000, () => {
-    console.log('Server is running on port 5000 🚀');
-});
-app.get('/', (req, res) => {
-    res.send('Bhavsetu Server is running!');
-});
-
 
 
 
@@ -1001,6 +993,1206 @@ app.get(
 
 
 
+
+// ==========================================================
+// BHAVSETU WDRA REGISTERED WAREHOUSES
+// ==========================================================
+
+const WDRA_URL = "https://wdra.gov.in/registered-wh-public";
+
+const WDRA_PORTLET =
+    "in_gov_wdra_warehouse_publiclist_portlet_WarehousePubliclistPortlet_INSTANCE_faio";
+
+const WDRA_NS =
+    "_in_gov_wdra_warehouse_publiclist_portlet_WarehousePubliclistPortlet_INSTANCE_faio_";
+
+const WDRA_HEADERS = {
+    "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36",
+
+    accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+
+    "accept-language":
+        "en-US,en;q=0.9"
+};
+
+
+// ==========================================================
+// CACHE
+// ==========================================================
+
+const WDRA_CACHE_TIME =
+    30 * 60 * 1000;
+
+const wdraCache =
+    new Map();
+
+const wdraPending =
+    new Map();
+
+
+// ==========================================================
+// HELPERS
+// ==========================================================
+
+function wdraClean(value) {
+    return String(value ?? "")
+        .replace(/\u00a0/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+
+function wdraKey(value) {
+    return wdraClean(value)
+        .toLowerCase();
+}
+
+
+function wdraCookies(response) {
+
+    if (
+        typeof response.headers.getSetCookie ===
+        "function"
+    ) {
+        return response.headers
+            .getSetCookie()
+            .map(
+                cookie =>
+                    cookie.split(";")[0]
+            )
+            .join("; ");
+    }
+
+
+    const raw =
+        response.headers.get(
+            "set-cookie"
+        );
+
+
+    if (!raw) {
+        return "";
+    }
+
+
+    return raw
+        .split(/,(?=[^;,]+=)/)
+        .map(
+            cookie =>
+                cookie.split(";")[0]
+        )
+        .join("; ");
+}
+
+
+// ==========================================================
+// OPEN WDRA PAGE
+// Gets:
+//
+// - fresh session
+// - p_auth
+// - state names + WDRA IDs
+// - report action URL
+// ==========================================================
+
+async function wdraOpenPage() {
+
+    const response =
+        await fetch(
+            WDRA_URL,
+            {
+                headers:
+                    WDRA_HEADERS,
+
+                redirect:
+                    "follow"
+            }
+        );
+
+
+    if (!response.ok) {
+        throw new Error(
+            `WDRA page HTTP ${response.status}`
+        );
+    }
+
+
+    const html =
+        await response.text();
+
+
+    const cookies =
+        wdraCookies(
+            response
+        );
+
+
+    const $ =
+        cheerio.load(
+            html
+        );
+
+
+    // ------------------------------------------------------
+    // p_auth
+    // ------------------------------------------------------
+
+    let pAuth =
+        $('input[name="p_auth"]')
+            .first()
+            .attr("value") ||
+        "";
+
+
+    if (!pAuth) {
+
+        const match =
+            html.match(
+                /[?&]p_auth=([A-Za-z0-9_-]+)/
+            );
+
+
+        if (match) {
+            pAuth =
+                match[1];
+        }
+    }
+
+
+    // ------------------------------------------------------
+    // STATES
+    // ------------------------------------------------------
+
+    let stateSelect =
+        $(
+            `select[name="${WDRA_NS}selectStateName"]`
+        );
+
+
+    if (
+        !stateSelect.length
+    ) {
+
+        stateSelect =
+            $(
+                'select[name$="selectStateName"]'
+            ).first();
+    }
+
+
+    const states =
+        [];
+
+
+    stateSelect
+        .find("option")
+        .each(
+            (_, option) => {
+
+                const id =
+                    wdraClean(
+                        $(option)
+                            .attr("value")
+                    );
+
+
+                const name =
+                    wdraClean(
+                        $(option)
+                            .text()
+                    );
+
+
+                if (
+                    !id ||
+                    !name ||
+                    /select/i.test(name)
+                ) {
+                    return;
+                }
+
+
+                states.push({
+                    id,
+                    name
+                });
+            }
+        );
+
+
+    // ------------------------------------------------------
+    // ACTION URL
+    // ------------------------------------------------------
+
+    let action =
+        $(
+            'form[action*="processWarehouseListReport"]'
+        )
+            .first()
+            .attr("action") ||
+        "";
+
+
+    if (!action) {
+
+        action =
+            `${WDRA_URL}` +
+            `?p_p_id=${encodeURIComponent(WDRA_PORTLET)}` +
+            `&p_p_lifecycle=1` +
+            `&p_p_state=normal` +
+            `&p_p_mode=view` +
+            `&${WDRA_NS}javax.portlet.action=processWarehouseListReport`;
+    }
+
+
+    if (
+        action.startsWith("/")
+    ) {
+
+        action =
+            new URL(
+                action,
+                WDRA_URL
+            ).href;
+    }
+
+
+    try {
+
+        const url =
+            new URL(action);
+
+
+        if (!pAuth) {
+
+            pAuth =
+                url.searchParams.get(
+                    "p_auth"
+                ) ||
+                "";
+        }
+
+    } catch (_) {}
+
+
+    return {
+        cookies,
+        pAuth,
+        states,
+        action
+    };
+}
+
+
+// ==========================================================
+// STATE ALIASES
+//
+// Only used when BhavSetu sends an alternate state spelling.
+// Returned/displayed state still comes from WDRA.
+// ==========================================================
+
+function wdraStateKeys(name) {
+
+    const value =
+        wdraKey(name);
+
+
+    const aliases = {
+
+        "andaman and nicobar islands":
+            [
+                "andaman and nicobar"
+            ],
+
+        "andaman and nicobar":
+            [
+                "andaman and nicobar islands"
+            ],
+
+        "chhattisgarh":
+            [
+                "chattisgarh"
+            ],
+
+        "chattisgarh":
+            [
+                "chhattisgarh"
+            ],
+
+        "puducherry":
+            [
+                "pondicherry"
+            ],
+
+        "pondicherry":
+            [
+                "puducherry"
+            ],
+
+        "uttarakhand":
+            [
+                "uttrakhand"
+            ],
+
+        "uttrakhand":
+            [
+                "uttarakhand"
+            ],
+
+        "nct of delhi":
+            [
+                "delhi"
+            ],
+
+        "delhi":
+            [
+                "nct of delhi"
+            ],
+
+        "dadra and nagar haveli and daman and diu":
+            [
+                "dadra & nagar haveli and daman & diu"
+            ]
+    };
+
+
+    return [
+        value,
+        ...(aliases[value] || [])
+    ];
+}
+
+
+function wdraFindState(
+    states,
+    requested
+) {
+
+    const accepted =
+        wdraStateKeys(
+            requested
+        );
+
+
+    return (
+        states || []
+    ).find(
+        state =>
+            accepted.includes(
+                wdraKey(
+                    state.name
+                )
+            )
+    );
+}
+
+
+// ==========================================================
+// STATES API
+// Exact state options currently provided by WDRA.
+// ==========================================================
+
+app.get(
+    "/api/wdra-states",
+    async (req, res) => {
+
+        res.set(
+            "Cache-Control",
+            "no-store"
+        );
+
+
+        try {
+
+            const session =
+                await wdraOpenPage();
+
+
+            const states =
+                (
+                    session.states ||
+                    []
+                )
+                    .filter(
+                        state =>
+                            state.id &&
+                            state.name
+                    )
+                    .map(
+                        state => ({
+                            id:
+                                String(
+                                    state.id
+                                ),
+
+                            name:
+                                state.name
+                        })
+                    );
+
+
+            return res.json({
+                success:
+                    true,
+
+                states
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "WDRA states:",
+                error.message
+            );
+
+
+            return res
+                .status(502)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "WDRA states could not be loaded"
+                });
+        }
+    }
+);
+
+
+// ==========================================================
+// FETCH COMPLETE STATE REPORT
+// ==========================================================
+
+async function wdraFetchState(
+    requestedState
+) {
+
+    const cacheKey =
+        wdraKey(
+            requestedState
+        );
+
+
+    // ------------------------------------------------------
+    // CACHE
+    // ------------------------------------------------------
+
+    const cached =
+        wdraCache.get(
+            cacheKey
+        );
+
+
+    if (
+        cached &&
+        Date.now() -
+        cached.time <
+        WDRA_CACHE_TIME
+    ) {
+
+        return {
+            ...cached.data,
+            cached:
+                true
+        };
+    }
+
+
+    // ------------------------------------------------------
+    // DEDUPLICATE SAME STATE REQUEST
+    // ------------------------------------------------------
+
+    if (
+        wdraPending.has(
+            cacheKey
+        )
+    ) {
+
+        return wdraPending.get(
+            cacheKey
+        );
+    }
+
+
+    const task =
+        (async () => {
+
+            const session =
+                await wdraOpenPage();
+
+
+            const state =
+                wdraFindState(
+                    session.states,
+                    requestedState
+                );
+
+
+            if (!state) {
+
+                throw new Error(
+                    `WDRA state not found: ${requestedState}`
+                );
+            }
+
+
+            // ------------------------------------------------
+            // FORM DATA
+            // ------------------------------------------------
+
+            const body =
+                new URLSearchParams();
+
+
+            body.set(
+                "p_p_id",
+                WDRA_PORTLET
+            );
+
+
+            body.set(
+                "p_p_lifecycle",
+                "1"
+            );
+
+
+            body.set(
+                "p_p_state",
+                "normal"
+            );
+
+
+            body.set(
+                "p_p_mode",
+                "view"
+            );
+
+
+            body.set(
+                `${WDRA_NS}javax.portlet.action`,
+                "processWarehouseListReport"
+            );
+
+
+            body.set(
+                `${WDRA_NS}formDate`,
+                String(
+                    Date.now()
+                )
+            );
+
+
+            body.set(
+                `${WDRA_NS}selectStateName`,
+                state.id
+            );
+
+
+            body.set(
+                `${WDRA_NS}GoButton`,
+                ""
+            );
+
+
+            if (
+                session.pAuth
+            ) {
+
+                body.set(
+                    "p_auth",
+                    session.pAuth
+                );
+            }
+
+
+            // ------------------------------------------------
+            // POST REPORT REQUEST
+            // ------------------------------------------------
+
+            const response =
+                await fetch(
+                    session.action,
+                    {
+                        method:
+                            "POST",
+
+                        headers: {
+                            ...WDRA_HEADERS,
+
+                            "content-type":
+                                "application/x-www-form-urlencoded",
+
+                            origin:
+                                "https://wdra.gov.in",
+
+                            referer:
+                                WDRA_URL,
+
+                            ...(session.cookies
+                                ? {
+                                    cookie:
+                                        session.cookies
+                                }
+                                : {})
+                        },
+
+                        body:
+                            body.toString(),
+
+                        redirect:
+                            "follow"
+                    }
+                );
+
+
+            const html =
+                await response.text();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    `WDRA report HTTP ${response.status}`
+                );
+            }
+
+
+            // ------------------------------------------------
+            // PARSE TABLE
+            // ------------------------------------------------
+
+            const $ =
+                cheerio.load(
+                    html
+                );
+
+
+            const warehouses =
+                [];
+
+
+            $(
+                "#resultTableId tbody tr"
+            ).each(
+                (_, row) => {
+
+                    const cells =
+                        $(row)
+                            .find("td")
+                            .map(
+                                (_, td) =>
+                                    wdraClean(
+                                        $(td)
+                                            .text()
+                                    )
+                            )
+                            .get();
+
+
+                    if (
+                        cells.length <
+                        11
+                    ) {
+                        return;
+                    }
+
+
+                    const stateName =
+                        cells[5] ||
+                        state.name;
+
+
+                    /*
+                     * If WDRA has no district,
+                     * use State/UT name.
+                     */
+                    const districtName =
+                        cells[4] ||
+                        stateName;
+
+
+                    warehouses.push({
+
+                        whmName:
+                            cells[0] || "",
+
+                        warehouseName:
+                            cells[1] || "",
+
+                        warehouseId:
+                            cells[2] || "",
+
+                        address:
+                            cells[3] || "",
+
+                        district:
+                            districtName,
+
+                        state:
+                            stateName,
+
+                        capacityMT:
+                            cells[6] || "",
+
+                        registrationDate:
+                            cells[7] || "",
+
+                        validUpto:
+                            cells[8] || "",
+
+                        contactNo:
+                            cells[9] || "",
+
+                        status:
+                            cells[10] || "",
+
+                        remarks:
+                            cells[11] || ""
+                    });
+                }
+            );
+
+
+            const data = {
+
+                state:
+                    state.name,
+
+                stateId:
+                    state.id,
+
+                fetchedAt:
+                    new Date()
+                        .toISOString(),
+
+                warehouses
+            };
+
+
+            /*
+             * Don't replace a good cache
+             * with unexpected empty HTML.
+             */
+            if (
+                warehouses.length
+            ) {
+
+                wdraCache.set(
+                    cacheKey,
+                    {
+                        time:
+                            Date.now(),
+
+                        data
+                    }
+                );
+            }
+
+
+            return {
+                ...data,
+
+                cached:
+                    false
+            };
+        })();
+
+
+    wdraPending.set(
+        cacheKey,
+        task
+    );
+
+
+    try {
+
+        return await task;
+
+    } finally {
+
+        wdraPending.delete(
+            cacheKey
+        );
+    }
+}
+
+
+// ==========================================================
+// DISTRICTS API
+//
+// District names come directly from actual WDRA warehouse
+// records for the selected state.
+// ==========================================================
+
+app.get(
+    "/api/wdra-districts",
+    async (req, res) => {
+
+        res.set(
+            "Cache-Control",
+            "no-store"
+        );
+
+
+        const state =
+            wdraClean(
+                req.query.state
+            );
+
+
+        if (!state) {
+
+            return res
+                .status(400)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "State is required"
+                });
+        }
+
+
+        try {
+
+            const report =
+                await wdraFetchState(
+                    state
+                );
+
+
+            const districtMap =
+                new Map();
+
+
+            for (
+                const warehouse of
+                report.warehouses || []
+            ) {
+
+                const district =
+                    wdraClean(
+                        warehouse.district
+                    ) ||
+                    wdraClean(
+                        warehouse.state
+                    ) ||
+                    wdraClean(
+                        report.state
+                    );
+
+
+                if (!district) {
+                    continue;
+                }
+
+
+                const key =
+                    wdraKey(
+                        district
+                    );
+
+
+                if (
+                    !districtMap.has(
+                        key
+                    )
+                ) {
+
+                    districtMap.set(
+                        key,
+                        district
+                    );
+                }
+            }
+
+
+            let districts =
+                [
+                    ...districtMap.values()
+                ];
+
+
+            districts.sort(
+                (a, b) =>
+                    a.localeCompare(
+                        b,
+                        "en",
+                        {
+                            sensitivity:
+                                "base"
+                        }
+                    )
+            );
+
+
+            /*
+             * Rare State/UT fallback.
+             */
+            if (
+                !districts.length
+            ) {
+
+                districts = [
+                    report.state
+                ];
+            }
+
+
+            return res.json({
+
+                success:
+                    true,
+
+                state:
+                    report.state,
+
+                cached:
+                    report.cached,
+
+                districts
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "WDRA districts:",
+                error.message
+            );
+
+
+            return res
+                .status(502)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "WDRA districts could not be loaded"
+                });
+        }
+    }
+);
+
+
+// ==========================================================
+// WAREHOUSES API
+//
+// Active first → all remaining statuses afterwards.
+// No warehouse is intentionally hidden.
+// ==========================================================
+
+app.get(
+    "/api/wdra-warehouses",
+    async (req, res) => {
+
+        res.set(
+            "Cache-Control",
+            "no-store"
+        );
+
+
+        const state =
+            wdraClean(
+                req.query.state
+            );
+
+
+        const district =
+            wdraClean(
+                req.query.district
+            );
+
+
+        if (
+            !state ||
+            !district
+        ) {
+
+            return res
+                .status(400)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "State and district are required"
+                });
+        }
+
+
+        try {
+
+            const report =
+                await wdraFetchState(
+                    state
+                );
+
+
+            const districtKey =
+                wdraKey(
+                    district
+                );
+
+
+            const warehouses =
+                (
+                    report.warehouses ||
+                    []
+                )
+                    .filter(
+                        warehouse => {
+
+                            const actualDistrict =
+                                wdraClean(
+                                    warehouse.district
+                                ) ||
+                                wdraClean(
+                                    warehouse.state
+                                ) ||
+                                wdraClean(
+                                    report.state
+                                );
+
+
+                            return (
+                                wdraKey(
+                                    actualDistrict
+                                ) ===
+                                districtKey
+                            );
+                        }
+                    );
+
+
+            // ------------------------------------------------
+            // ACTIVE FIRST
+            // ------------------------------------------------
+
+            warehouses.sort(
+                (a, b) => {
+
+                    const aActive =
+                        wdraKey(
+                            a.status
+                        ) ===
+                        "active";
+
+
+                    const bActive =
+                        wdraKey(
+                            b.status
+                        ) ===
+                        "active";
+
+
+                    if (
+                        aActive &&
+                        !bActive
+                    ) {
+                        return -1;
+                    }
+
+
+                    if (
+                        !aActive &&
+                        bActive
+                    ) {
+                        return 1;
+                    }
+
+
+                    return String(
+                        a.warehouseName ||
+                        ""
+                    ).localeCompare(
+                        String(
+                            b.warehouseName ||
+                            ""
+                        ),
+                        "en",
+                        {
+                            sensitivity:
+                                "base"
+                        }
+                    );
+                }
+            );
+
+
+            const active =
+                warehouses.filter(
+                    warehouse =>
+                        wdraKey(
+                            warehouse.status
+                        ) ===
+                        "active"
+                ).length;
+
+
+            return res.json({
+
+                success:
+                    true,
+
+                source:
+                    "WDRA",
+
+                state:
+                    report.state,
+
+                district,
+
+                fetchedAt:
+                    report.fetchedAt,
+
+                cached:
+                    report.cached,
+
+                total:
+                    warehouses.length,
+
+                active,
+
+                inactive:
+                    warehouses.length -
+                    active,
+
+                warehouses
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "WDRA warehouses:",
+                error.message
+            );
+
+
+            return res
+                .status(502)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "WDRA warehouse request failed"
+                });
+        }
+    }
+);
+
+
+
 // ===============================
 // GEMINI CROP SCANNER API ROUTE
 // ===============================
@@ -1352,6 +2544,14 @@ app.get("/api/weather", async (req, res) => {
             code: timedOut ? "WEATHER_TIMEOUT" : "WEATHER_UPSTREAM_FAILED"
         });
     }
+});
+
+// Server Listen on Port 5000
+app.listen(5000, () => {
+    console.log('Server is running on port 5000 🚀');
+});
+app.get('/', (req, res) => {
+    res.send('Bhavsetu Server is running!');
 });
 
 app.use((error, req, res, next) => {
