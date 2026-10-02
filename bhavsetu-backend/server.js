@@ -1613,73 +1613,57 @@ function wdraFindState(
 // Exact state options currently provided by WDRA.
 // ==========================================================
 
-app.get(
-    "/api/wdra-states",
-    async (req, res) => {
+app.get("/api/wdra-states", (req, res) => {
 
-        res.set(
-            "Cache-Control",
-            "no-store"
-        );
+    res.set("Cache-Control", "no-store");
 
+    const states = [
+        ["35", "Andaman And Nicobar Islands"],
+        ["28", "Andhra Pradesh"],
+        ["12", "Arunachal Pradesh"],
+        ["18", "Assam"],
+        ["10", "Bihar"],
+        ["4", "Chandigarh"],
+        ["22", "Chhattisgarh"],
+        ["7", "Delhi"],
+        ["30", "Goa"],
+        ["24", "Gujarat"],
+        ["6", "Haryana"],
+        ["2", "Himachal Pradesh"],
+        ["1", "Jammu And Kashmir"],
+        ["20", "Jharkhand"],
+        ["29", "Karnataka"],
+        ["32", "Kerala"],
+        ["37", "Ladakh"],
+        ["31", "Lakshadweep"],
+        ["23", "Madhya Pradesh"],
+        ["27", "Maharashtra"],
+        ["14", "Manipur"],
+        ["17", "Meghalaya"],
+        ["15", "Mizoram"],
+        ["13", "Nagaland"],
+        ["21", "Odisha"],
+        ["34", "Puducherry"],
+        ["3", "Punjab"],
+        ["8", "Rajasthan"],
+        ["11", "Sikkim"],
+        ["33", "Tamil Nadu"],
+        ["36", "Telangana"],
+        ["38", "The Dadra And Nagar Haveli And Daman And Diu"],
+        ["16", "Tripura"],
+        ["5", "Uttarakhand"],
+        ["9", "Uttar Pradesh"],
+        ["19", "West Bengal"]
+    ].map(([id, name]) => ({
+        id,
+        name
+    }));
 
-        try {
-
-            const session =
-                await wdraOpenPage();
-
-
-            const states =
-                (
-                    session.states ||
-                    []
-                )
-                    .filter(
-                        state =>
-                            state.id &&
-                            state.name
-                    )
-                    .map(
-                        state => ({
-                            id:
-                                String(
-                                    state.id
-                                ),
-
-                            name:
-                                state.name
-                        })
-                    );
-
-
-            return res.json({
-                success:
-                    true,
-
-                states
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "WDRA states:",
-                error.message
-            );
-
-
-            return res
-                .status(502)
-                .json({
-                    success:
-                        false,
-
-                    message:
-                        "WDRA states could not be loaded"
-                });
-        }
-    }
-);
+    res.json({
+        success: true,
+        states
+    });
+});
 
 
 // ==========================================================
