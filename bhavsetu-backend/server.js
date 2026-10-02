@@ -518,24 +518,27 @@ function calculateMandiTrend(
 }
 
 
-function convertAgmarkMandi(
-    json,
-    marketName
-){
+function convertAgmarkMandi(json, marketName) {
 
     const records =
-        json?.data?.records || [];
+        Array.isArray(json?.data?.records)
+            ? json.data.records
+            : [];
 
     const columns =
-        json?.data?.columns || [];
+        Array.isArray(json?.data?.columns)
+            ? json.data.columns
+            : [];
 
     const priceColumns =
         columns.find(
-            x =>
-                x.key ===
-                "price_group"
+            x => x.key === "price_group"
         )?.columns || [];
 
+    /*
+     * AGMARKNET price-group order:
+     * newest → older → oldest reporting date
+     */
     const latestDate =
         priceColumns[0]?.title || "";
 
@@ -545,63 +548,113 @@ function convertAgmarkMandi(
     const oldDate =
         priceColumns[2]?.title || "";
 
+    const convertedRecords =
+        records.map(x => ({
+
+            Commodity:
+                x.cmdt_name || "",
+
+            Commodity_Group:
+                x.cmdt_grp_name || "",
+
+            MSP:
+                x.msp_price,
+
+            Modal_Price:
+                x.as_on_price,
+
+            Arrival:
+                x.as_on_arrival,
+
+            Arrival_Date:
+                latestDate,
+
+            Previous_Price:
+                x.one_day_ago_price,
+
+            Previous_Arrival:
+                x.one_day_ago_arrival,
+
+            Previous_Date:
+                previousDate,
+
+            Old_Price:
+                x.two_day_ago_price,
+
+            Old_Arrival:
+                x.two_day_ago_arrival,
+
+            Old_Date:
+                oldDate
+        }));
+
+
+    /*
+     * Market Latest date = newest date on which at least
+     * one commodity actually has a modal price.
+     *
+     * Don't simply print a column title when that entire
+     * reporting column contains no usable price.
+     */
+    const reportingDays = [
+        {
+            date: latestDate,
+            field: "Modal_Price"
+        },
+        {
+            date: previousDate,
+            field: "Previous_Price"
+        },
+        {
+            date: oldDate,
+            field: "Old_Price"
+        }
+    ];
+
+
+    const validPrice = value => {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return false;
+        }
+
+        const n =
+            Number(value);
+
+        return (
+            Number.isFinite(n) &&
+            n > 0
+        );
+    };
+
+
+    const actualLatest =
+        reportingDays.find(day =>
+            day.date &&
+            convertedRecords.some(
+                record =>
+                    validPrice(
+                        record[day.field]
+                    )
+            )
+        )?.date || "";
+
+
     return [{
         market:
             marketName,
 
-        latestDate,
+        latestDate:
+            actualLatest,
 
         records:
-            records.map(
-                x => ({
-
-                    Commodity:
-                        x.cmdt_name,
-
-                    Commodity_Group:
-                        x.cmdt_grp_name,
-
-                    MSP:
-                        x.msp_price,
-
-                    Modal_Price:
-                        x.as_on_price,
-
-                    Arrival:
-                        x.as_on_arrival,
-
-                    Arrival_Date:
-                        latestDate,
-
-                    Previous_Price:
-                        x.one_day_ago_price,
-
-                    Previous_Arrival:
-                        x.one_day_ago_arrival,
-
-                    Previous_Date:
-                        previousDate,
-
-                    Old_Price:
-                        x.two_day_ago_price,
-
-                    Old_Arrival:
-                        x.two_day_ago_arrival,
-
-                    Old_Date:
-                        oldDate,
-
-                    Trend:
-    calculateMandiTrend(
-        x.as_on_price,
-        x.one_day_ago_price,
-        x.two_day_ago_price
-    )
-                })
-            )
+            convertedRecords
     }];
 }
-
 
 // ==========================================================
 // REFRESH + CACHE
@@ -838,28 +891,68 @@ app.get(
                     });
                 }
 
-                refreshMandiData(
-                    stateId,
-                    districtId,
-                    marketId,
-                    stateName,
-                    districtName,
-                    marketName
-                ).catch(
-                    error =>
-                        console.error(
-                            "Mandi background refresh:",
-                            error.message
-                        )
-                );
+                /*
+ * Cache exists but is no longer fresh.
+ * Get current AGMARKNET data before responding,
+ * so an old reporting date is not presented as Latest.
+ */
+try {
 
-                return res.json({
-                    success:true,
-                    cached:true,
-                    refreshing:true,
-                    markets:
-                        cached.markets
-                });
+    const freshMarkets =
+        await refreshMandiData(
+            stateId,
+            districtId,
+            marketId,
+            stateName,
+            districtName,
+            marketName
+        );
+
+    const hasFreshRecords =
+        (freshMarkets || []).some(
+            market =>
+                Array.isArray(market.records) &&
+                market.records.length > 0
+        );
+
+    if (hasFreshRecords) {
+
+        return res.json({
+            success: true,
+            cached: false,
+            refreshed: true,
+            markets: freshMarkets
+        });
+    }
+
+    /*
+     * AGMARKNET responded successfully but currently gave
+     * nothing useful. Preserve last known successful cache.
+     */
+    return res.json({
+        success: true,
+        cached: true,
+        stale: true,
+        markets: cached.markets
+    });
+
+} catch (error) {
+
+    console.error(
+        "Mandi refresh:",
+        error.message
+    );
+
+    /*
+     * Live service failed; don't destroy a valid old cache.
+     */
+    return res.json({
+        success: true,
+        cached: true,
+        stale: true,
+        markets: cached.markets
+    });
+}
             }
 
             const markets =
@@ -1147,18 +1240,13 @@ function wdraCookies(response) {
 
 async function wdraOpenPage() {
 
-    const response =
-        await fetch(
-            WDRA_URL,
-            {
-                headers:
-                    WDRA_HEADERS,
-
-                redirect:
-                    "follow"
-            }
-        );
-
+    const response = await fetch(
+        WDRA_URL,
+        {
+            headers: WDRA_HEADERS,
+            redirect: "follow"
+        }
+    );
 
     if (!response.ok) {
         throw new Error(
@@ -1166,32 +1254,24 @@ async function wdraOpenPage() {
         );
     }
 
-
     const html =
         await response.text();
 
-
     const cookies =
-        wdraCookies(
-            response
-        );
-
+        wdraCookies(response);
 
     const $ =
-        cheerio.load(
-            html
-        );
+        cheerio.load(html);
 
 
-    // ------------------------------------------------------
-    // p_auth
-    // ------------------------------------------------------
+    // ======================================================
+    // P_AUTH
+    // ======================================================
 
     let pAuth =
         $('input[name="p_auth"]')
             .first()
-            .attr("value") ||
-        "";
+            .attr("value") || "";
 
 
     if (!pAuth) {
@@ -1201,7 +1281,6 @@ async function wdraOpenPage() {
                 /[?&]p_auth=([A-Za-z0-9_-]+)/
             );
 
-
         if (match) {
             pAuth =
                 match[1];
@@ -1209,54 +1288,78 @@ async function wdraOpenPage() {
     }
 
 
-    // ------------------------------------------------------
-    // STATES
-    // ------------------------------------------------------
+    // ======================================================
+    // FIND STATE SELECT
+    // ======================================================
 
-    let stateSelect =
-        $(
-            `select[name="${WDRA_NS}selectStateName"]`
-        );
+    let stateSelect = null;
 
 
-    if (
-        !stateSelect.length
-    ) {
+    $("select").each((_, element) => {
 
-        stateSelect =
-            $(
-                'select[name$="selectStateName"]'
-            ).first();
-    }
+        if (stateSelect) {
+            return;
+        }
+
+        const name =
+            String(
+                $(element).attr("name") || ""
+            );
+
+        const id =
+            String(
+                $(element).attr("id") || ""
+            );
+
+        const text =
+            wdraClean(
+                $(element).text()
+            ).toLowerCase();
 
 
-    const states =
-        [];
+        if (
+            /selectstatename/i.test(name) ||
+            /selectstatename/i.test(id) ||
+            (
+                text.includes("madhya pradesh") &&
+                text.includes("maharashtra")
+            )
+        ) {
+            stateSelect =
+                $(element);
+        }
+    });
 
 
-    stateSelect
-        .find("option")
-        .each(
-            (_, option) => {
+    // ======================================================
+    // READ STATES
+    // ======================================================
+
+    const states = [];
+
+
+    if (stateSelect) {
+
+        stateSelect
+            .find("option")
+            .each((_, option) => {
 
                 const id =
                     wdraClean(
-                        $(option)
-                            .attr("value")
+                        $(option).attr("value")
                     );
-
 
                 const name =
                     wdraClean(
-                        $(option)
-                            .text()
+                        $(option).text()
                     );
 
 
                 if (
                     !id ||
                     !name ||
-                    /select/i.test(name)
+                    /^select/i.test(name) ||
+                    /^--/.test(name)
                 ) {
                     return;
                 }
@@ -1266,21 +1369,92 @@ async function wdraOpenPage() {
                     id,
                     name
                 });
+            });
+    }
+
+
+    // ======================================================
+    // SECOND FALLBACK:
+    // Search every option for Indian states.
+    // ======================================================
+
+    if (!states.length) {
+
+        $("option").each((_, option) => {
+
+            const id =
+                wdraClean(
+                    $(option).attr("value")
+                );
+
+            const name =
+                wdraClean(
+                    $(option).text()
+                );
+
+
+            if (!id || !name) {
+                return;
             }
+
+
+            /*
+             * WDRA state ID is numeric.
+             * This avoids pulling unrelated options.
+             */
+            if (!/^\d+$/.test(id)) {
+                return;
+            }
+
+
+            const knownState =
+                /^(Andaman|Andhra Pradesh|Arunachal Pradesh|Assam|Bihar|Chandigarh|Chhattisgarh|Chattisgarh|Dadra|Delhi|Goa|Gujarat|Haryana|Himachal Pradesh|Jammu|Jharkhand|Karnataka|Kerala|Ladakh|Lakshadweep|Madhya Pradesh|Maharashtra|Manipur|Meghalaya|Mizoram|Nagaland|Odisha|Orissa|Puducherry|Pondicherry|Punjab|Rajasthan|Sikkim|Tamil Nadu|Telangana|Tripura|Uttar Pradesh|Uttarakhand|Uttrakhand|West Bengal)$/i
+                    .test(name);
+
+
+            if (knownState) {
+
+                states.push({
+                    id,
+                    name
+                });
+            }
+        });
+    }
+
+
+    // Remove duplicates
+    const uniqueStates =
+        [
+            ...new Map(
+                states.map(
+                    state => [
+                        `${state.id}|${state.name}`,
+                        state
+                    ]
+                )
+            ).values()
+        ];
+
+
+    if (!uniqueStates.length) {
+
+        throw new Error(
+            "WDRA state options not found"
         );
+    }
 
 
-    // ------------------------------------------------------
+    // ======================================================
     // ACTION URL
-    // ------------------------------------------------------
+    // ======================================================
 
     let action =
         $(
             'form[action*="processWarehouseListReport"]'
         )
             .first()
-            .attr("action") ||
-        "";
+            .attr("action") || "";
 
 
     if (!action) {
@@ -1295,9 +1469,7 @@ async function wdraOpenPage() {
     }
 
 
-    if (
-        action.startsWith("/")
-    ) {
+    if (action.startsWith("/")) {
 
         action =
             new URL(
@@ -1309,17 +1481,16 @@ async function wdraOpenPage() {
 
     try {
 
-        const url =
+        const actionURL =
             new URL(action);
 
 
         if (!pAuth) {
 
             pAuth =
-                url.searchParams.get(
-                    "p_auth"
-                ) ||
-                "";
+                actionURL
+                    .searchParams
+                    .get("p_auth") || "";
         }
 
     } catch (_) {}
@@ -1328,7 +1499,7 @@ async function wdraOpenPage() {
     return {
         cookies,
         pAuth,
-        states,
+        states: uniqueStates,
         action
     };
 }

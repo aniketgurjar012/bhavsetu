@@ -805,29 +805,53 @@ function updateMandiLocation() {
     Important:
     Price + Date + Arrival always come from the SAME reporting day.
 */
+// ==========================================================
+// CHOOSE NEWEST AVAILABLE MANDI PRICE
+// ==========================================================
+
 function getMandiDisplayPrice(item) {
+
+    const validPrice = value => {
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return false;
+        }
+
+        const n = Number(value);
+
+        return Number.isFinite(n) && n > 0;
+    };
+
+    // Newest → previous → oldest
     const days = [
         {
             price: item.Modal_Price,
             date: item.Arrival_Date,
             arrival: item.Arrival,
-            type: "market"
+            position: 0
         },
         {
             price: item.Previous_Price,
             date: item.Previous_Date,
             arrival: item.Previous_Arrival,
-            type: "market"
+            position: 1
         },
         {
             price: item.Old_Price,
             date: item.Old_Date,
             arrival: item.Old_Arrival,
-            type: "market"
+            position: 2
         }
     ];
 
-    const available = days.find(x => mandiHasValue(x.price));
+    // Newest ACTUAL available mandi price
+    const available = days.find(day =>
+        day.date &&
+        validPrice(day.price)
+    );
 
     if (available) {
         return {
@@ -836,12 +860,13 @@ function getMandiDisplayPrice(item) {
         };
     }
 
-    if (mandiHasValue(item.MSP)) {
+    // No market price in all three reporting dates → MSP
+    if (validPrice(item.MSP)) {
         return {
             price: item.MSP,
             date: "",
             arrival: null,
-            type: "msp",
+            position: -1,
             isMSP: true
         };
     }
@@ -849,175 +874,343 @@ function getMandiDisplayPrice(item) {
     return null;
 }
 
+
+// ==========================================================
+// CREATE MANDI CARD
+// ==========================================================
+
 function createMandiCard(item) {
-    const card = document.createElement("article");
-    card.className = "bhavsetu-rate-card";
 
-    const display = getMandiDisplayPrice(item);
+    const display =
+        getMandiDisplayPrice(item);
 
-    // This normally won't happen because renderMandi filters such records.
-    if (!display) return null;
-
-// ======================================================
-// CALCULATE TREND FROM ACTUAL AVAILABLE PRICES
-// ======================================================
-
-const actualPrices = [
-    item.Modal_Price,
-    item.Previous_Price,
-    item.Old_Price
-]
-.map(value => Number(value))
-.filter(value =>
-    Number.isFinite(value) &&
-    value > 0
-);
-
-let trend = "-";
-let trendClass = "mandi-trend-neutral";
-
-/*
- * MSP = never compare with mandi prices.
- */
-if (!display.isMSP && actualPrices.length >= 2) {
-
-    const currentPrice =
-        actualPrices[0];
-
-    const previousPrice =
-        actualPrices[1];
-
-    if (currentPrice > previousPrice) {
-
-        trend = "▲";
-        trendClass = "mandi-trend-up";
-
-    } else if (currentPrice < previousPrice) {
-
-        trend = "▼";
-        trendClass = "mandi-trend-down";
-
-    } else {
-
-        trend = "-";
-        trendClass = "mandi-trend-neutral";
+    if (!display) {
+        return null;
     }
-}
 
-    const priceLabel = display.isMSP
-        ? mandiText("mandiMSPPrice", "MSP मूल्य")
-        : mandiText("mandiModalPrice", "मंडी भाव");
+    const card =
+        document.createElement("article");
 
-    const arrivalHTML = display.isMSP
-        ? ""
-        : `
-            <div class="mandi-range">
-                <span>
-                    ${mandiEscape(mandiText("mandiArrival", "आवक"))}:
-                    ${mandiEscape(mandiNumber(display.arrival))} MT
-                </span>
-            </div>
-        `;
+    card.className =
+        "bhavsetu-rate-card";
 
-    const dateHTML = display.isMSP
-        ? ""
-        : `
-            <p class="mandi-card-date">
-                📅 ${mandiEscape(display.date || "—")}
-            </p>
-        `;
 
-    const mspNoteHTML = display.isMSP
-        ? `
-            <div class="mandi-msp-fallback-note">
-                <strong>
-                    ${mandiEscape(
-                        mandiText("mandiMSPFallbackBadge", "MSP मूल्य")
+    // ======================================================
+    // TREND FROM ACTUAL AVAILABLE PRICES
+    // ======================================================
+
+    const actualDays = [
+        {
+            price: item.Modal_Price,
+            position: 0
+        },
+        {
+            price: item.Previous_Price,
+            position: 1
+        },
+        {
+            price: item.Old_Price,
+            position: 2
+        }
+    ].filter(x => {
+
+        if (
+            x.price === null ||
+            x.price === undefined ||
+            x.price === ""
+        ) {
+            return false;
+        }
+
+        const n =
+            Number(x.price);
+
+        return Number.isFinite(n) && n > 0;
+    });
+
+
+    let trend = "-";
+    let trendClass =
+        "mandi-trend-neutral";
+
+
+    /*
+     * Compare displayed market price against
+     * the next older available market price.
+     *
+     * MSP never gets compared with market prices.
+     */
+    if (!display.isMSP) {
+
+        const index =
+            actualDays.findIndex(
+                x =>
+                    x.position ===
+                    display.position
+            );
+
+        if (
+            index !== -1 &&
+            index + 1 < actualDays.length
+        ) {
+
+            const currentPrice =
+                Number(
+                    actualDays[index].price
+                );
+
+            const olderPrice =
+                Number(
+                    actualDays[index + 1].price
+                );
+
+
+            if (
+                currentPrice >
+                olderPrice
+            ) {
+
+                trend = "▲";
+                trendClass =
+                    "mandi-trend-up";
+
+            } else if (
+                currentPrice <
+                olderPrice
+            ) {
+
+                trend = "▼";
+                trendClass =
+                    "mandi-trend-down";
+
+            } else {
+
+                trend = "-";
+                trendClass =
+                    "mandi-trend-neutral";
+            }
+        }
+    }
+
+
+    // ======================================================
+    // LABELS
+    // ======================================================
+
+    const priceLabel =
+        display.isMSP
+            ? mandiText(
+                "mandiMSPPrice",
+                "MSP मूल्य"
+            )
+            : mandiText(
+                "mandiModalPrice",
+                "मंडी भाव"
+            );
+
+
+    const arrivalHTML =
+        display.isMSP
+            ? ""
+            : `
+                <div class="mandi-range">
+                    <span>
+                        ${mandiEscape(
+                            mandiText(
+                                "mandiArrival",
+                                "आवक"
+                            )
+                        )}:
+                        ${mandiEscape(
+                            mandiNumber(
+                                display.arrival
+                            )
+                        )} MT
+                    </span>
+                </div>
+            `;
+
+
+    const dateHTML =
+        display.isMSP
+            ? ""
+            : `
+                <p class="mandi-card-date">
+                    📅 ${mandiEscape(
+                        display.date || "—"
                     )}
-                </strong>
+                </p>
+            `;
 
-                <span>
-                    ${mandiEscape(
-                        mandiText(
-                            "mandiMSPFallbackNote",
-                            "पिछले तीन रिपोर्टिंग दिनों का मंडी भाव उपलब्ध नहीं है। इसलिए MSP दिखाया जा रहा है।"
-                        )
-                    )}
-                </span>
-            </div>
-        `
-        : "";
+
+    const mspNoteHTML =
+        display.isMSP
+            ? `
+                <div class="mandi-msp-fallback-note">
+
+                    <strong>
+                        ${mandiEscape(
+                            mandiText(
+                                "mandiMSPFallbackBadge",
+                                "MSP मूल्य"
+                            )
+                        )}
+                    </strong>
+
+                    <span>
+                        ${mandiEscape(
+                            mandiText(
+                                "mandiMSPFallbackNote",
+                                "पिछले तीन रिपोर्टिंग दिनों का मंडी भाव उपलब्ध नहीं है। इसलिए MSP दिखाया जा रहा है।"
+                            )
+                        )}
+                    </span>
+
+                </div>
+            `
+            : "";
+
+
+    // ======================================================
+    // CARD HTML
+    // ======================================================
 
     card.innerHTML = `
+
         <div class="mandi-card-top">
+
             <h4>
-                🌾 ${mandiEscape(item.Commodity || "N/A")}
+                🌾 ${mandiEscape(
+                    item.Commodity || "N/A"
+                )}
             </h4>
 
             <span>
-                ${mandiEscape(item.Commodity_Group || "")}
+                ${mandiEscape(
+                    item.Commodity_Group || ""
+                )}
             </span>
+
         </div>
+
 
         <p class="mandi-msp-line">
             MSP:
-            <b>₹${mandiEscape(mandiNumber(item.MSP))}</b>
+            <b>
+                ₹${mandiEscape(
+                    mandiNumber(item.MSP)
+                )}
+            </b>
             / Quintal
         </p>
 
+
         ${dateHTML}
 
+
         <div class="mandi-price">
+
             <div>
-                <small>${mandiEscape(priceLabel)}</small>
+
+                <small>
+                    ${mandiEscape(
+                        priceLabel
+                    )}
+                </small>
 
                 <strong class="${trendClass}">
-                    ₹${mandiEscape(mandiNumber(display.price))}
+                    ₹${mandiEscape(
+                        mandiNumber(
+                            display.price
+                        )
+                    )}
                     ${trend}
                 </strong>
 
                 <small>
                     ${mandiEscape(
-                        mandiText("mandiPerQuintal", "प्रति क्विंटल")
+                        mandiText(
+                            "mandiPerQuintal",
+                            "प्रति क्विंटल"
+                        )
                     )}
                 </small>
+
             </div>
 
+
             ${arrivalHTML}
+
         </div>
+
 
         ${mspNoteHTML}
 
-        <button type="button" class="mandi-history-button">
+
+        <button
+            type="button"
+            class="mandi-history-button"
+        >
             ${mandiEscape(
-                mandiText("mandiHistory", "पिछले भाव")
+                mandiText(
+                    "mandiHistory",
+                    "पिछले भाव"
+                )
             )}
         </button>
 
-        <div class="mandi-history hidden"></div>
+
+        <div
+            class="mandi-history hidden"
+        ></div>
     `;
 
-    const btn = card.querySelector(".mandi-history-button");
-    const box = card.querySelector(".mandi-history");
+
+    // ======================================================
+    // HISTORY BUTTON
+    // ======================================================
+
+    const btn =
+        card.querySelector(
+            ".mandi-history-button"
+        );
+
+    const box =
+        card.querySelector(
+            ".mandi-history"
+        );
+
 
     btn.onclick = () => {
-        btn.style.display = "none";
-        box.classList.remove("hidden");
+
+        btn.style.display =
+            "none";
+
+        box.classList.remove(
+            "hidden"
+        );
 
         box.innerHTML = `
             <div class="history-finished">
                 ${mandiEscape(
-                    mandiText("mandiHistoryLoading", "लोड हो रहा है...")
+                    mandiText(
+                        "mandiHistoryLoading",
+                        "लोड हो रहा है..."
+                    )
                 )}
             </div>
         `;
 
-        loadMandiHistory(item, box, btn);
+        loadMandiHistory(
+            item,
+            box,
+            btn
+        );
     };
+
 
     return card;
 }
-
 function renderMandi(markets) {
     const g = mandiGrid();
     if (!g) return;
